@@ -1,0 +1,511 @@
+"""
+Trays pipeline
+
+Purpose
+-------
+Generate new Unique_Tray_Code rows from GHSeed source data and insert only the
+ones that don't already exist in dbo.T_GHTraysCreation. For each (BerryCode, Pollination_Year),
+Plate_Index continues from the current MAX in the target table.
+
+High-level steps
+----------------
+1) Load eligible GHSeed rows (Active=1, SCREENING=1, current/next year).
+2) For each row, compute trays and Unique_IDs (fully vectorized batch math).
+3) Query existing target rows (limited to our Berry/Year keys) and anti-join.
+4) Compute Plate_Index by grouping (BerryCode, Year), continuing from current MAX.
+5) Shape rows to target schema (incl. audit columns) and insert.
+
+Safety / Idempotency
+--------------------
+- Anti-join on (Unique_Tray_Code, ghsm_FK) prevents duplicates.
+- Plate_Index allocation is deterministic per batch and continues from DB MAX.
+
+Configuration
+-------------
+- Credentials loaded from .env file via python-dotenv.
+- Override with MSSQL_* environment variables; DO NOT hardcode secrets in code.
+
+Testability
+-----------
+- Core math and frame transforms are pure functions (no I/O).
+- Repository interface (TrayRepository) allows mocks/fakes in tests.
+
+Requirements
+------------
+- pandas, numpy, SQLAlchemy, pyodbc (ODBC Driver 17+ for SQL Server), python-dotenv.
+"""
+
+
+from __future__ import annotations
+
+import logging
+import os
+import sys
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Protocol, Iterable, Tuple
+
+import numpy as np
+import pandas as pd
+from dotenv import load_dotenv
+from sqlalchemy import create_engine, text, bindparam
+
+# Load .env from the same directory as this script
+load_dotenv(Path(__file__).resolve().parent / ".env")
+
+# Logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s  %(levelname)-8s  %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
+log = logging.getLogger(__name__)
+
+# --------------------------
+# Berry ↔ Code mapping
+# --------------------------
+BERRY_ID_TO_CODE = {1: "BK", 2: "BU", 3: "RA", 4: "ST"}
+BERRY_CODE_TO_ID = {v: k for k, v in BERRY_ID_TO_CODE.items()}
+
+
+# --------------------------
+# Settings
+# --------------------------
+@dataclass(frozen=True)
+class Settings:
+    server: str = os.getenv("MSSQL_SERVER", "")
+    database: str = os.getenv("MSSQL_DATABASE", "")
+    username: str = os.getenv("MSSQL_USERNAME", "")
+    password: str = os.getenv("MSSQL_PASSWORD", "")
+    odbc_driver: str = os.getenv("MSSQL_ODBC_DRIVER", "ODBC Driver 17 for SQL Server")
+    trust_server_cert: bool = True
+
+    target_schema: str = os.getenv("TARGET_SCHEMA", "dbo")
+    target_table: str = os.getenv("TARGET_TABLE", "T_GHTraysCreation")
+
+    created_by: str = os.getenv("CREATED_BY", "GHTrayScript")
+
+    def validate(self) -> None:
+        missing = [f for f in ("server", "database", "username", "password")
+                   if not getattr(self, f)]
+        if missing:
+            raise EnvironmentError(
+                f"Missing required credentials: {missing}. "
+                "Set them in .env or as environment variables."
+            )
+
+    @property
+    def conn_str(self) -> str:
+        return (
+            f"mssql+pyodbc://{self.username}:{self.password}"
+            f"@{self.server}/{self.database}"
+            f"?driver={self.odbc_driver.replace(' ', '+')}"
+            f"&TrustServerCertificate={'yes' if self.trust_server_cert else 'no'}"
+        )
+
+
+# --------------------------
+# Data access port (for DI)
+# --------------------------
+class TrayRepository(Protocol):
+    def fetch_source_rows(self) -> pd.DataFrame: ...
+    def fetch_existing_for_keys(self, berries: Iterable[str], years: Iterable[int]) -> Tuple[pd.DataFrame, pd.DataFrame]: ...
+    def insert_trays(self, df_ins: pd.DataFrame) -> int: ...
+
+
+# --------------------------
+# SQL Server repository
+# --------------------------
+class SqlServerTrayRepository:
+    def __init__(self, settings: Settings) -> None:
+        self.s = settings
+        self.engine = create_engine(settings.conn_str, fast_executemany=True, pool_pre_ping=True)
+
+    def fetch_source_rows(self) -> pd.DataFrame:
+        """
+        Pull eligible seedling rows plus BerryCode, lab plate size, etc.
+        NOTE: Adjust WHERE if your eligibility rules change.
+        """
+        QUERY = """
+        SELECT
+            sm.GHSeedlingMaster_ID,
+            sm.PROGENY,
+            sm.TRAY_SIZE,
+            sm.TRANSPLANTS_REQUIRED,
+            sm.Berry_ID,
+            sm.Testing_Lab_1_FK,
+            sm.Active,
+            sm.SCREENING,
+            sm.POLLINATION_YEAR,
+            b.BerryCode,
+            l.GHLab_ID,
+            l.Plate_Sample_Num
+        FROM GHSeed.dbo.M_GHSeedlingMaster AS sm
+        LEFT JOIN TPN.dbo.M_BerryID AS b
+            ON sm.Berry_ID = b.PK_BerryID
+        LEFT JOIN GHSeed.dbo.M_GHLabs AS l
+            ON sm.Testing_Lab_1_FK = l.GHLab_ID
+        WHERE sm.Active = 1
+          AND sm.SCREENING = 1
+          AND (POLLINATION_YEAR = YEAR(GETDATE()) OR POLLINATION_YEAR = YEAR(GETDATE()) + 1);
+        """
+        df = pd.read_sql(QUERY, self.engine)
+
+        # Numeric columns used in computations
+        for col in ["TRANSPLANTS_REQUIRED", "TRAY_SIZE", "Plate_Sample_Num", "POLLINATION_YEAR"]:
+            if col in df.columns:
+                df[col] = pd.to_numeric(df[col], errors="coerce")
+
+        required = [
+            "BerryCode", "PROGENY", "TRANSPLANTS_REQUIRED", "TRAY_SIZE",
+            "Plate_Sample_Num", "GHSeedlingMaster_ID", "POLLINATION_YEAR"
+        ]
+        missing = [c for c in required if c not in df.columns]
+        if missing:
+            raise ValueError(f"Missing required columns in joined result: {missing}")
+
+        return df
+
+    def fetch_existing_for_keys(
+        self, berries: Iterable[str], years: Iterable[int]
+    ) -> Tuple[pd.DataFrame, pd.DataFrame]:
+        """
+        Return:
+          existing: columns [Unique_Tray_Code, ghsm_FK] for anti-join
+          max_idx: columns [BerryCode, Pollination_Year, MaxPlateIndex]
+        Queries are limited to the (Berry, Year) keys present in the batch for performance.
+        """
+        berries = [str(b).strip() for b in set(berries) if str(b).strip()]
+        years   = [int(y) for y in set(years) if pd.notna(y)]
+
+        empty_trays = pd.DataFrame(columns=["Unique_Tray_Code", "ghsm_FK"])
+        empty_idx   = pd.DataFrame(columns=["BerryCode", "Pollination_Year", "MaxPlateIndex"])
+        if not berries or not years:
+            return empty_trays, empty_idx
+
+        # Filter in target by Berry_ID (T_GHTraysCreation has Berry_ID, not BerryCode)
+        berry_ids = [BERRY_CODE_TO_ID[b] for b in berries if b in BERRY_CODE_TO_ID]
+        if not berry_ids:
+            return empty_trays, empty_idx
+
+        target = f"{self.s.target_schema}.{self.s.target_table}"
+
+        q_existing = text(f"""
+            SELECT Unique_Tray_Code, ghsm_FK
+            FROM {target}
+            WHERE Berry_ID IN :berry_ids
+              AND Pollination_Year IN :years
+        """).bindparams(
+            bindparam("berry_ids", expanding=True),
+            bindparam("years",     expanding=True),
+        )
+        existing = pd.read_sql(q_existing, self.engine, params={"berry_ids": berry_ids, "years": years})
+
+        q_max = text(f"""
+            SELECT Berry_ID, Pollination_Year, MAX(Plate_Index) AS MaxPlateIndex
+            FROM {target}
+            WHERE Berry_ID IN :berry_ids
+              AND Pollination_Year IN :years
+            GROUP BY Berry_ID, Pollination_Year
+        """).bindparams(
+            bindparam("berry_ids", expanding=True),
+            bindparam("years",     expanding=True),
+        )
+        max_idx = pd.read_sql(q_max, self.engine, params={"berry_ids": berry_ids, "years": years})
+
+        if not max_idx.empty:
+            # Map back to codes so downstream grouping can continue to use BerryCode
+            max_idx["BerryCode"] = max_idx["Berry_ID"].map(BERRY_ID_TO_CODE)
+            max_idx = max_idx[["BerryCode", "Pollination_Year", "MaxPlateIndex"]]
+            max_idx["MaxPlateIndex"] = pd.to_numeric(max_idx["MaxPlateIndex"], errors="coerce").fillna(0).astype(int)
+        else:
+            max_idx = empty_idx
+
+        return existing, max_idx
+
+    def insert_trays(self, df_ins: pd.DataFrame) -> int:
+        """
+        Insert prepared rows into target. Assumes df_ins matches target schema.
+        """
+        df = df_ins.copy()
+        df["Unique_Tray_Code"] = df["Unique_Tray_Code"].astype(str)
+        df["Plant_Qty"]        = pd.to_numeric(df["Plant_Qty"], errors="coerce").fillna(0).astype(int)
+        df["ghsm_FK"]          = pd.to_numeric(df["ghsm_FK"], errors="coerce").astype("Int64")
+        df["Test_Lab_ID"]      = pd.to_numeric(df["Test_Lab_ID"], errors="coerce").astype("Int64")
+        df["Pollination_Year"] = pd.to_numeric(df["Pollination_Year"], errors="coerce").astype("Int64")
+        df["Plate_Index"]      = pd.to_numeric(df["Plate_Index"], errors="coerce").astype("Int64")
+
+        for c in ["Created_By", "Modified_By"]:
+            df[c] = df[c].astype(str)
+        for c in ["Created_DateTime", "Modified_DateTime"]:
+            df[c] = pd.to_datetime(df[c]).dt.tz_localize(None)
+
+        with self.engine.begin() as conn:
+            df.to_sql(
+                name=self.s.target_table,
+                schema=self.s.target_schema,
+                con=conn,
+                if_exists="append",
+                index=False,
+                chunksize=1000
+            )
+        return len(df)
+
+
+# --------------------------
+# Output column list (single source of truth)
+# --------------------------
+_BATCH_COLS = [
+    "BerryCode", "PROGENY", "POLLINATION_YEAR", "TRAY_SIZE", "PlateSize",
+    "Plate", "Unique_ID", "Plant_Qty", "Suffix",
+    "GHSeedlingMaster_ID", "Testing_Lab_1_FK", "GHLab_ID",
+    "Plate_Sample_Num", "TRANSPLANTS_REQUIRED", "Berry_ID",
+]
+
+
+# --------------------------
+# Domain logic (pure, fully vectorized)
+# --------------------------
+def build_counts_for_batch(df_src: pd.DataFrame) -> pd.DataFrame:
+    """
+    Vectorized batch computation — no row-by-row Python loop.
+    Explodes each source row into one row per plant, then groups by tray.
+    """
+    empty = pd.DataFrame(columns=_BATCH_COLS)
+
+    required = ["BerryCode", "PROGENY", "TRANSPLANTS_REQUIRED", "TRAY_SIZE",
+                "Plate_Sample_Num", "POLLINATION_YEAR"]
+    if df_src.empty or any(c not in df_src.columns for c in required):
+        return empty
+
+    df = df_src.copy()
+
+    # Coerce & strip
+    df["BerryCode"] = df["BerryCode"].astype(str).str.strip()
+    df["PROGENY"]   = df["PROGENY"].astype(str).str.strip()
+    for col in ["TRANSPLANTS_REQUIRED", "TRAY_SIZE", "Plate_Sample_Num", "POLLINATION_YEAR"]:
+        df[col] = pd.to_numeric(df[col], errors="coerce")
+
+    # Drop rows with any NaN in critical columns or non-positive values
+    mask = (
+        df[required].notna().all(axis=1)
+        & (df["TRANSPLANTS_REQUIRED"] > 0)
+        & (df["TRAY_SIZE"] > 0)
+        & (df["Plate_Sample_Num"] > 0)
+    )
+    df = df.loc[mask].reset_index(drop=True)
+    if df.empty:
+        return empty
+
+    df["TRANSPLANTS_REQUIRED"] = df["TRANSPLANTS_REQUIRED"].astype(int)
+    df["TRAY_SIZE"]            = df["TRAY_SIZE"].astype(int)
+    df["Plate_Sample_Num"]     = df["Plate_Sample_Num"].astype(int)
+    df["POLLINATION_YEAR"]     = df["POLLINATION_YEAR"].astype(int)
+
+    # Assign a temporary row id for the explode
+    df["_row"] = np.arange(len(df))
+
+    # Explode: one row per plant (well) using repeat + arange offsets
+    counts = df["TRANSPLANTS_REQUIRED"].values
+    row_idx = np.repeat(np.arange(len(df)), counts)
+    well_seq = np.concatenate([np.arange(n) for n in counts])  # 0-based within each source row
+
+    exp = df.iloc[row_idx].reset_index(drop=True).copy()
+    plate_size = exp["Plate_Sample_Num"].values
+    tray_sz    = exp["TRAY_SIZE"].values
+
+    # Vectorized tray math (same formulas as before, now across all rows at once)
+    trays_per_plate = np.maximum(1, np.ceil(plate_size / tray_sz).astype(int))
+    plate_idx       = (well_seq // plate_size) + 1
+    well_in_plate   = (well_seq % plate_size) + 1
+    tray_in_plate   = np.minimum(np.ceil(well_in_plate / tray_sz).astype(int), trays_per_plate)
+
+    suffix = (plate_idx - 1) * trays_per_plate + tray_in_plate
+    suffix_str = np.char.zfill(suffix.astype(str), 2)
+    unique_id  = np.char.add(
+        np.char.add(exp["BerryCode"].values.astype(str), exp["PROGENY"].values.astype(str)),
+        np.char.add(np.full(len(suffix_str), "."), suffix_str),
+    )
+
+    exp["Plate"]     = plate_idx
+    exp["Suffix"]    = suffix
+    exp["Unique_ID"] = unique_id
+    exp["PlateSize"] = plate_size
+
+    # Group by tray to get Plant_Qty (count of wells per tray)
+    group_cols = [
+        "BerryCode", "PROGENY", "POLLINATION_YEAR", "TRAY_SIZE", "PlateSize",
+        "Plate", "Suffix", "Unique_ID",
+        "GHSeedlingMaster_ID", "Testing_Lab_1_FK", "GHLab_ID",
+        "Plate_Sample_Num", "TRANSPLANTS_REQUIRED", "Berry_ID",
+    ]
+    out = exp.groupby(group_cols, dropna=False).size().reset_index(name="Plant_Qty")
+
+    # Normalize dtypes
+    out["GHSeedlingMaster_ID"] = pd.to_numeric(out["GHSeedlingMaster_ID"], errors="coerce").astype(int)
+    out["Plate"] = pd.to_numeric(out["Plate"], errors="coerce").astype(int)
+
+    return out[_BATCH_COLS]
+
+
+def anti_join_new_trays(df_counts: pd.DataFrame, existing_trays: pd.DataFrame) -> pd.DataFrame:
+    """
+    Return only rows where (Unique_ID, ghsm_FK) is not already present in target.
+    """
+    if existing_trays.empty:
+        return df_counts.copy()
+
+    left = df_counts.rename(columns={"Unique_ID": "Unique_Tray_Code", "GHSeedlingMaster_ID": "ghsm_FK"})
+    key_cols = ["Unique_Tray_Code", "ghsm_FK"]
+
+    left["_keep"] = 1
+    existing = existing_trays[key_cols].drop_duplicates().assign(_exists=1)
+    merged = left.merge(existing, on=key_cols, how="left")
+    new_rows = merged[merged["_exists"].isna()].drop(columns=["_keep", "_exists"])
+    return new_rows.rename(columns={"Unique_Tray_Code": "Unique_ID", "ghsm_FK": "GHSeedlingMaster_ID"})
+
+
+def allocate_plate_index(df_counts_new: pd.DataFrame, existing_max_index: pd.DataFrame) -> pd.DataFrame:
+    """
+    Compute Plate_Index per unique physical plate (BerryCode, Year, GHSM, Plate),
+    continuing from current MAX(Plate_Index) per (BerryCode, Year) in target.
+    """
+    if df_counts_new.empty:
+        return df_counts_new.copy().assign(Plate_Index=pd.Series(dtype=int))
+
+    idx_map = existing_max_index.copy()
+    if idx_map.empty:
+        idx_map = pd.DataFrame(columns=["BerryCode", "Pollination_Year", "MaxPlateIndex"])
+    idx_map = idx_map.rename(columns={"Pollination_Year": "POLLINATION_YEAR"})
+
+    plate_key_cols = ["BerryCode", "POLLINATION_YEAR", "GHSeedlingMaster_ID", "Plate"]
+
+    plates = (
+        df_counts_new[plate_key_cols]
+        .drop_duplicates()
+        .sort_values(plate_key_cols)
+        .reset_index(drop=True)
+    )
+
+    max_per_group = idx_map[["BerryCode", "POLLINATION_YEAR", "MaxPlateIndex"]].drop_duplicates()
+    plates = plates.merge(max_per_group, on=["BerryCode", "POLLINATION_YEAR"], how="left")
+    plates["MaxPlateIndex"] = pd.to_numeric(plates["MaxPlateIndex"], errors="coerce").fillna(0).astype(int)
+
+    plates["Local_Order"] = plates.groupby(["BerryCode", "POLLINATION_YEAR"], sort=False).cumcount() + 1
+    plates["Plate_Index"] = plates["MaxPlateIndex"] + plates["Local_Order"]
+    plates = plates.drop(columns=["Local_Order"])
+
+    out = df_counts_new.merge(plates[plate_key_cols + ["Plate_Index"]], on=plate_key_cols, how="left", validate="m:1")
+    return out.sort_values(["BerryCode", "POLLINATION_YEAR", "Plate_Index", "Suffix"]).reset_index(drop=True)
+
+
+def to_insert_frame(df_counts_with_index: pd.DataFrame, created_by: str) -> pd.DataFrame:
+    """
+    Shape to target schema and add audit columns.
+    Ensures Berry_ID exists (derives from BerryCode if missing).
+    """
+    now = pd.Timestamp.utcnow()
+    df_src = df_counts_with_index.copy()
+
+    if "Berry_ID" not in df_src.columns:
+        if "BerryCode" in df_src.columns:
+            df_src["Berry_ID"] = df_src["BerryCode"].map(BERRY_CODE_TO_ID).astype("Int64")
+        else:
+            raise KeyError("Expected Berry_ID or BerryCode in df_counts_with_index, found neither.")
+
+    df = df_src.rename(columns={
+        "Unique_ID": "Unique_Tray_Code",
+        "GHSeedlingMaster_ID": "ghsm_FK",
+        "GHLab_ID": "Test_Lab_ID",
+        "POLLINATION_YEAR": "Pollination_Year",
+    })[[
+        "Unique_Tray_Code", "Plant_Qty",
+        "ghsm_FK", "Test_Lab_ID", "Pollination_Year", "Plate_Index",
+        "Berry_ID",
+    ]].copy()
+
+    df["Created_By"]        = created_by
+    df["Created_DateTime"]  = now
+    df["Modified_By"]       = created_by
+    df["Modified_DateTime"] = now
+    return df.where(pd.notna(df), None)
+
+
+# --------------------------
+# Orchestration
+# --------------------------
+class TrayPipeline:
+    def __init__(self, repo: TrayRepository, created_by: str) -> None:
+        self.repo = repo
+        self.created_by = created_by
+
+    def run(self) -> int:
+        # Step 1 — fetch source rows
+        log.info("Fetching eligible source rows ...")
+        try:
+            df_src = self.repo.fetch_source_rows()
+        except Exception:
+            log.exception("Failed to fetch source rows from GHSeed.")
+            raise
+
+        # Step 2 — compute tray counts (vectorized)
+        log.info("Computing tray allocations for %d source rows ...", len(df_src))
+        df_counts = build_counts_for_batch(df_src)
+        if df_counts.empty:
+            log.info("No eligible source rows found. Exiting.")
+            return 0
+
+        berries = df_counts["BerryCode"].dropna().astype(str).str.strip().unique().tolist()
+        years   = df_counts["POLLINATION_YEAR"].dropna().astype(int).unique().tolist()
+
+        # Step 3 — anti-join against existing target rows
+        log.info("Checking existing trays for %d berry/year combos ...", len(berries) * len(years))
+        try:
+            existing_trays, max_idx = self.repo.fetch_existing_for_keys(berries, years)
+        except Exception:
+            log.exception("Failed to query existing trays from target table.")
+            raise
+
+        only_new = anti_join_new_trays(df_counts, existing_trays)
+        if only_new.empty:
+            log.info("All generated trays already exist. Nothing to insert.")
+            return 0
+
+        # Step 4 — allocate Plate_Index
+        with_index = allocate_plate_index(only_new, max_idx)
+
+        # Step 5 — shape and insert
+        df_ins = to_insert_frame(with_index, self.created_by)
+        df_ins = df_ins.drop_duplicates(subset=["Unique_Tray_Code", "ghsm_FK"])  # intra-batch safety
+
+        log.info("Inserting %d new tray rows ...", len(df_ins))
+        try:
+            inserted = self.repo.insert_trays(df_ins)
+        except Exception:
+            log.exception("Insert failed. No rows were committed (transaction rolled back).")
+            raise
+
+        log.info("Inserted %s rows into target.", f"{inserted:,}")
+        return inserted
+
+
+# --------------------------
+# Entrypoint
+# --------------------------
+def main() -> None:
+    try:
+        s = Settings()
+        s.validate()
+        repo = SqlServerTrayRepository(s)
+        pipeline = TrayPipeline(repo=repo, created_by=s.created_by)
+        pipeline.run()
+    except EnvironmentError as exc:
+        log.error("Configuration error: %s", exc)
+        sys.exit(1)
+    except Exception:
+        log.exception("Pipeline failed with an unexpected error.")
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()

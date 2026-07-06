@@ -1,0 +1,493 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "saving": "Saving...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "new": "New",
+    "close": "Close",
+    "search": "Search",
+    "reset": "Reset",
+    "export": "Export CSV",
+    "noData": "No data available",
+    "noResults": "No results found",
+    "typeToSearch": "Type to search...",
+    "show": "Show",
+    "entries": "entries",
+    "of": "of",
+    "page": "Page",
+    "previous": "Previous",
+    "next": "Next",
+    "yes": "Yes",
+    "no": "No",
+    "active": "Active",
+    "inactive": "Inactive",
+    "all": "All",
+    "required": "Required",
+    "optional": "Optional",
+    "actions": "Actions",
+    "confirm": "Confirm",
+    "complete": "Complete",
+    "template": "Template",
+    "upload": "Upload",
+    "download": "Download",
+    "uploadFailed": "Upload failed",
+    "networkError": "Network error",
+    "warnings": "Warnings",
+    "user": "User",
+    "team": "Team",
+    "filter": "Filter"
+  },
+  "auth": {
+    "seedlingPortal": "Seedling Desktop Portal",
+    "signInDescription": "Sign in with your employee account and 4-digit PIN to continue.",
+    "selectEmployee": "Select Employee",
+    "selectYourName": "Select your name...",
+    "fourDigitCode": "4-Digit Code",
+    "signIn": "Sign In",
+    "authenticating": "Authenticating...",
+    "logout": "Logout",
+    "gettingStartedButton": "Getting Started Guide"
+  },
+  "nav": {
+    "seedling": "Seedling",
+    "desktopPortal": "Desktop Portal",
+    "homeDashboard": "Home Dashboard",
+    "analytics": "Analytics",
+    "crosses": "Crosses",
+    "crossingListSimplified": "Crossing List Summary",
+    "crossingListFull": "Crossing List Full",
+    "crossForm": "Cross Form",
+    "parentInventory": "Parent Inventory",
+    "propagationLifecycle": "Propagation Lifecycle",
+    "lifecycleSummary": "Lifecycle Summary",
+    "pollen": "Pollen",
+    "pollination": "Pollination",
+    "fruit": "Fruit",
+    "seed": "Seed",
+    "transplant": "Transplant",
+    "screenByProgeny": "Screen by Progeny",
+    "screenByPlate": "Screen by Plate",
+    "ship": "Ship",
+    "sortAllocation": "Sort Group Allocation",
+    "referenceTables": "Reference Tables",
+    "labs": "Labs",
+    "teams": "Teams",
+    "trays": "Trays",
+    "ratios": "Ratios",
+    "deadlines": "Deadlines",
+    "employees": "Employees",
+    "markerList": "Marker List",
+    "markerAllocations": "Marker Allocations",
+    "markerPrices": "Marker Prices",
+    "rightClickForMenu": "(right-click for menu)",
+    "pinSidebar": "Pin sidebar open",
+    "unpinSidebar": "Unpin sidebar (allow auto-collapse)",
+    "expandSidebar": "Expand sidebar",
+    "collapseSidebar": "Collapse sidebar",
+    "uploadData": "Upload Data",
+    "help": "User Manual"
+  },
+  "filters": {
+    "globalFilters": "Global Filters",
+    "berry": "Berry",
+    "team": "Team",
+    "pollinationYear": "Pollination Year",
+    "allTeams": "All Teams",
+    "spCrosses": "SP Crosses",
+    "resetFilters": "Reset Filters",
+    "allPrograms": "All Programs",
+    "allLabs": "All Labs",
+    "allDestinations": "All Destinations",
+    "searchProgeny": "Search progeny...",
+    "searchParent": "Search parent...",
+    "year": "Year",
+    "program": "Program",
+    "destination": "Destination"
+  },
+  "home": {
+    "dashboardOverview": "Dashboard Overview",
+    "summaryMetrics": "Summary metrics for Pollination Year {{year}}",
+    "pollinationProgress": "Pollination Progress",
+    "seedProgress": "Seed Progress",
+    "transplantProgress": "Transplant Progress",
+    "shipProgress": "Ship Progress",
+    "required": "Required",
+    "requiredG": "Required (g)",
+    "requested": "Requested",
+    "crossesByBerry": "Crosses by Berry Type",
+    "propagationFunnel": "Propagation Funnel",
+    "shipRequest": "Ship Request",
+    "transplantsRequired": "Transplants Required",
+    "pollinationsRequired": "Pollinations Required",
+    "crosses": "Crosses"
+  },
+  "analytics": {
+    "title": "Analytics",
+    "pollinations": "Pollinations",
+    "seed": "Seed",
+    "transplants": "Transplants",
+    "ship": "Ship",
+    "markers": "Markers",
+    "parents": "Parents",
+    "capAtRequired": "Cap at required qty/progeny (exclude extras)",
+    "byProgram": "by Program",
+    "byDestination": "by Destination",
+    "byTeam": "by Team",
+    "byYear": "by Pollination Year",
+    "byBerry": "by Berry",
+    "byType": "by Type",
+    "samples": "Samples",
+    "cost": "Cost",
+    "allocation": "Allocation",
+    "crossList": "Cross List",
+    "actual": "Actual",
+    "planned": "Planned",
+    "markersPlannedByType": "Markers Planned — By Type",
+    "markerTotals": "Marker Totals",
+    "female": "Female",
+    "male": "Male"
+  },
+  "crosses": {
+    "title": "Crosses",
+    "shortList": "Crossing List — Summary",
+    "fullList": "Crossing List — Full",
+    "crossForm": "Cross Form",
+    "newCross": "New Cross",
+    "editCross": "Edit Cross",
+    "copyAsNew": "Copy as New",
+    "inactivate": "Inactivate",
+    "reactivate": "Reactivate",
+    "parentList": "Parent List",
+    "downloadTemplate": "Download Crossing Template",
+    "uploadCrossingFile": "Upload Crossing File"
+  },
+  "propagation": {
+    "pollen": {
+      "title": "Pollen",
+      "description": "Track pollen collection and inventory",
+      "pollenToGo": "Pollen To Go",
+      "showL2L4": "Show L2–L4"
+    },
+    "pollination": {
+      "title": "Pollination",
+      "description": "Track pollination progress across crosses.",
+      "pollinationToGo": "Pollination To Go",
+      "emasculationToGo": "Emasculation To Go"
+    },
+    "fruit": {
+      "title": "Fruit",
+      "description": "Track fruit collection progress across crosses.",
+      "fruitToGo": "Fruit To Go"
+    },
+    "seed": {
+      "title": "Seed",
+      "description": "Track seed collection, acid treatment, and sowing progress.",
+      "seedSowToGo": "Seed Sow To Go",
+      "sowSeed": "Sow Seed",
+      "acidDateRange": "Acid Date Range",
+      "howCalcsWork": "How the Calculations Work",
+      "seedCalcs": "Seed Calculations"
+    },
+    "transplant": {
+      "title": "Transplant",
+      "description": "View transplant quantities, shipping requests, and breeder adjustments.",
+      "availablePlants": "Available > 0",
+      "exportTrayCodes": "Export Tray Codes and Plate Indexes CSV",
+      "exportTrayCodesSuccess": "Tray codes exported"
+    },
+    "screenProgeny": {
+      "title": "Screen by Progeny",
+      "description": "Track screening progress by progeny."
+    },
+    "screenPlate": {
+      "title": "Screen by Plate",
+      "description": "Track screening progress by plate.",
+      "plateIndex": "Plate Index #"
+    },
+    "ship": {
+      "title": "Ship",
+      "description": "Track seedling shipping across destinations.",
+      "shipped": "Shipped"
+    },
+    "sortAllocation": {
+      "title": "Sort Group Allocation",
+      "description": "Split each progeny's Sort Group counts between its D1 and D2 destinations.",
+      "saveAll": "Save All",
+      "savedTitle": "Saved",
+      "savedDescription": "Saved {{count}} allocation rows.",
+      "filtersRequiredTitle": "Set Berry, Team, and Pollination Year first",
+      "filtersRequiredBody": "This screen needs all three global filters set to load eligible progenies. Missing:",
+      "rowCount": "{{count}} progeny",
+      "rowCount_other": "{{count}} progenies",
+      "galleryTotalsTitle": "Gallery Totals & Priorities",
+      "galleryTotalsDesc": "Set a priority per Sort Group; D1 fills first up to its ship request, then overflow goes to D2 (or mirror for D2 priority, or 50/50 for Equal). Capacity is consumed in order SG1 → SG5.",
+      "sortGroup": "Sort Group",
+      "total": "Total",
+      "priority": "Priority",
+      "toD1": "To D1",
+      "toD2": "To D2",
+      "sgRow": "SG {{n}}",
+      "totalsRow": "Totals",
+      "equal": "Equal split",
+      "d1Priority": "D1 priority",
+      "d2Priority": "D2 priority",
+      "noEligible": "No eligible progenies for this Berry / Team / Year. Eligible progenies need a D2 destination and at least one Sort Group with a count > 0.",
+      "dest1": "Destination 1",
+      "dest2": "Destination 2",
+      "shipRequest": "Ship request",
+      "planned": "Planned"
+    },
+    "lifecycle": {
+      "title": "Lifecycle Summary",
+      "description": "Track completion of lifecycle stages by Berry/Team/Year",
+      "berry": "Berry",
+      "teamName": "Team Name",
+      "pollinationYear": "Pollination Year",
+      "progenyCount": "Progeny Count",
+      "pollenDone": "Pollen",
+      "pollinationDone": "Pollination",
+      "fruitDone": "Fruit",
+      "seedDone": "Seed",
+      "transplantDone": "Transplant",
+      "screenDone": "Screen",
+      "shipDone": "Ship",
+      "lastModified": "Last Modified",
+      "modifiedBy": "Modified By"
+    }
+  },
+  "reference": {
+    "labs": {
+      "title": "Testing Labs",
+      "description": "Manage the list of genotyping testing labs and plate sample numbers.",
+      "labName": "Lab Name",
+      "newLab": "New Lab",
+      "editLab": "Edit Lab"
+    },
+    "teams": {
+      "title": "Teams",
+      "description": "Manage greenhouse/pollination teams and their active status.",
+      "teamName": "Team Name",
+      "newTeam": "New Team",
+      "editTeam": "Edit Team"
+    },
+    "trays": {
+      "title": "Tray Sizes",
+      "description": "Manage tray size configurations and M2 per tray values.",
+      "traySize": "Tray Size",
+      "cellCount": "Cell Count",
+      "newTray": "New Tray",
+      "editTray": "Edit Tray"
+    },
+    "ratios": {
+      "title": "Propagation Ratios",
+      "description": "Manage the average propagation ratios, percentages, standard deviations, and buffer % to be used in calculations for all propagation steps.",
+      "newRatio": "New Ratio",
+      "editRatio": "Edit Ratio"
+    },
+    "deadlines": {
+      "title": "Deadlines",
+      "description": "Manage the number of weeks prior to the requested field plant date that each step should happen.",
+      "newDeadline": "New Deadline",
+      "editDeadline": "Edit Deadline"
+    },
+    "employees": {
+      "title": "Employees",
+      "description": "Manage employee accounts, teams, and access levels.",
+      "fullName": "Full Name",
+      "employeeNum": "Employee #",
+      "email": "Email",
+      "userLevel": "User Level",
+      "newEmployee": "New Employee",
+      "editEmployee": "Edit Employee",
+      "accessRestriction": "Only Admin2 and Admin3 users can access the Employees screen."
+    },
+    "markers": {
+      "title": "Marker List",
+      "description": "Manage trait markers, lab aliases, and testing lab status.",
+      "traitMarker": "Trait Marker",
+      "preferredLab": "Preferred Lab",
+      "newMarker": "New Marker",
+      "editMarker": "Edit Marker"
+    },
+    "markerBudget": {
+      "title": "Marker Allocations",
+      "description": "Manage marker sample and cost allocations by program and lab."
+    },
+    "markerPrices": {
+      "title": "Marker Prices",
+      "description": "Manage marker sample prices by genotyping screen and lab.",
+      "samplePrice": "Sample Price",
+      "allScreens": "All Genotyping Screens"
+    }
+  },
+  "inactivateDialog": {
+    "title": "Inactivate Cross",
+    "confirmMessage": "Are you sure you want to inactivate this cross? Please add any relevant comments below.",
+    "breederComment": "Breeder Comment",
+    "ghTeamComment": "GH Team Comment",
+    "optionalBreeder": "Optional breeder comment...",
+    "optionalGh": "Optional GH team comment...",
+    "noCancel": "No, Cancel",
+    "yesInactivate": "Yes, Inactivate",
+    "inactivating": "Inactivating..."
+  },
+  "dataTable": {
+    "editCount": "{{count}} edit(s)",
+    "saveChanges": "Save Changes",
+    "discardChanges": "Discard",
+    "dataList": "Data List",
+    "resetFilters": "Reset"
+  },
+  "notFound": {
+    "title": "404 Page Not Found",
+    "message": "Did you forget to add the page to the router?"
+  },
+  "language": {
+    "label": "Language"
+  },
+  "help": {
+    "title": "User Manual",
+    "subtitle": "Complete guide to using the Seedling Desktop application.",
+    "gettingStartedButton": "Getting Started Guide",
+    "gettingStarted": {
+      "title": "Getting Started",
+      "content": "### Logging In\n\n1. Open the Seedling Desktop app in your web browser.\n2. On the login screen, select your name from the dropdown list.\n3. Enter your 4-digit PIN (your Employee Number).\n4. Click Sign In.\n\nIf your PIN is incorrect, an error message will appear. Contact an administrator if you need your PIN reset.\n\n### First-Time Users\n\nYour administrator must create your employee account in the Employees reference table before you can log in. You will need:\n\n- Your name added to the system\n- A 4-digit Employee Number assigned (this is your PIN)\n- An appropriate User Level assigned\n\n### User Roles\n\n- Level 1 (User) — View all data, no editing\n- Level 2 (Breeder) — Add/edit crosses, inline editing of shipping and comments\n- Level 3 (Admin2) — Manage Teams, Trays, Ratios, Deadlines, and Employees\n- Level 4 (Admin3) — Same as Admin2\n- Level 5 (Molecular) — Manage Labs, Markers, Marker Allocations, and Marker Prices"
+    },
+    "navigation": {
+      "title": "Navigation & Layout",
+      "content": "The app uses a sidebar on the left side of the screen for navigation. It is organized into four sections:\n\n- Home & Analytics — Dashboard overview and detailed charts\n- Crosses — Cross records, parent inventory, and the cross form\n- Propagation Lifecycle — Stage-by-stage tracking from pollen through shipping\n- Reference Tables — System configuration data (teams, labs, markers, etc.)\n\n### Sidebar Controls\n\n- Click the pin icon to keep the sidebar always visible, or let it collapse automatically.\n- Click your user avatar at the bottom to log out.\n- Right-click a section icon when collapsed to see the flyout menu.\n\nThe top bar contains the global filters that apply across all pages."
+    },
+    "globalFilters": {
+      "title": "Global Filters",
+      "content": "The top bar contains persistent filters that affect data across every page:\n\n- Berry Type — Filter by berry (e.g., Strawberry, Blueberry, Raspberry, Blackberry)\n- Team — Filter by breeding team\n- Pollination Year — Select the target pollination year\n- SP Crosses — Toggle to show/hide SP (specific) crosses\n\nThese filters stay active as you navigate between pages. To see all data, clear any active filters."
+    },
+    "dashboard": {
+      "title": "Home Dashboard",
+      "content": "The dashboard provides a quick overview of the current breeding season's progress.\n\n### Progress Cards\n\nFour color-coded progress cards at the top show:\n\n- Pollination Progress — Percentage of pollinations completed vs. required\n- Seed Progress — Seed collected (grams) vs. required\n- Transplant Progress — Seedlings transplanted vs. required\n- Ship Progress — Seedlings shipped vs. total requested\n\nEach card shows a progress bar that shifts from red (behind schedule) to green (on track).\n\n### Charts\n\n- Crosses by Berry Type — Bar chart showing active crosses for each berry type\n- Propagation Funnel — Funnel chart visualizing volume through stages: Ship Request, Transplants Required, Pollinations Required, Crosses"
+    },
+    "analytics": {
+      "title": "Analytics",
+      "content": "The Analytics page provides detailed charts and breakdowns beyond the dashboard summary.\n\n- Pollinations, Seed, Transplants, and Shipping — Grouped bar charts filterable by Program, Destination, Team, or Year\n- Marker Analytics — Compares Marker Totals (Allocated vs. Cross List vs. Actual) and shows Markers Planned by Type\n- Parent Analytics — Charts for female and male parent performance including Seed Weight and Fruit Percentage\n\nUse the dropdown controls on the page to switch between different chart groupings."
+    },
+    "crosses": {
+      "title": "Crosses",
+      "content": "The Crosses section manages all cross records, parent plant inventory, and the form for creating or editing crosses.",
+      "simplified": {
+        "title": "Crossing List (Simplified)",
+        "content": "A condensed table showing the most commonly referenced cross data.\n\n### Key Columns\n\n- Progeny name, Destination 1 & 2, Ship Requests, Adjustments\n- Total Ship Requirement, Estimated Plants to Ship, Est Ship # (from Seed)\n- Transplant progress (Done vs. Required), Extra Trays Available\n- Markers, Seed data, Parent counts, Plant Date\n\n### Color Coding\n\n- Est Ship # (from Seed): Green if meeting/exceeding the Total Ship Requirement; red if falling short\n- D1/D2 Adj +/-: Amber highlight when adjustments have been entered\n\n### Actions\n\n- Add Cross button (Breeder level and above)\n- Full List button to switch to the comprehensive view\n- Row actions: Edit, Copy as New, Inactivate\n\n### Inline Editing (Breeder level and above)\n\n- Destination 1 & 2, Adjustments, Expected Discard %, Spiny Discard %"
+      },
+      "full": {
+        "title": "Crossing List (Full)",
+        "content": "The comprehensive table showing all cross data fields. This view contains all columns from the Simplified list, plus:\n\n- Parent 1 & 2 names, Berry type, Team\n- Screening status and Marker 1–6 assignments, Lab 1–2\n- Seed details (Sow Seed?, Seed Sown, Seed Weight Required/Inventory)\n- Fruit and Flower data (Required vs. Collected/Pollinated)\n- Parent layer details (P1/P2 L1–L4 field codes and counts)\n- Reciprocal Done, Fumigated, SP Crosses, Breeder & GH Team Comments\n\n### Inline Editing (Breeder level and above)\n\n- Destination 1 & 2, D1/D2 Adjustments, Expected Discard %, Spiny Discard %\n- Breeder Comments, GH Team Comments\n\n### Batch Save\n\nAfter making inline edits across multiple rows, click Save to submit all changes at once."
+      },
+      "form": {
+        "title": "Cross Form (Add / Edit / Copy)",
+        "content": "The form for creating a new cross, editing an existing one, or copying a cross to create a new record.\n\n### Sections\n\n- Cross Info: Berry, Progeny, Pollination Year/Team, Parents (searchable dropdowns), Reciprocal, SP Crosses, Designed By\n- Destinations & Shipping: Location, Program, Ship Request, Ship Adjustment, Field Plant Date — for Destination 1 and 2\n- Screening & Markers: Screening toggle, Marker 1–6 (filtered by berry type), Lab 1–2\n- Calculations Panel: Read-only panel showing calculated propagation requirements\n\n### Modes\n\n- Add: All fields editable. A new cross is created on save.\n- Edit: Some fields locked (Berry, Progeny, Year/Team, Ship Request). Other fields can be updated.\n- Copy as New: Data pre-filled from existing cross; you must enter a new Progeny name."
+      },
+      "parents": {
+        "title": "Parent Inventory",
+        "content": "Manages parent plant inventory used in crosses.\n\n### Columns\n\n- Selection name (the parent variety)\n- L1 Field Code & L1 Count (primary location)\n- L2–L4 Field Codes & Counts (toggleable with Show/Hide L2–L4 button)\n- Total Parents, Parents Required, Year, Comments, Berry, Team\n\n### Row Highlighting\n\n- Rows highlighted in red if the parent does not have sufficient plants to meet requirements\n\n### Actions\n\n- Add Parent — Create a new parent record with location and count details\n- Edit — Update an existing parent's locations and inventory\n- Delete — Remove a parent record"
+      }
+    },
+    "propagation": {
+      "title": "Propagation Lifecycle",
+      "content": "The Propagation Lifecycle pages track the progress of crosses through each stage of the breeding process, from pollen collection to final shipping.",
+      "lifecycle": {
+        "title": "Lifecycle Summary",
+        "content": "A high-level checklist showing the completion status of each lifecycle stage.\n\n- Stages tracked: Pollen, Pollination, Fruit, Seed, Transplant, Screen, Ship\n- Administrators can toggle the Done status for any stage\n- Shows who last modified the status and when"
+      },
+      "pollen": {
+        "title": "Pollen",
+        "content": "Tracks flower collection and pollen availability for each parent plant.\n\n- Flowers Required for Pollen vs. Total Flowers Collected\n- Pollen Available, Pollen Used, Bad Pollen\n- L1–L4 Field Codes and collection counts (L2–L4 toggleable)\n- Pollen To Go filter highlights parents that still need more flowers collected\n- Totals row displays sum totals for key numeric columns"
+      },
+      "pollination": {
+        "title": "Pollination",
+        "content": "Monitors the execution of crosses between parent plants.\n\n- Progeny, Parent 1, Parent 2, Bulk Parent 3\n- Pollination Required vs. Successful Pollinations, Emasculation To Go\n- Reciprocal Done status\n- Label Export feature for printing field labels (CSV)"
+      },
+      "fruit": {
+        "title": "Fruit",
+        "content": "Tracks fruit collection progress after successful pollinations.\n\n- Progeny, Fruit Required, Total Fruit Collected\n- Fruit To Go filter highlights crosses where the collection target has not been met"
+      },
+      "seed": {
+        "title": "Seed",
+        "content": "Manages seed processing, including acid treatment and sowing.\n\n- Seed Weight Required, Seed Weight Inventory\n- Seed Ready for Acid/GA treatment status\n- Seed Weight to Sow vs. Seed Weight to Bank (storage)\n- Acid/GA treatment start dates and deadlines, Sow Start date\n- Treatment Tracking automatically flags seeds ready for processing\n- Calculations Panel explains the logic behind seed sowing and banking"
+      },
+      "transplant": {
+        "title": "Transplant",
+        "content": "Tracks the transplanting of germinated seedlings into trays.\n\n- Transplants Required vs. Plants Transplanted\n- Transplant Instructions (e.g., Al Azar, Spineless, Spiny)\n- Destination 1 & 2 quantities\n- Breeders can modify D1/D2 transplant adjustments"
+      },
+      "screenProgeny": {
+        "title": "Screening (by Progeny)",
+        "content": "Shows genotype screening status summarized by cross/progeny.\n\n- Progeny, Markers assigned, Samples Required vs. Collected\n- Keep Requests vs. Keep Actuals\n- Sort Groups (1–5) for organizing screening results"
+      },
+      "screenPlate": {
+        "title": "Screening (by Plate)",
+        "content": "Shows genotype screening status organized by physical lab plates.\n\n- Plate Index, Lab, Marker\n- Samples Required vs. Collected\n- Screening completion status"
+      },
+      "sortAllocation": {
+        "title": "Sort Group Allocation",
+        "content": "Used between screening and shipping to split each progeny's screened-and-kept Sort Group counts (1–5) between its two destinations (D1 and D2).\n\nRequires Berry, Team, and Pollination Year set in the top filters. Only progenies with both D1 and D2 destinations and at least one non-zero Sort Group appear.\n\nFor each Sort Group, pick a priority:\n- Equal split — divide 50/50, capped by each side's ship request.\n- D1 priority — fill D1 up to its ship request, overflow to D2.\n- D2 priority — mirror of D1.\n\nPriorities apply from SG1 → SG5 in order, tracking remaining ship-request capacity per side. The D1 + D2 split always equals the source Sort Group total.\n\nSave All writes every progeny's split in one transaction. Save is rejected if any (progeny, sort group) exceeds the source total. Breeder (level 2) or higher can save."
+      },
+      "ship": {
+        "title": "Ship",
+        "content": "The final stage — preparing and tracking seedling shipments.\n\n- Progeny, Destination, Total Ship Plan vs. Ship Actual Total\n- First Tray/Box, Last Tray/Box, Rack/Pallet information\n- Extras Not Shipped (seedlings exceeding requirements)"
+      }
+    },
+    "reference": {
+      "title": "Reference Tables",
+      "content": "Reference tables contain the configuration data that drives calculations and options throughout the app. These are typically managed by administrators.",
+      "labs": {
+        "title": "Labs",
+        "content": "Manage the external testing laboratories used for genotype screening.\n\n- Lab Name — Name of the testing lab\n- Plate Sample Number — Standard capacity of a plate at this lab\n- Active — Whether the lab is currently available for selection\n\nOnly Molecular (Level 5) users can create, edit, or inactivate labs. All other users have read-only access."
+      },
+      "teams": {
+        "title": "Teams",
+        "content": "Manage the breeding teams within the organization.\n\n- Team Name — Name of the team\n- Active — Whether the team is currently active\n\nOnly Admin2 (Level 3) and Admin3 (Level 4) users can create, edit, or inactivate teams. All other users have read-only access."
+      },
+      "trays": {
+        "title": "Trays",
+        "content": "Define the standard tray sizes used in the greenhouse.\n\n- Tray Size — Number of cells in the tray\n- M² Per Tray — Surface area of the tray\n\nOnly Admin2 (Level 3) and Admin3 (Level 4) users can create, edit, or inactivate trays. All other users have read-only access."
+      },
+      "ratios": {
+        "title": "Ratios",
+        "content": "Manage success percentages and yield factors used in propagation calculations.\n\n- Seedling Transplant Success %, Average Seed Germination %, Pollination Success %\n- Seeds Per Gram, Grams of Seed Per Fruit\n- Standard Deviations for germination, pollination, and flower collection\n- Each ratio is linked to a specific Team, Berry, and Program\n\nOnly Admin2 (Level 3) and Admin3 (Level 4) users can create, edit, or inactivate ratios. All other users have read-only access."
+      },
+      "deadlines": {
+        "title": "Deadlines",
+        "content": "Configure the operational schedule for each stage of the breeding lifecycle.\n\n- Milestones: Crossing Files, Pollination, Fruit Collection, Seed Treatment, Sowing, Transplanting, Marker Screening\n- Each milestone has a Start Week and Deadline Week (relative to a target date)\n- Deadlines can be set per Berry Type, Team, Destination, and Program\n- Drives notifications that alert team members when action items are approaching\n\nOnly Admin2 (Level 3) and Admin3 (Level 4) users can create, edit, or inactivate deadlines. All other users have read-only access."
+      },
+      "employees": {
+        "title": "Employees",
+        "content": "Manage user accounts and access permissions.\n\n- Employee Name — Full name displayed in the system\n- Employee Number — 4-digit code used as the login PIN (hidden for non-admin users)\n- Team — Assigned breeding team\n- Email — Used for automated notifications\n- User Level — Permission level (User, Breeder, Admin2, Admin3, Molecular)\n- Active — Whether the account is enabled\n\nAll users can view the Employees screen, but only Admin2 (Level 3) and Admin3 (Level 4) can create, edit, or inactivate employees. Employee numbers are masked with dots for non-admin users."
+      },
+      "markers": {
+        "title": "Marker List",
+        "content": "Manage the catalog of genetic markers (traits) available for screening.\n\n- Trait/Marker Name, Berry type, Preferred Lab\n- Aliases (Driscoll's or Corteva names)\n- Lab Status for each lab (e.g., Corteva, LGC)\n\nOnly Molecular (Level 5) users can create, edit, or inactivate markers. Berry, Preferred Lab, and Alias (Driscolls) are required fields. All other users have read-only access."
+      },
+      "markerBudget": {
+        "title": "Marker Allocations / Budget",
+        "content": "Track the budget and sample limits for genotyping activities.\n\n- Sample Allocation Total — Maximum number of samples allowed\n- Cost Allocation Total — Budget amount for genotyping\n- Linked to Pollination Year, Berry, Program, Lab, and Team\n\nOnly Molecular (Level 5) users can add, edit, or delete marker allocations. All other users have read-only access."
+      },
+      "markerPrices": {
+        "title": "Marker Prices",
+        "content": "Manage the unit costs for genetic testing services.\n\n- Sample Price — Cost per sample\n- Year, Berry, Genotyping Screen, Lab\n\nOnly Molecular (Level 5) users can add, edit, or delete marker prices. All other users have read-only access."
+      }
+    },
+    "languages": {
+      "title": "Language Support",
+      "content": "The app supports four languages:\n\n- English\n- Spanish (Español)\n- Portuguese (Português)\n- Arabic (العربية) — displayed in right-to-left layout\n\nTo change the language, use the language selector in the top bar. The entire interface will update to your selected language."
+    },
+    "roles": {
+      "title": "User Roles & Permissions",
+      "content": "Access to features is controlled by your assigned User Level:\n\n- Level 1 (User) — View all data across the app. No editing capabilities. Employee numbers are hidden.\n- Level 2 (Breeder) — Add/edit crosses, inline edit shipping adjustments, comments, and discard percentages. Employee numbers are hidden.\n- Level 3 (Admin2) — All Breeder capabilities, plus manage Teams, Trays, Ratios, Deadlines, and Employees. Toggle lifecycle stage completion.\n- Level 4 (Admin3) — All Admin2 capabilities.\n- Level 5 (Molecular) — Manage Labs, Marker List, Marker Allocations, and Marker Prices. Read-only access to Teams, Trays, Ratios, Deadlines, and Employees. Employee numbers are hidden.\n\n### Screen Access Summary\n\n- Teams, Trays, Ratios, Deadlines, Employees — Editable by Admin2 (Level 3) and Admin3 (Level 4) only. All other users have read-only access.\n- Labs, Marker List, Marker Allocations, Marker Prices — Editable by Molecular (Level 5) only. All other users have read-only access.\n- Employees screen — Visible to all users, but Employee Numbers are masked (shown as dots) for non-admin users.\n\nYour User Level is assigned by an administrator in the Employees reference table."
+    },
+    "tips": {
+      "title": "Tips & Shortcuts",
+      "content": "- Inline Editing: On the Crossing Lists, click directly into editable cells to make quick changes. Click Save to submit your batch.\n- Batch Save: All changes are saved together — no need to save each row individually.\n- Sticky Headers: Table headers stay visible as you scroll down.\n- Color Coding: Green on Est Ship # (from Seed) means meeting the requirement; red means falling short. Amber on adjustment columns indicates an adjustment. Red rows in Parent Inventory mean insufficient parents.\n- Copy as New: Use this action on any cross to quickly create a similar cross with a new Progeny name.\n- Pollen/Fruit To Go: Use these filters to focus on items that still need attention.\n- Label Export: On the Pollination page, export CSV files for printing field labels.\n- Reset Filters: Every gallery page has a Reset button to clear all filters."
+    }
+  }
+}

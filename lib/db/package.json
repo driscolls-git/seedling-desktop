@@ -1,0 +1,19 @@
+{
+  "name": "@workspace/db",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./query": "./src/query.ts",
+    "./types": "./src/types.ts"
+  },
+  "dependencies": {
+    "mssql": "^11.0.1",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@types/mssql": "^9.1.5",
+    "@types/node": "catalog:"
+  }
+}

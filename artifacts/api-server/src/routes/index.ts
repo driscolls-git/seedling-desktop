@@ -1,0 +1,51 @@
+import { Router, type IRouter } from "express";
+import healthRouter from "./health";
+import authRouter from "./auth";
+import referenceTablesRouter from "./reference-tables";
+import crossesRouter from "./crosses";
+import parentsRouter from "./parents";
+import pollenRouter from "./pollen";
+import screeningRouter from "./screening";
+import shippingRouter from "./shipping";
+import fruitRouter from "./fruit";
+import pollinationRouter from "./pollination";
+import seedRouter from "./seed";
+import transplantRouter from "./transplant";
+import dashboardRouter from "./dashboard";
+import analyticsRouter from "./analytics";
+import lifecycleStatusRouter from "./lifecycle-status";
+import { requireAuth } from "../middleware/auth";
+
+const router: IRouter = Router();
+
+router.use(healthRouter);
+router.use(authRouter);
+
+router.use(requireAuth);
+router.use(referenceTablesRouter);
+router.use(crossesRouter);
+router.use(parentsRouter);
+router.use(pollenRouter);
+router.use(screeningRouter);
+router.use(shippingRouter);
+router.use("/fruit", fruitRouter);
+router.use("/pollination", pollinationRouter);
+router.use("/seed", seedRouter);
+router.use("/transplant", transplantRouter);
+router.use(dashboardRouter);
+router.use(analyticsRouter);
+router.use(lifecycleStatusRouter);
+// router.use(crossesRouter);
+// router.use(parentsRouter);
+// router.use(pollenRouter);
+// router.use(dashboardRouter);
+// router.use(screeningRouter);
+// router.use(shippingRouter);
+// router.use(analyticsRouter);
+// router.use("/fruit", fruitRouter);
+// router.use("/pollination", pollinationRouter);
+// router.use("/seed", seedRouter);
+// router.use("/transplant", transplantRouter);
+// router.use(lifecycleStatusRouter);
+
+export default router;

@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Seedling Desktop"
+version = "1.0.0"
+id = "artifacts/seedling-desktop"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+localPort = 25602
+name = "web"
+paths = ["/"]
+
+[services.development]
+run = "pnpm --filter @workspace/seedling-desktop run dev"
+
+[services.env]
+PORT = "25602"
+BASE_PATH = "/"
+
+[services.production]
+build = ["pnpm", "--filter", "@workspace/seedling-desktop", "run", "build"]
+publicDir = "artifacts/seedling-desktop/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"

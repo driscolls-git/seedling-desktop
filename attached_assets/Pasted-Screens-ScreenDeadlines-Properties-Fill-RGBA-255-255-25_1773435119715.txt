@@ -1,0 +1,3937 @@
+Screens:
+  ScreenDeadlines:
+    Properties:
+      Fill: =RGBA(255, 255, 255, 1)
+      OnVisible: |-
+        =Clear(coldeadlist);
+        Collect(
+            coldeadlist,
+            Filter(
+                vw_GH_Deadlines,
+                Berry = varberry,
+                IsBlank(ddTeamDeadFilter.SelectedText) || Team_Name = ddTeamDeadFilter.SelectedText.Value,
+                IsBlank(ddDest1_3.SelectedText) || Destination = ddDest1_3.SelectedText.Value,
+                Active = true
+            )
+        );
+    Children:
+      - labTitleBar_7:
+          Control: Label@2.5.1
+          Properties:
+            Align: =Align.Center
+            Color: =RGBA(252, 252, 249, 1)
+            Fill: =RGBA(218, 40, 28, 1)
+            FontWeight: =FontWeight.Semibold
+            Height: =25
+            PaddingBottom: =5.00
+            PaddingLeft: =5.00
+            PaddingRight: =7.36
+            PaddingTop: =7.36
+            Size: =14
+            Text: ="GH Seedling App"
+            Width: =1648
+            X: =0.00
+      - butNavigation_7:
+          Control: Classic/Button@2.2.0
+          Properties:
+            Color: =RGBA(72,119,60,1)
+            Fill: =RGBA(252,218,35,1)
+            FontWeight: =FontWeight.Bold
+            Height: =25
+            OnSelect: =Set(varshowmenu,true)
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            RadiusBottomLeft: =0
+            RadiusBottomRight: =0
+            RadiusTopLeft: =0
+            RadiusTopRight: =0
+            Size: =11
+            Text: ="Navigation"
+            X: =0.00
+      - IconChevron2_10:
+          Control: Classic/Icon@2.5.0
+          Properties:
+            Height: =25
+            Icon: =Icon.ChevronUp
+            OnSelect: =Set(varshowmenu,false)
+            PaddingBottom: =0.00
+            PaddingLeft: =0.00
+            PaddingRight: =0.00
+            PaddingTop: =0.00
+            Visible: =varshowmenu
+            Width: =30
+            X: =125
+      - DriscollsLogo2_10:
+          Control: Image@2.2.3
+          Properties:
+            Height: =50
+            Image: ='Driscoll''s Logo 2'
+            PaddingBottom: =0.00
+            PaddingLeft: =0.00
+            PaddingRight: =0.00
+            PaddingTop: =0.00
+            Width: =170
+            X: =1478
+      - Rectangle2_14:
+          Control: Rectangle@2.3.0
+          Properties:
+            Fill: =RGBA(252, 218, 35, 0.25)
+            Height: =62
+            Width: =1648
+            X: =0.00
+            Y: =25
+      - labTitleCrossingList_3:
+          Control: Label@2.5.1
+          Properties:
+            Align: =Align.Center
+            FontWeight: =FontWeight.Bold
+            Height: =37
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            Size: =26
+            Text: ="Seedling Propagation Deadlines"
+            VerticalAlign: =VerticalAlign.Bottom
+            Width: =550
+            X: =549
+            Y: =27
+      - butAddNewCross_6:
+          Control: Classic/Button@2.2.0
+          Properties:
+            Color: =RGBA(252,218,35,1)
+            DisplayMode: =If(tgAdminLevel.Value,DisplayMode.Edit,DisplayMode.Disabled)
+            Fill: =RGBA(72,119,60,1)
+            FontWeight: =FontWeight.Bold
+            Height: =25
+            OnSelect: |-
+              =ResetForm(FormDeadlines);
+              NewForm(FormDeadlines);
+              Set(vardeadlineshow,true);
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            Size: =11
+            Text: ="Add New Deadline"
+            Width: =140
+            X: =180
+      - conFilterDeadlines:
+          Control: GroupContainer@1.5.0
+          Variant: ManualLayout
+          Properties:
+            Fill: =RGBA(252, 218, 35, 100)
+            Height: =698
+            PaddingRight: =0.00
+            PaddingTop: =0.00
+            Width: =160
+            X: =0.00
+            Y: =70
+          Children:
+            - TextFilterBox_11:
+                Control: Text@0.0.51
+                Properties:
+                  Align: ='TextCanvas.Align'.Center
+                  BorderStyle: =BorderStyle.Solid
+                  Font: =App.Theme.Font
+                  Height: =Parent.Height
+                  Size: =18
+                  Text: ="Filters"
+                  VerticalAlign: =VerticalAlign.Top
+                  Weight: ='TextCanvas.Weight'.Semibold
+                  Width: =Parent.Width
+                  X: =0.00
+            - Image1_11:
+                Control: Image@2.2.3
+                Properties:
+                  BorderColor: =RGBA(218, 40, 28, 1)
+                  BorderThickness: =If(varberry="STRAW",4,0)
+                  Height: =50
+                  Image: ='Strawberry Icon 3'
+                  OnSelect: |-
+                    =Set(varberry,"STRAW");Set(varberryID,4);Set(varfillcolor,RGBA(218, 40, 28, 0.4));
+                    Clear(coldeadlist);
+                    Collect(
+                        coldeadlist,
+                        Filter(
+                            vw_GH_Deadlines,
+                            Berry = varberry,
+                            IsBlank(ddTeamDeadFilter.SelectedText) || Team_Name = ddTeamDeadFilter.SelectedText.Value,
+                            IsBlank(ddDest1_3.SelectedText) || Destination = ddDest1_3.SelectedText.Value,
+                            Active = true
+                        )
+                    );
+                  PaddingBottom: =0.00
+                  PaddingLeft: =0.00
+                  PaddingRight: =0.00
+                  PaddingTop: =0.00
+                  Width: =45
+                  X: =25
+                  Y: =39
+            - Image4_11:
+                Control: Image@2.2.3
+                Properties:
+                  BorderColor: =RGBA(109, 49, 162, 1)
+                  BorderThickness: =If(varberry="BLACK",4,0)
+                  Height: =50
+                  Image: ='Blackberry Icon 3'
+                  OnSelect: |-
+                    =Set(varberry,"BLACK");Set(varberryID,1);Set(varfillcolor,RGBA(109, 49, 162, 0.6));
+                    Clear(coldeadlist);
+                    Collect(
+                        coldeadlist,
+                        Filter(
+                            vw_GH_Deadlines,
+                            Berry = varberry,
+                            IsBlank(ddTeamDeadFilter.SelectedText) || Team_Name = ddTeamDeadFilter.SelectedText.Value,
+                            IsBlank(ddDest1_3.SelectedText) || Destination = ddDest1_3.SelectedText.Value,
+                            Active = true
+                        )
+                    );
+                  PaddingBottom: =0.00
+                  PaddingLeft: =0.00
+                  PaddingRight: =0.00
+                  PaddingTop: =0.00
+                  Width: =45
+                  X: =90
+                  Y: =39
+            - Image3_12:
+                Control: Image@2.2.3
+                Properties:
+                  BorderColor: =RGBA(39, 113, 194, 1)
+                  BorderThickness: =If(varberry="BLUE",4,0)
+                  Height: =50
+                  Image: ='Blueberry Icon 3'
+                  OnSelect: |-
+                    =Set(varberry,"BLUE");Set(varberryID,2);Set(varfillcolor,RGBA(39, 113, 194, 0.6));
+                    Clear(coldeadlist);
+                    Collect(
+                        coldeadlist,
+                        Filter(
+                            vw_GH_Deadlines,
+                            Berry = varberry,
+                            IsBlank(ddTeamDeadFilter.SelectedText) || Team_Name = ddTeamDeadFilter.SelectedText.Value,
+                            IsBlank(ddDest1_3.SelectedText) || Destination = ddDest1_3.SelectedText.Value,
+                            Active = true
+                        )
+                    );
+                  PaddingBottom: =0.00
+                  PaddingLeft: =0.00
+                  PaddingRight: =0.00
+                  PaddingTop: =0.00
+                  Width: =45
+                  X: =25
+                  Y: =112
+            - Image2_17:
+                Control: Image@2.2.3
+                Properties:
+                  BorderColor: =RGBA(233, 79, 76, 1)
+                  BorderThickness: =If(varberry="RASP",4,0)
+                  Height: =50
+                  Image: ='Raspberry Icon 3'
+                  OnSelect: |-
+                    =Set(varberry,"RASP");Set(varberryID,3);Set(varfillcolor,RGBA(233, 79, 76, 0.6));
+                    Clear(coldeadlist);
+                    Collect(
+                        coldeadlist,
+                        Filter(
+                            vw_GH_Deadlines,
+                            Berry = varberry,
+                            IsBlank(ddTeamDeadFilter.SelectedText) || Team_Name = ddTeamDeadFilter.SelectedText.Value,
+                            IsBlank(ddDest1_3.SelectedText) || Destination = ddDest1_3.SelectedText.Value,
+                            Active = true
+                        )
+                    );
+                  PaddingBottom: =0.00
+                  PaddingLeft: =0.00
+                  PaddingRight: =0.00
+                  PaddingTop: =0.00
+                  Width: =45
+                  X: =90
+                  Y: =112
+            - TextProgram_9:
+                Control: Text@0.0.51
+                Properties:
+                  Align: ='TextCanvas.Align'.Start
+                  Font: =App.Theme.Font
+                  Height: =23
+                  Text: ="Program"
+                  Width: =130
+                  X: =15
+                  Y: =298
+            - butReset_14:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  BorderThickness: =0
+                  Color: =Color.White
+                  Fill: =RGBA(218, 40, 28, 1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =30
+                  HoverFill: =RGBA(118, 0, 0, 1)
+                  OnSelect: |-
+                    =Reset(ddTeamDeadFilter);
+                    Reset(ComboBox1);
+                    Reset(ddDest1_3);
+                    Set(
+                        varfillcolor,
+                        RGBA(
+                            252,
+                            218,
+                            35,
+                            0.25
+                        )
+                    );
+                    Set(
+                        varberry,
+                        ""
+                    );
+                    Clear(coldeadlist);
+                    Collect(
+                        coldeadlist,
+                        Filter(
+                            vw_GH_Deadlines,
+                            Berry = varberry,
+                            IsBlank(ddTeamDeadFilter.SelectedText) || Team_Name = ddTeamDeadFilter.SelectedText.Value,
+                            IsBlank(ddDest1_3.SelectedText) || Destination = ddDest1_3.SelectedText.Value,
+                            Active = true
+                        )
+                    );
+                  PaddingBottom: =6.67
+                  PaddingLeft: =6.67
+                  PaddingRight: =7.36
+                  PaddingTop: =7.36
+                  Size: =14
+                  Text: ="Reset"
+                  Width: =130
+                  X: =15
+                  Y: =650
+            - TextDest1_5:
+                Control: Text@0.0.51
+                Properties:
+                  Align: ='TextCanvas.Align'.Start
+                  Font: =App.Theme.Font
+                  Height: =23
+                  Text: ="Destination"
+                  Width: =130
+                  X: =15
+                  Y: =232
+            - ddDest1_3:
+                Control: Classic/DropDown@2.3.1
+                Properties:
+                  AllowEmptySelection: =true
+                  ChevronBackground: =RGBA(72,119,60,1)
+                  Default: =
+                  Height: =30
+                  Items: |-
+                    =//Filter the list of destinations
+                    Distinct(vw_GH_Deadlines,Destination)
+                  Items.Value: =Value
+                  OnChange: |-
+                    =Clear(coldeadlist);
+                    Collect(
+                        coldeadlist,
+                        Filter(
+                            vw_GH_Deadlines,
+                            Berry = varberry,
+                            IsBlank(ddTeamDeadFilter.SelectedText) || Team_Name = ddTeamDeadFilter.SelectedText.Value,
+                            IsBlank(ddDest1_3.SelectedText) || Destination = ddDest1_3.SelectedText.Value,
+                            Active = true
+                        )
+                    );
+                  PaddingBottom: =0
+                  PaddingLeft: =5
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  Size: =11
+                  Width: =130
+                  X: =15
+                  Y: =255
+            - labTeamDead:
+                Control: Text@0.0.51
+                Properties:
+                  Align: ='TextCanvas.Align'.Start
+                  Font: =App.Theme.Font
+                  Height: =23
+                  Text: ="Team"
+                  Width: =130
+                  X: =15
+                  Y: =167
+            - ddTeamDeadFilter:
+                Control: Classic/DropDown@2.3.1
+                Properties:
+                  AllowEmptySelection: =true
+                  ChevronBackground: =RGBA(72,119,60,1)
+                  Default: =ddTeamMain.Selected.Value
+                  Height: =30
+                  Items: =Distinct(M_GHTeams,Team_Name)
+                  Items.Value: =Value
+                  OnChange: |-
+                    =Clear(coldeadlist);
+                    Collect(
+                        coldeadlist,
+                        Filter(
+                            vw_GH_Deadlines,
+                            Berry = varberry,
+                            IsBlank(ddTeamDeadFilter.SelectedText) || Team_Name = ddTeamDeadFilter.SelectedText.Value,
+                            IsBlank(ddDest1_3.SelectedText) || Destination = ddDest1_3.SelectedText.Value,
+                            Active = true
+                        )
+                    );
+                  PaddingBottom: =0
+                  PaddingLeft: =5
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  Size: =11
+                  Width: =130
+                  X: =15
+                  Y: =190
+            - ComboBox1:
+                Control: Classic/ComboBox@2.4.0
+                Properties:
+                  ChevronBackground: =RGBA(72,119,60,1)
+                  DisplayFields: =["SrcBreedingProgram"]
+                  Height: =30
+                  Items: =M_SrcBreedingProgram
+                  SearchFields: =["SrcBreedingProgram"]
+                  Size: =11
+                  Width: =130
+                  X: =15
+                  Y: =320
+      - conDeadlines:
+          Control: GroupContainer@1.5.0
+          Variant: AutoLayout
+          Properties:
+            Height: =681
+            LayoutDirection: =LayoutDirection.Horizontal
+            LayoutOverflowX: =LayoutOverflow.Scroll
+            Width: =1488
+            X: =160
+            Y: =87
+          Children:
+            - conMain_6:
+                Control: GroupContainer@1.5.0
+                Variant: ManualLayout
+                Properties:
+                  AlignInContainer: =AlignInContainer.Start
+                  Fill: =varfillcolor
+                  FillPortions: =0
+                  Height: =Parent.Height
+                  LayoutMaxHeight: =
+                  LayoutMaxWidth: =
+                  PaddingBottom: =0.00
+                  PaddingLeft: =0.00
+                  PaddingRight: =0.00
+                  PaddingTop: =0.00
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Width: =2485
+                  X: =200
+                  Y: =118
+                Children:
+                  - conHeader_8:
+                      Control: GroupContainer@1.5.0
+                      Variant: ManualLayout
+                      Properties:
+                        Height: =42
+                        Width: =Parent.Width
+                        Y: =Parent.Y
+                      Children:
+                        - butRegionRatio_2:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Edit / Delete"
+                              Width: =50
+                              Y: =1
+                        - butBerryRatio_1:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Berry"
+                              Width: =70
+                              X: =50
+                              Y: =1
+                        - butProgramRatio_1:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Program"
+                              Width: =130
+                              X: =330
+                              Y: =1
+                        - butSeedlingTransPercent_1:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Destination"
+                              Width: =120
+                              X: =210
+                              Y: =1
+                        - butSeedGermPercent_1:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Crossing File Deadline"
+                              Width: =100
+                              X: =460
+                              Y: =1
+                        - butSeedGermStdDev_2:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Pollination Deadline"
+                              Width: =100
+                              X: =660
+                              Y: =1
+                        - butSeedGermStdDev_3:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Fruit Collect Deadline"
+                              Width: =100
+                              X: =860
+                              Y: =1
+                        - butSeedsPerGram_1:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Seed Sow Deadline"
+                              Width: =100
+                              X: =1260
+                              Y: =1
+                        - butSeedsPerGramStdDev_1:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Transplant Deadline"
+                              Width: =100
+                              X: =1460
+                              Y: =1
+                        - butSeedPerFruit_1:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Marker Screen Deadline"
+                              Width: =100
+                              X: =1660
+                              Y: =1
+                        - butSeedPerFruitStdDev_1:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Marker Results Deadline"
+                              Width: =100
+                              X: =1760
+                              Y: =1
+                        - butModifiedDateRatio_1:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Modified Date"
+                              Width: =150
+                              X: =2100
+                              Y: =1
+                        - butModifiedByRatio_1:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Modified By"
+                              Width: =140
+                              X: =2250
+                              Y: =1
+                        - butPKIDRatio_1:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="ID"
+                              Width: =80
+                              X: =2390
+                              Y: =1
+                        - butSeedsPerGram_2:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Seed Sow Start"
+                              Width: =100
+                              X: =1160
+                              Y: =1
+                        - butSeedsPerGram_3:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Seed Acid Start"
+                              Width: =100
+                              X: =960
+                              Y: =1
+                        - butSeedsPerGram_4:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Seed Acid Deadline"
+                              Width: =100
+                              X: =1060
+                              Y: =1
+                        - butSeedGermStdDev_4:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Pollination Start"
+                              Width: =100
+                              X: =560
+                              Y: =1
+                        - butSeedGermStdDev_5:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Fruit Collect Start"
+                              Width: =100
+                              X: =760
+                              Y: =1
+                        - butSeedsPerGramStdDev_2:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Transplant Start"
+                              Width: =100
+                              X: =1360
+                              Y: =1
+                        - butSeedPerFruit_2:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Marker Screen Start"
+                              Width: =100
+                              X: =1560
+                              Y: =1
+                        - butBerryRatio_2:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Team"
+                              Width: =90
+                              X: =120
+                              Y: =1
+                        - butCommentsDead:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Comments"
+                              Width: =240
+                              X: =1860
+                              Y: =1
+                  - galDeadlines:
+                      Control: Gallery@2.15.0
+                      Variant: BrowseLayout_Vertical_TwoTextOneImageVariant_ver5.0
+                      Properties:
+                        Height: =625
+                        Items: |-
+                          =//Filters list based on filters entered and sorts results by Team then Berry
+                          SortByColumns(
+                              Filter(
+                                  coldeadlist,
+                                  IsEmpty(ComboBox1.SelectedItems) || IsBlank(ComboBox1.SelectedItems) || Program in ShowColumns(
+                                      ComboBox1.SelectedItems,
+                                      SrcBreedingProgram
+                                  )
+                              ),
+                              "Team_Name",
+                              SortOrder.Ascending,
+                              "Berry",
+                              SortOrder.Ascending
+                          )
+                        ShowNavigation: =true
+                        TemplatePadding: =0.00
+                        TemplateSize: =27
+                        Width: =Parent.Width
+                        Y: =43
+                      Children:
+                        - Separator1_10:
+                            Control: Rectangle@2.3.0
+                            Properties:
+                              Fill: =RGBA(252, 218, 35, 1)
+                              Height: =3
+                              OnSelect: =Select(Parent)
+                              Width: =Parent.Width
+                              X: =0.00
+                              Y: =24
+                        - Rectangle1_10:
+                            Control: Rectangle@2.3.0
+                            Properties:
+                              Fill: =App.Theme.Colors.Darker30
+                              Height: =27
+                              OnSelect: =Select(Parent)
+                              Visible: =ThisItem.IsSelected
+                              Width: =5.90
+                              X: =0.00
+                              Y: =0.00
+                        - IconEdit_3:
+                            Control: Classic/Icon@2.5.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              DisabledFill: =RGBA(106, 122, 127, 1)
+                              DisplayMode: =If(tgAdminLevel.Value,DisplayMode.Edit,DisplayMode.Disabled)
+                              Fill: =RGBA(72,119,60,1)
+                              Height: =23
+                              Icon: =Icon.Edit
+                              OnSelect: |-
+                                =Select(Parent);
+                                ResetForm(FormDeadlines);
+                                EditForm(FormDeadlines);
+                                Set(vardeadlineshow,true);
+                              Width: =25
+                        - IconEdit_4:
+                            Control: Classic/Icon@2.5.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              DisabledFill: =Color.Gray
+                              DisplayMode: =If(tgAdminLevel.Value,DisplayMode.Edit,DisplayMode.Disabled)
+                              Fill: =RGBA(218, 40, 28, 1)
+                              Height: =23
+                              Icon: =Icon.Trash
+                              OnSelect: |-
+                                =Select(Parent);
+                                Set(vardeadlineinactiveshow,true);
+                              Width: =25
+                              X: =25
+                        - BerryRatio_1:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Berry
+                              Width: =70
+                              X: =50
+                        - ProgramRatio_1:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Program
+                              Width: =130
+                              X: =330
+                        - SeedlingTransPercent_1:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Destination
+                              Width: =120
+                              X: =210
+                        - SeedGermPercent_1:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Crossing_File_Deadline
+                              Width: =100
+                              X: =460
+                        - SeedGermStdDev_2:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Pollination_Deadline
+                              Width: =100
+                              X: =660
+                        - SeedGermStdDev_3:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Fruit_Collect_Deadline
+                              Width: =100
+                              X: =860
+                        - SeedsPerGram_1:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Seed_Sow_Deadline
+                              Width: =100
+                              X: =1260
+                        - SeedsPerGramStdDev_1:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Transplant_Deadline
+                              Width: =100
+                              X: =1460
+                        - GramsSeedPerFruit_1:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Marker_Screening_Deadline
+                              Width: =100
+                              X: =1660
+                        - SeedPerFruitStdDev_1:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Marker_Results_Deadline
+                              Width: =100
+                              X: =1760
+                        - ModifiedDateRatio_1:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Modified_DateTime
+                              X: =2100
+                        - ModifiedByRatio_1:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Modified_By
+                              Width: =140
+                              X: =2250
+                        - PKIDRatio_1:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Deadlines_ID
+                              Width: =80
+                              X: =2390
+                        - SeedsPerGram_2:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Seed_Sow_Start
+                              Width: =100
+                              X: =1160
+                        - SeedsPerGramStdDev_2:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Seed_Acid_Start
+                              Width: =100
+                              X: =960
+                        - SeedsPerGramStdDev_3:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Seed_Acid_Deadline
+                              Width: =100
+                              X: =1060
+                        - SeedGermStdDev_4:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Pollination_Start
+                              Width: =100
+                              X: =560
+                        - SeedGermStdDev_5:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Fruit_Collect_Start
+                              Width: =100
+                              X: =760
+                        - SeedsPerGramStdDev_4:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Transplant_Start
+                              Width: =100
+                              X: =1360
+                        - GramsSeedPerFruit_2:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Marker_Screen_Start
+                              Width: =100
+                              X: =1560
+                        - BerryRatio_2:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Team_Name
+                              Width: =90
+                              X: =120
+                        - CommentsDead:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Comments
+                              Width: =240
+                              X: =1860
+      - conInactivate2_2:
+          Control: GroupContainer@1.5.0
+          Variant: ManualLayout
+          Properties:
+            Fill: =RGBA(252,218,35,1)
+            Visible: =vardeadlineinactiveshow
+            X: =650
+            Y: =227
+          Children:
+            - Label4_2:
+                Control: Label@2.5.1
+                Properties:
+                  Align: =Align.Center
+                  Height: =78
+                  Text: |-
+                    ="Are you sure you want to inactivate this Deadline? Berry: "&galDeadlines.Selected.Berry&" Team: "&galDeadlines.Selected.Team_Name&" Destination: "&galDeadlines.Selected.Destination&" Program: "&galDeadlines.Selected.Program
+                  Width: =427
+                  X: =36
+                  Y: =32
+            - butReset_15:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  BorderThickness: =0
+                  Color: =Color.White
+                  Fill: =RGBA(218, 40, 28, 1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =30
+                  HoverFill: =RGBA(118, 0, 0, 1)
+                  OnSelect: =Set(vardeadlineinactiveshow,false);
+                  PaddingBottom: =6.67
+                  PaddingLeft: =6.67
+                  PaddingRight: =7.36
+                  PaddingTop: =7.36
+                  Size: =14
+                  Text: ="No"
+                  Width: =130
+                  X: =104
+                  Y: =140
+            - butReset_16:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  BorderThickness: =0
+                  Color: =Color.White
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =30
+                  HoverFill: =RGBA(118, 0, 0, 1)
+                  OnSelect: |-
+                    =Patch(
+                        M_GHDeadlines,
+                        LookUp(
+                            M_GHDeadlines,
+                            Deadlines_ID = galDeadlines.Selected.Deadlines_ID
+                        ),
+                        {
+                            Active: false,
+                            Modified_By: User().FullName,
+                            Modified_DateTime: Now()
+                        }
+                    );
+                    Set(
+                        vardeadlineinactiveshow,
+                        false
+                    );
+                    Clear(coldeadlist);
+                    Collect(
+                        coldeadlist,
+                        Filter(
+                            vw_GH_Deadlines,
+                            Berry = varberry,
+                            IsBlank(ddTeamDeadFilter.SelectedText) || Team_Name = ddTeamDeadFilter.SelectedText.Value,
+                            IsBlank(ddDest1_3.SelectedText) || Destination = ddDest1_3.SelectedText.Value,
+                            Active = true
+                        )
+                    );
+                  PaddingBottom: =6.67
+                  PaddingLeft: =6.67
+                  PaddingRight: =7.36
+                  PaddingTop: =7.36
+                  Size: =14
+                  Text: ="Yes"
+                  Width: =130
+                  X: =295
+                  Y: =140
+      - conEditDeadlines:
+          Control: GroupContainer@1.5.0
+          Variant: ManualLayout
+          Properties:
+            Fill: =RGBA(252, 218, 35, 100)
+            Height: =682
+            PaddingRight: =0.00
+            PaddingTop: =0.00
+            Visible: =vardeadlineshow
+            Width: =1488
+            X: =160
+            Y: =86
+          Children:
+            - TextFilterBox_12:
+                Control: Text@0.0.51
+                Properties:
+                  Align: ='TextCanvas.Align'.Center
+                  BorderStyle: =BorderStyle.Solid
+                  Font: =App.Theme.Font
+                  Height: =Parent.Height
+                  Size: =18
+                  Text: =If(FormDeadlines.Mode=FormMode.Edit,"Edit Deadlines","New Deadline Entry")
+                  VerticalAlign: =VerticalAlign.Top
+                  Weight: ='TextCanvas.Weight'.Semibold
+                  Width: =Parent.Width
+                  X: =0.00
+            - FormDeadlines:
+                Control: Form@2.4.4
+                Variant: Classic
+                Layout: Vertical
+                Properties:
+                  DataSource: =M_GHDeadlines
+                  Height: =403
+                  Item: =LookUp('M_GHDeadlines',Deadlines_ID=galDeadlines.Selected.Deadlines_ID)
+                  NumberOfColumns: =6
+                  Width: =1485
+                  Y: =65
+                Children:
+                  - Berry_ID_DataCard3:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicNumberEdit
+                      Properties:
+                        DataField: ="Berry_ID"
+                        Default: =ThisItem.Berry_ID
+                        DisplayName: =false
+                        Height: =85
+                        Required: =true
+                        Update: =Value(Berry_IDDead.Text)
+                        Width: =247
+                        X: =0
+                        Y: =0
+                      Children:
+                        - DataCardKey21:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =34
+                              Size: =11
+                              Text: ="Berry"
+                              Width: =Parent.Width - 60
+                              Wrap: =false
+                              X: =30
+                              Y: =10
+                        - Berry_IDDead:
+                            Control: Classic/TextInput@2.3.2
+                            MetadataKey: FieldValue
+                            Properties:
+                              BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                              Default: =LookUp(M_BerryID,BerryType=ddBerryDead.SelectedText.Value,PK_BerryID)
+                              DelayOutput: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Format: =TextFormat.Number
+                              Height: =30
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =11
+                              Tooltip: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              X: =1
+                              Y: =45
+                        - ErrorMessage21:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =14
+                              Text: =Parent.Error
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =Berry_IDDead.Y + Berry_IDDead.Height
+                        - StarVisible21:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey21.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey21.Y
+                        - ddBerryDead:
+                            Control: Classic/DropDown@2.3.1
+                            Properties:
+                              ChevronBackground: =RGBA(72,119,60,1)
+                              Default: =galDeadlines.Selected.Berry
+                              Height: =30
+                              Items: =Distinct(M_BerryID,BerryType)
+                              Items.Value: =Value
+                              PaddingBottom: =5
+                              PaddingLeft: =5
+                              PaddingRight: =5
+                              PaddingTop: =5
+                              Size: =11
+                              Width: =173
+                              X: =30
+                              Y: =45
+                  - Team_ID_DataCard3:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicNumberEdit
+                      Properties:
+                        DataField: ="Team_ID"
+                        Default: =ThisItem.Team_ID
+                        DisplayName: =DataSourceInfo([@M_GHDeadlines],DataSourceInfo.DisplayName,Team_ID)
+                        Required: =true
+                        Update: =Value(Team_IDDead.Text)
+                        Width: =247
+                        X: =1
+                        Y: =0
+                      Children:
+                        - DataCardKey32:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =34
+                              Size: =11
+                              Text: ="Team"
+                              Width: =Parent.Width - 60
+                              Wrap: =false
+                              X: =30
+                              Y: =10
+                        - Team_IDDead:
+                            Control: Classic/TextInput@2.3.2
+                            MetadataKey: FieldValue
+                            Properties:
+                              BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                              Default: =LookUp(M_GHTeams,Team_Name=ddTeamDead.SelectedText.Value,Team_ID)
+                              DelayOutput: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Format: =TextFormat.Number
+                              Height: =30
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =11
+                              Tooltip: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              X: =1
+                              Y: =DataCardKey32.Y + DataCardKey32.Height + 5
+                        - ErrorMessage32:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =14
+                              Text: =Parent.Error
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =Team_IDDead.Y + Team_IDDead.Height
+                        - StarVisible32:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey32.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey32.Y
+                        - ddTeamDead:
+                            Control: Classic/DropDown@2.3.1
+                            Properties:
+                              ChevronBackground: =RGBA(72,119,60,1)
+                              Default: =galDeadlines.Selected.Team_Name
+                              Height: =30
+                              Items: =Distinct(M_GHTeams,Team_Name)
+                              Items.Value: =Value
+                              Size: =11
+                              Width: =173
+                              X: =30
+                              Y: =45
+                  - Destination_ID_DataCard1:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicNumberEdit
+                      Properties:
+                        DataField: ="Destination_ID"
+                        Default: =ThisItem.Destination_ID
+                        DisplayName: =DataSourceInfo([@M_GHDeadlines],DataSourceInfo.DisplayName,Destination_ID)
+                        Required: =true
+                        Update: =Value(Dest_IDDead.Text)
+                        Width: =247
+                        X: =2
+                        Y: =0
+                      Children:
+                        - DataCardKey22:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =34
+                              Size: =11
+                              Text: ="Destination"
+                              Width: =Parent.Width - 60
+                              Wrap: =false
+                              X: =30
+                              Y: =10
+                        - Dest_IDDead:
+                            Control: Classic/TextInput@2.3.2
+                            MetadataKey: FieldValue
+                            Properties:
+                              BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                              Default: =LookUp(M_Locations,LocationName=ddDestDead.SelectedText.Value,Location_ID)
+                              DelayOutput: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Format: =TextFormat.Number
+                              Height: =30
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =11
+                              Tooltip: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              X: =1
+                              Y: =45
+                        - ErrorMessage22:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =14
+                              Text: =Parent.Error
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =Dest_IDDead.Y + Dest_IDDead.Height
+                        - StarVisible22:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey22.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey22.Y
+                        - ddDestDead:
+                            Control: Classic/DropDown@2.3.1
+                            Properties:
+                              ChevronBackground: =RGBA(72,119,60,1)
+                              Default: =galDeadlines.Selected.Destination
+                              Height: =30
+                              Items: =Distinct(M_Locations,LocationName)
+                              Items.Value: =Value
+                              PaddingBottom: =5
+                              PaddingLeft: =5
+                              PaddingRight: =5
+                              PaddingTop: =5
+                              Size: =11
+                              Width: =173
+                              X: =30
+                              Y: =45
+                  - Program_ID_DataCard2:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicNumberEdit
+                      Properties:
+                        DataField: ="Program_ID"
+                        Default: =ThisItem.Program_ID
+                        DisplayName: =DataSourceInfo([@M_GHDeadlines],DataSourceInfo.DisplayName,Program_ID)
+                        Required: =true
+                        Update: =Value(Program_IDDead.Text)
+                        Width: =247
+                        X: =3
+                        Y: =0
+                      Children:
+                        - DataCardKey33:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =34
+                              Size: =11
+                              Text: ="Program"
+                              Width: =Parent.Width - 60
+                              Wrap: =false
+                              X: =30
+                              Y: =10
+                        - Program_IDDead:
+                            Control: Classic/TextInput@2.3.2
+                            MetadataKey: FieldValue
+                            Properties:
+                              BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                              Default: =LookUp(M_SrcBreedingProgram,SrcBreedingProgram=ddProgramDead.SelectedText.Value,SrcBreedingProgramId)
+                              DelayOutput: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Format: =TextFormat.Number
+                              Height: =30
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =11
+                              Tooltip: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              X: =1
+                              Y: =DataCardKey33.Y + DataCardKey33.Height + 5
+                        - ErrorMessage33:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =14
+                              Text: =Parent.Error
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =Program_IDDead.Y + Program_IDDead.Height
+                        - StarVisible33:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey33.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey33.Y
+                        - ddProgramDead:
+                            Control: Classic/DropDown@2.3.1
+                            Properties:
+                              ChevronBackground: =RGBA(72,119,60,1)
+                              Default: =galDeadlines.Selected.Program
+                              Height: =30
+                              Items: |-
+                                =//Filter the list of programs based on the berry selected
+                                SortByColumns(Distinct(Filter(M_SrcBreedingProgram,BerryType = Value(Berry_IDDead.Text)), SrcBreedingProgram),"Value")
+                              Items.Value: =Value
+                              Size: =11
+                              Width: =173
+                              X: =30
+                              Y: =45
+                  - Crossing_File_Deadline_DataCard1:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicNumberEdit
+                      Properties:
+                        DataField: ="Crossing_File_Deadline"
+                        Default: =ThisItem.Crossing_File_Deadline
+                        DisplayName: =DataSourceInfo([@M_GHDeadlines],DataSourceInfo.DisplayName,Crossing_File_Deadline)
+                        Required: =true
+                        Update: =Value(dcvCrossingDead.Text)
+                        Width: =247
+                        X: =4
+                        Y: =0
+                      Children:
+                        - DataCardKey112:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =34
+                              Size: =11
+                              Text: ="Crossing File Deadline"
+                              Width: =Parent.Width - 60
+                              Wrap: =false
+                              X: =30
+                              Y: =10
+                        - dcvCrossingDead:
+                            Control: Classic/TextInput@2.3.2
+                            MetadataKey: FieldValue
+                            Properties:
+                              BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                              Default: =Parent.Default
+                              DelayOutput: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Format: =TextFormat.Number
+                              Height: =30
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =11
+                              Tooltip: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =DataCardKey112.Y + DataCardKey112.Height + 5
+                        - emCrossDead:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: |+
+                                =Parent.Error
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width
+                              Y: =dcvCrossingDead.Y + dcvCrossingDead.Height
+                        - StarVisible108:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey112.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey112.Y
+                  - Pollination_Start_DataCard1:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicNumberEdit
+                      Properties:
+                        DataField: ="Pollination_Start"
+                        Default: =ThisItem.Pollination_Start
+                        DisplayName: =DataSourceInfo([@M_GHDeadlines],DataSourceInfo.DisplayName,Pollination_Start)
+                        Required: =true
+                        Update: =Value(dcvPollinationStart.Text)
+                        Width: =247
+                        X: =5
+                        Y: =0
+                      Children:
+                        - DataCardKey36:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =34
+                              Size: =11
+                              Text: ="Pollination Start"
+                              Width: =Parent.Width - 60
+                              Wrap: =false
+                              X: =30
+                              Y: =10
+                        - dcvPollinationStart:
+                            Control: Classic/TextInput@2.3.2
+                            MetadataKey: FieldValue
+                            Properties:
+                              BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                              Default: =Parent.Default
+                              DelayOutput: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Format: =TextFormat.Number
+                              Height: =30
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =11
+                              Tooltip: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =DataCardKey36.Y + DataCardKey36.Height + 5
+                        - emPollinationStart:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =14
+                              Text: =Parent.Error
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =dcvPollinationStart.Y + dcvPollinationStart.Height
+                        - StarVisible36:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey36.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey36.Y
+                  - Pollination_Deadline_DataCard1:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicNumberEdit
+                      Properties:
+                        DataField: ="Pollination_Deadline"
+                        Default: =ThisItem.Pollination_Deadline
+                        DisplayName: =DataSourceInfo([@M_GHDeadlines],DataSourceInfo.DisplayName,Pollination_Deadline)
+                        Required: =true
+                        Update: =Value(dcvPollinationDead.Text)
+                        Width: =247
+                        X: =0
+                        Y: =1
+                      Children:
+                        - DataCardKey117:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =34
+                              Size: =11
+                              Text: ="Pollination Deadline"
+                              Width: =Parent.Width - 60
+                              Wrap: =false
+                              X: =30
+                              Y: =10
+                        - dcvPollinationDead:
+                            Control: Classic/TextInput@2.3.2
+                            MetadataKey: FieldValue
+                            Properties:
+                              BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                              Default: =Parent.Default
+                              DelayOutput: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Format: =TextFormat.Number
+                              Height: =30
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =11
+                              Tooltip: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =DataCardKey117.Y + DataCardKey117.Height + 5
+                        - emPollinationDead:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: |-
+                                =//Show error if this week number is lower than previous week number
+                                Coalesce(
+                                    Parent.Error,
+                                    If(
+                                        Value(dcvPollinationDead.Text) < Value(dcvCrossingDead.Text) || Value(dcvPollinationDead.Text) < Value(dcvPollinationStart.Text),
+                                        "Needs to be higher or = to the previous step"
+                                    )
+                                )
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width
+                              Y: =dcvPollinationDead.Y + dcvPollinationDead.Height
+                        - StarVisible113:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey117.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey117.Y
+                  - Fruit_Collect_Start_DataCard1:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicNumberEdit
+                      Properties:
+                        DataField: ="Fruit_Collect_Start"
+                        Default: =ThisItem.Fruit_Collect_Start
+                        DisplayName: =DataSourceInfo([@M_GHDeadlines],DataSourceInfo.DisplayName,Fruit_Collect_Start)
+                        Required: =true
+                        Update: =Value(dcvFruitStart.Text)
+                        Width: =247
+                        X: =1
+                        Y: =1
+                      Children:
+                        - DataCardKey35:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =34
+                              Size: =11
+                              Text: ="Fruit Collect Start"
+                              Width: =Parent.Width - 60
+                              Wrap: =false
+                              X: =30
+                              Y: =10
+                        - dcvFruitStart:
+                            Control: Classic/TextInput@2.3.2
+                            MetadataKey: FieldValue
+                            Properties:
+                              BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                              Default: =Parent.Default
+                              DelayOutput: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Format: =TextFormat.Number
+                              Height: =30
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =11
+                              Tooltip: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =DataCardKey35.Y + DataCardKey35.Height + 5
+                        - emFruitStart:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =14
+                              Text: =Parent.Error
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =dcvFruitStart.Y + dcvFruitStart.Height
+                        - StarVisible35:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey35.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey35.Y
+                  - Fruit_Collect_Deadline_DataCard1:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicNumberEdit
+                      Properties:
+                        DataField: ="Fruit_Collect_Deadline"
+                        Default: =ThisItem.Fruit_Collect_Deadline
+                        DisplayName: =DataSourceInfo([@M_GHDeadlines],DataSourceInfo.DisplayName,Fruit_Collect_Deadline)
+                        Required: =true
+                        Update: =Value(dcvFruitDead.Text)
+                        Width: =247
+                        X: =2
+                        Y: =1
+                      Children:
+                        - DataCardKey114:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =34
+                              Size: =11
+                              Text: ="Fruit Collect Deadline"
+                              Width: =Parent.Width - 60
+                              Wrap: =false
+                              X: =30
+                              Y: =10
+                        - dcvFruitDead:
+                            Control: Classic/TextInput@2.3.2
+                            MetadataKey: FieldValue
+                            Properties:
+                              BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                              Default: =Parent.Default
+                              DelayOutput: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Format: =TextFormat.Number
+                              Height: =30
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =11
+                              Tooltip: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =DataCardKey114.Y + DataCardKey114.Height + 5
+                        - emFruitDead:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: |-
+                                =//Show error if this week number is lower than previous week number
+                                Coalesce(
+                                    Parent.Error,
+                                    If(
+                                        Value(dcvFruitDead.Text) < Value(dcvPollinationDead.Text) || Value(dcvFruitDead.Text) < Value(dcvFruitStart.Text),
+                                        "Needs to be higher or = to the previous step"
+                                    )
+                                )
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width
+                              Y: =dcvFruitDead.Y + dcvFruitDead.Height
+                        - StarVisible110:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey114.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey114.Y
+                  - Seed_Acid_Start_DataCard1:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicNumberEdit
+                      Properties:
+                        DataField: ="Seed_Acid_Start"
+                        Default: =ThisItem.Seed_Acid_Start
+                        DisplayName: =DataSourceInfo([@M_GHDeadlines],DataSourceInfo.DisplayName,Seed_Acid_Start)
+                        Required: =true
+                        Update: =Value(dcvAcidStart.Text)
+                        Width: =247
+                        X: =3
+                        Y: =1
+                      Children:
+                        - DataCardKey38:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =34
+                              Size: =11
+                              Text: ="Seed Acid Start"
+                              Width: =Parent.Width - 60
+                              Wrap: =false
+                              X: =30
+                              Y: =10
+                        - dcvAcidStart:
+                            Control: Classic/TextInput@2.3.2
+                            MetadataKey: FieldValue
+                            Properties:
+                              BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                              Default: =Parent.Default
+                              DelayOutput: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Format: =TextFormat.Number
+                              Height: =30
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =11
+                              Tooltip: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =DataCardKey38.Y + DataCardKey38.Height + 5
+                        - emAcidStart:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =14
+                              Text: =Parent.Error
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =dcvAcidStart.Y + dcvAcidStart.Height
+                        - StarVisible38:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey38.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey38.Y
+                  - Seed_Acid_Deadline_DataCard1:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicNumberEdit
+                      Properties:
+                        DataField: ="Seed_Acid_Deadline"
+                        Default: =ThisItem.Seed_Acid_Deadline
+                        DisplayName: =DataSourceInfo([@M_GHDeadlines],DataSourceInfo.DisplayName,Seed_Acid_Deadline)
+                        Required: =true
+                        Update: =Value(dcvAcidDead.Text)
+                        Width: =247
+                        X: =4
+                        Y: =1
+                      Children:
+                        - DataCardKey37:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =34
+                              Size: =11
+                              Text: ="Seed Acid Deadline"
+                              Width: =Parent.Width - 60
+                              Wrap: =false
+                              X: =30
+                              Y: =10
+                        - dcvAcidDead:
+                            Control: Classic/TextInput@2.3.2
+                            MetadataKey: FieldValue
+                            Properties:
+                              BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                              Default: =Parent.Default
+                              DelayOutput: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Format: =TextFormat.Number
+                              Height: =30
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =11
+                              Tooltip: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =DataCardKey37.Y + DataCardKey37.Height + 5
+                        - emAcidDead:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: |-
+                                =//Show error if this week number is lower than previous week number
+                                Coalesce(
+                                    Parent.Error,
+                                    If(
+                                        Value(dcvAcidDead.Text) < Value(dcvFruitDead.Text) || Value(dcvAcidDead.Text) < Value(dcvAcidStart.Text),
+                                        "Needs to be higher or = to the previous step"
+                                    )
+                                )
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =dcvAcidDead.Y + dcvAcidDead.Height
+                        - StarVisible37:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey37.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey37.Y
+                  - Seed_Sow_Start_DataCard1:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicNumberEdit
+                      Properties:
+                        DataField: ="Seed_Sow_Start"
+                        Default: =ThisItem.Seed_Sow_Start
+                        DisplayName: =DataSourceInfo([@M_GHDeadlines],DataSourceInfo.DisplayName,Seed_Sow_Start)
+                        Required: =true
+                        Update: =Value(dcvSowStart.Text)
+                        Width: =247
+                        X: =5
+                        Y: =1
+                      Children:
+                        - DataCardKey39:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =34
+                              Size: =11
+                              Text: ="Seed Sow Start"
+                              Width: =Parent.Width - 60
+                              Wrap: =false
+                              X: =30
+                              Y: =10
+                        - dcvSowStart:
+                            Control: Classic/TextInput@2.3.2
+                            MetadataKey: FieldValue
+                            Properties:
+                              BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                              Default: =Parent.Default
+                              DelayOutput: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Format: =TextFormat.Number
+                              Height: =30
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =11
+                              Tooltip: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =DataCardKey39.Y + DataCardKey39.Height + 5
+                        - emSowStart:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =14
+                              Text: =Parent.Error
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =dcvSowStart.Y + dcvSowStart.Height
+                        - StarVisible39:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey39.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey39.Y
+                  - Seed_Sow_Deadline_DataCard1:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicNumberEdit
+                      Properties:
+                        DataField: ="Seed_Sow_Deadline"
+                        Default: =ThisItem.Seed_Sow_Deadline
+                        DisplayName: =DataSourceInfo([@M_GHDeadlines],DataSourceInfo.DisplayName,Seed_Sow_Deadline)
+                        Height: =85
+                        Required: =true
+                        Update: =Value(dcvSowDead.Text)
+                        Width: =247
+                        X: =0
+                        Y: =2
+                      Children:
+                        - DataCardKey119:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =34
+                              Size: =11
+                              Text: ="Seed Sow Deadline"
+                              Width: =Parent.Width - 60
+                              Wrap: =false
+                              X: =30
+                              Y: =10
+                        - dcvSowDead:
+                            Control: Classic/TextInput@2.3.2
+                            MetadataKey: FieldValue
+                            Properties:
+                              BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                              Default: =Parent.Default
+                              DelayOutput: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Format: =TextFormat.Number
+                              Height: =30
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =11
+                              Tooltip: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =DataCardKey119.Y + DataCardKey119.Height + 5
+                        - emSeedSowDead:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: |-
+                                =//Show error if this week number is lower than previous week number
+                                Coalesce(
+                                    Parent.Error,
+                                    If(
+                                        Value(dcvSowDead.Text) < Value(dcvAcidDead.Text) || Value(dcvSowDead.Text) < Value(dcvSowStart.Text),
+                                        "Needs to be higher or = to the previous step"
+                                    )
+                                )
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =dcvSowDead.Y + dcvSowDead.Height
+                        - StarVisible115:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey119.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey119.Y
+                  - Transplant_Start_DataCard1:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicNumberEdit
+                      Properties:
+                        DataField: ="Transplant_Start"
+                        Default: =ThisItem.Transplant_Start
+                        DisplayName: =DataSourceInfo([@M_GHDeadlines],DataSourceInfo.DisplayName,Transplant_Start)
+                        Required: =true
+                        Update: =Value(dcvTransStart.Text)
+                        Width: =247
+                        X: =1
+                        Y: =2
+                      Children:
+                        - DataCardKey40:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =34
+                              Size: =11
+                              Text: ="Transplant Start"
+                              Width: =Parent.Width - 60
+                              Wrap: =false
+                              X: =30
+                              Y: =10
+                        - dcvTransStart:
+                            Control: Classic/TextInput@2.3.2
+                            MetadataKey: FieldValue
+                            Properties:
+                              BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                              Default: =Parent.Default
+                              DelayOutput: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Format: =TextFormat.Number
+                              Height: =30
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =11
+                              Tooltip: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =DataCardKey40.Y + DataCardKey40.Height + 5
+                        - emTransStart:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =14
+                              Text: =Parent.Error
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =dcvTransStart.Y + dcvTransStart.Height
+                        - StarVisible40:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey40.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey40.Y
+                  - Transplant_Deadline_DataCard1:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicNumberEdit
+                      Properties:
+                        DataField: ="Transplant_Deadline"
+                        Default: =ThisItem.Transplant_Deadline
+                        DisplayName: =DataSourceInfo([@M_GHDeadlines],DataSourceInfo.DisplayName,Transplant_Deadline)
+                        Height: =85
+                        Required: =true
+                        Update: =Value(dcvTransDead.Text)
+                        Width: =247
+                        X: =2
+                        Y: =2
+                      Children:
+                        - DataCardKey122:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =34
+                              Size: =11
+                              Text: ="Transplant Deadline"
+                              Width: =Parent.Width - 60
+                              Wrap: =false
+                              X: =30
+                              Y: =10
+                        - dcvTransDead:
+                            Control: Classic/TextInput@2.3.2
+                            MetadataKey: FieldValue
+                            Properties:
+                              BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                              Default: =Parent.Default
+                              DelayOutput: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Format: =TextFormat.Number
+                              Height: =30
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =11
+                              Tooltip: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =DataCardKey122.Y + DataCardKey122.Height + 5
+                        - emTransDead:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: |-
+                                =//Show error if this week number is lower than previous week number
+                                Coalesce(
+                                    Parent.Error,
+                                    If(
+                                        Value(dcvTransDead.Text) < Value(dcvSowDead.Text) || Value(dcvTransDead.Text) < Value(dcvTransStart.Text),
+                                        "Needs to be higher or = to the previous step"
+                                    )
+                                )
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =dcvTransDead.Y + dcvTransDead.Height
+                        - StarVisible118:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey122.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey122.Y
+                  - Marker_Screen_Start_DataCard1:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicNumberEdit
+                      Properties:
+                        DataField: ="Marker_Screen_Start"
+                        Default: =ThisItem.Marker_Screen_Start
+                        DisplayName: =DataSourceInfo([@M_GHDeadlines],DataSourceInfo.DisplayName,Marker_Screen_Start)
+                        Required: =true
+                        Update: =Value(dcvScreenStart.Text)
+                        Width: =247
+                        X: =3
+                        Y: =2
+                      Children:
+                        - DataCardKey34:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =34
+                              Size: =11
+                              Text: ="Marker Screen Start"
+                              Width: =Parent.Width - 60
+                              Wrap: =false
+                              X: =30
+                              Y: =10
+                        - dcvScreenStart:
+                            Control: Classic/TextInput@2.3.2
+                            MetadataKey: FieldValue
+                            Properties:
+                              BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                              Default: =Parent.Default
+                              DelayOutput: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Format: =TextFormat.Number
+                              Height: =30
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =11
+                              Tooltip: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =DataCardKey34.Y + DataCardKey34.Height + 5
+                        - emScreenStart:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =14
+                              Text: =Parent.Error
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =dcvScreenStart.Y + dcvScreenStart.Height
+                        - StarVisible34:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey34.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey34.Y
+                  - Marker_Screening_Deadline_DataCard1:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicNumberEdit
+                      Properties:
+                        DataField: ="Marker_Screening_Deadline"
+                        Default: =ThisItem.Marker_Screening_Deadline
+                        DisplayName: =DataSourceInfo([@M_GHDeadlines],DataSourceInfo.DisplayName,Marker_Screening_Deadline)
+                        Height: =85
+                        Required: =true
+                        Update: =Value(dcvScreenDead.Text)
+                        Width: =247
+                        X: =4
+                        Y: =2
+                      Children:
+                        - DataCardKey116:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =30
+                              Size: =11
+                              Text: ="Marker Screen Deadline"
+                              Width: =203
+                              Wrap: =false
+                              X: =30
+                              Y: =10
+                        - dcvScreenDead:
+                            Control: Classic/TextInput@2.3.2
+                            MetadataKey: FieldValue
+                            Properties:
+                              BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                              Default: =Parent.Default
+                              DelayOutput: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Format: =TextFormat.Number
+                              Height: =30
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =11
+                              Tooltip: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =DataCardKey116.Y + DataCardKey116.Height + 5
+                        - emMarkerScreenDead:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: |-
+                                =//Show error if this week number is lower than previous week number
+                                Coalesce(
+                                    Parent.Error,
+                                    If(
+                                        Value(dcvScreenDead.Text) < Value(dcvTransDead.Text) || Value(dcvScreenDead.Text) < Value(dcvScreenStart.Text),
+                                        "Needs to be higher or = to the previous step"
+                                    )
+                                )
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =dcvScreenDead.Y + dcvScreenDead.Height
+                        - StarVisible112:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey116.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey116.Y
+                  - Marker_Results_Deadline_DataCard1:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicNumberEdit
+                      Properties:
+                        DataField: ="Marker_Results_Deadline"
+                        Default: =ThisItem.Marker_Results_Deadline
+                        DisplayName: =DataSourceInfo([@M_GHDeadlines],DataSourceInfo.DisplayName,Marker_Results_Deadline)
+                        Height: =85
+                        Required: =true
+                        Update: =Value(dcvMarkerResultsDead.Text)
+                        Width: =247
+                        X: =5
+                        Y: =2
+                      Children:
+                        - DataCardKey115:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =34
+                              Size: =11
+                              Text: ="Marker Results Deadline"
+                              Width: =Parent.Width - 60
+                              Wrap: =false
+                              X: =30
+                              Y: =10
+                        - dcvMarkerResultsDead:
+                            Control: Classic/TextInput@2.3.2
+                            MetadataKey: FieldValue
+                            Properties:
+                              BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                              Default: =Parent.Default
+                              DelayOutput: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Format: =TextFormat.Number
+                              Height: =30
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =11
+                              Tooltip: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =DataCardKey115.Y + DataCardKey115.Height + 5
+                        - emMarkerResultsDead:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: |-
+                                =//Show error if this week number is lower than previous week number
+                                Coalesce(
+                                    Parent.Error,
+                                    If(
+                                        Value(dcvMarkerResultsDead.Text) < Value(dcvScreenDead.Text),
+                                        "Needs to be higher or = to the previous step"
+                                    )
+                                )
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =dcvMarkerResultsDead.Y + dcvMarkerResultsDead.Height
+                        - StarVisible111:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey115.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey115.Y
+                  - Comments_DataCard3:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicTextualEdit
+                      Properties:
+                        DataField: ="Comments"
+                        Default: =ThisItem.Comments
+                        DisplayName: =DataSourceInfo([@M_GHDeadlines],DataSourceInfo.DisplayName,Comments)
+                        MaxLength: =DataSourceInfo([@M_GHDeadlines], DataSourceInfo.MaxLength, Comments)
+                        Required: =false
+                        Update: =tiCommentsDead.Text
+                        Width: =494
+                        X: =0
+                        Y: =3
+                      Children:
+                        - DataCardKey31:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =34
+                              Size: =11
+                              Text: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              Wrap: =false
+                              X: =30
+                              Y: =10
+                        - tiCommentsDead:
+                            Control: Classic/TextInput@2.3.2
+                            MetadataKey: FieldValue
+                            Properties:
+                              BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                              Default: =Parent.Default
+                              DelayOutput: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Height: =30
+                              MaxLength: =Parent.MaxLength
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =11
+                              Tooltip: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =DataCardKey31.Y + DataCardKey31.Height + 5
+                        - ErrorMessage31:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =14
+                              Text: =Parent.Error
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =tiCommentsDead.Y + tiCommentsDead.Height
+                        - StarVisible31:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey31.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey31.Y
+                  - Deadlines_ID_DataCard1:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicTextualView
+                      Properties:
+                        DataField: ="Deadlines_ID"
+                        Default: =ThisItem.Deadlines_ID
+                        DisplayName: =DataSourceInfo([@M_GHDeadlines],DataSourceInfo.DisplayName,Deadlines_ID)
+                        Required: =false
+                        Width: =247
+                        X: =2
+                        Y: =3
+                      Children:
+                        - DataCardKey41:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =34
+                              Size: =11
+                              Text: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              Wrap: =false
+                              X: =30
+                              Y: =10
+                        - DataCardValue14:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldValue
+                            Properties:
+                              AutoHeight: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Height: =27
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: =Parent.Default
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =DataCardKey41.Y + DataCardKey41.Height + 5
+            - labDeadlineInstruct:
+                Control: Label@2.5.1
+                Properties:
+                  Align: =Align.Center
+                  Text: ="Enter number of weeks prior to the requested field plant date each step should happen.  Enter negative, whole numbers (no decimals)."
+                  Width: =Parent.Width
+                  Y: =25
+            - butReset_17:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  BorderThickness: =0
+                  Color: =Color.White
+                  Fill: =RGBA(218, 40, 28, 1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =30
+                  HoverFill: =RGBA(118, 0, 0, 1)
+                  OnSelect: |-
+                    =ResetForm(FormDeadlines);
+                    Set(vardeadlineshow,false);
+                  PaddingBottom: =6.67
+                  PaddingLeft: =6.67
+                  PaddingRight: =7.36
+                  PaddingTop: =7.36
+                  Size: =14
+                  Text: ="Cancel"
+                  Width: =130
+                  X: =547
+                  Y: =611
+            - butReset_18:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  BorderThickness: =0
+                  Color: =Color.White
+                  DisplayMode: |-
+                    =If(
+                        !FormDeadlines.Valid || !IsBlank(emPollinationDead.Text) || !IsBlank(emFruitDead.Text) || !IsBlank(emAcidDead.Text) || !IsBlank(emSeedSowDead.Text) || !IsBlank(emTransDead.Text) || !IsBlank(emMarkerScreenDead.Text) || !IsBlank(emMarkerResultsDead.Text),
+                        DisplayMode.Disabled,
+                        DisplayMode.Edit
+                    )
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =30
+                  HoverFill: =RGBA(118, 0, 0, 1)
+                  OnSelect: |-
+                    =//Submits deadline update in form to GHSeed table
+                    Set(
+                        vardeadlineshow,
+                        false
+                    );
+                    If(
+                        FormDeadlines.Mode = FormMode.New,
+                        Patch(
+                            'M_GHDeadlines',
+                            Defaults('M_GHDeadlines'),
+                            {Crossing_File_Deadline: Value(dcvCrossingDead.Text),
+                            Pollination_Start: Value(dcvPollinationStart.Text),
+                            Pollination_Deadline: Value(dcvPollinationDead.Text),
+                            Fruit_Collect_Start: Value(dcvFruitStart.Text),
+                            Fruit_Collect_Deadline: Value(dcvFruitDead.Text),
+                            Seed_Acid_Start: Value(dcvAcidStart.Text),
+                            Seed_Acid_Deadline: Value(dcvAcidDead.Text),
+                            Seed_Sow_Start: Value(dcvSowStart.Text),
+                            Seed_Sow_Deadline: Value(dcvSowDead.Text),
+                            Transplant_Start: Value(dcvTransStart.Text),
+                            Transplant_Deadline: Value(dcvTransDead.Text),
+                            Marker_Screen_Start: Value(dcvScreenStart.Text),
+                            Marker_Screening_Deadline: Value(dcvScreenDead.Text),
+                            Marker_Results_Deadline: Value(dcvMarkerResultsDead.Text),
+                            Comments: tiCommentsDead.Text,
+                            Berry_ID: Value(Berry_IDDead.Text),
+                            Team_ID: Value(Team_IDDead.Text),
+                            Destination_ID: Value(Dest_IDDead.Text),
+                            Program_ID: Value(Program_IDDead.Text),
+                            Created_DateTime: Now(),
+                            Created_By: User().FullName,
+                            Modified_DateTime: Now(),
+                            Modified_By: User().FullName,
+                            Active: true
+                            }
+                        ),
+                        Patch(
+                            'M_GHDeadlines',
+                            LookUp(
+                                'M_GHDeadlines',
+                                Deadlines_ID = galDeadlines.Selected.Deadlines_ID
+                            ),
+                            {Crossing_File_Deadline: Value(dcvCrossingDead.Text),
+                            Pollination_Start: Value(dcvPollinationStart.Text),
+                            Pollination_Deadline: Value(dcvPollinationDead.Text),
+                            Fruit_Collect_Start: Value(dcvFruitStart.Text),
+                            Fruit_Collect_Deadline: Value(dcvFruitDead.Text),
+                            Seed_Acid_Start: Value(dcvAcidStart.Text),
+                            Seed_Acid_Deadline: Value(dcvAcidDead.Text),
+                            Seed_Sow_Start: Value(dcvSowStart.Text),
+                            Seed_Sow_Deadline: Value(dcvSowDead.Text),
+                            Transplant_Start: Value(dcvTransStart.Text),
+                            Transplant_Deadline: Value(dcvTransDead.Text),
+                            Marker_Screen_Start: Value(dcvScreenStart.Text),
+                            Marker_Screening_Deadline: Value(dcvScreenDead.Text),
+                            Marker_Results_Deadline: Value(dcvMarkerResultsDead.Text),
+                            Comments: tiCommentsDead.Text,
+                            Berry_ID: Value(Berry_IDDead.Text),
+                            Team_ID: Value(Team_IDDead.Text),
+                            Destination_ID: Value(Dest_IDDead.Text),
+                            Program_ID: Value(Program_IDDead.Text),
+                            Modified_DateTime: Now(),
+                            Modified_By: User().FullName
+                            }
+                        )
+                    );
+                    //Error or Success notification of submission
+                    If(
+                        IsEmpty(Errors('M_GHDeadlines')),
+                        Notify(
+                            "Success",
+                            NotificationType.Success
+                        );
+                        ,
+                        Notify(
+                            First(Errors('M_GHDeadlines')).Message & "Error with Deadline Form Submission",
+                            NotificationType.Error
+                        )
+                    );
+                    ResetForm(FormDeadlines);
+                    Clear(coldeadlist);
+                    Collect(
+                        coldeadlist,
+                        Filter(
+                            vw_GH_Deadlines,
+                            Berry = varberry,
+                            IsBlank(ddTeamDeadFilter.SelectedText) || Team_Name = ddTeamDeadFilter.SelectedText.Value,
+                            IsBlank(ddDest1_3.SelectedText) || Destination = ddDest1_3.SelectedText.Value,
+                            Active = true
+                        )
+                    );
+                  PaddingBottom: =6.67
+                  PaddingLeft: =6.67
+                  PaddingRight: =7.36
+                  PaddingTop: =7.36
+                  Size: =14
+                  Text: ="Submit"
+                  Width: =130
+                  X: =807
+                  Y: =611
+            - conExample_1:
+                Control: GroupContainer@1.5.0
+                Variant: ManualLayout
+                Properties:
+                  BorderThickness: =2
+                  DropShadow: =DropShadow.Semibold
+                  Fill: =RGBA(218, 40, 28, .3)
+                  Height: =140
+                  Width: =1488
+                  Y: =445
+                Children:
+                  - labShipQty_1:
+                      Control: Text@0.0.51
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        FontColor: =RGBA(0, 0, 0, 1)
+                        Height: =35
+                        Size: =12
+                        Text: ="Fruit Collect Deadline"
+                        VerticalAlign: =VerticalAlign.Middle
+                        Width: =102
+                        X: =436
+                        Y: =16
+                  - labDiscardPercent_1:
+                      Control: Text@0.0.51
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        FontColor: =RGBA(0, 0, 0, 1)
+                        Height: =35
+                        Size: =12
+                        Text: ="Seed Acid Start"
+                        VerticalAlign: =VerticalAlign.Middle
+                        Width: =102
+                        X: =538
+                        Y: =16
+                  - labPlateQty_1:
+                      Control: Text@0.0.51
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        FontColor: =RGBA(0, 0, 0, 1)
+                        Height: =35
+                        Size: =12
+                        Text: ="Seed Acid Deadline"
+                        VerticalAlign: =VerticalAlign.Middle
+                        Width: =102
+                        X: =640
+                        Y: =16
+                  - labSpinyDiscard_1:
+                      Control: Text@0.0.51
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        FontColor: =RGBA(0, 0, 0, 1)
+                        Height: =35
+                        Size: =12
+                        Text: ="Seed Sow Deadline"
+                        VerticalAlign: =VerticalAlign.Middle
+                        Width: =102
+                        X: =844
+                        Y: =16
+                  - labTransplantQty_1:
+                      Control: Text@0.0.51
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        FontColor: =RGBA(0, 0, 0, 1)
+                        Height: =35
+                        Size: =12
+                        Text: ="Seed Sow Start"
+                        VerticalAlign: =VerticalAlign.Middle
+                        Width: =102
+                        X: =742
+                        Y: =16
+                  - labSeedReq_1:
+                      Control: Text@0.0.51
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        FontColor: =RGBA(0, 0, 0, 1)
+                        Height: =35
+                        Size: =12
+                        Text: ="Transplant Start"
+                        VerticalAlign: =VerticalAlign.Middle
+                        Width: =102
+                        X: =946
+                        Y: =16
+                  - labFruitReq_1:
+                      Control: Text@0.0.51
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        FontColor: =RGBA(0, 0, 0, 1)
+                        Height: =35
+                        Size: =12
+                        Text: ="Transplant Deadline"
+                        VerticalAlign: =VerticalAlign.Middle
+                        Width: =102
+                        X: =1048
+                        Y: =16
+                  - labPollinationsReq_1:
+                      Control: Text@0.0.51
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        FontColor: =RGBA(0, 0, 0, 1)
+                        Height: =35
+                        Size: =12
+                        Text: ="Marker Screen Start"
+                        VerticalAlign: =VerticalAlign.Middle
+                        Width: =102
+                        X: =1150
+                        Y: =16
+                  - labPollenReq_1:
+                      Control: Text@0.0.51
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        FontColor: =RGBA(0, 0, 0, 1)
+                        Height: =35
+                        Size: =12
+                        Text: ="Marker Screen Deadline"
+                        VerticalAlign: =VerticalAlign.Middle
+                        Width: =102
+                        X: =1252
+                        Y: =16
+                  - labParent1Req_1:
+                      Control: Text@0.0.51
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        FontColor: =RGBA(0, 0, 0, 1)
+                        Height: =35
+                        Size: =12
+                        Text: ="Marker Results Deadline"
+                        VerticalAlign: =VerticalAlign.Middle
+                        Width: =102
+                        X: =1354
+                        Y: =16
+                  - labParent2Req_1:
+                      Control: Text@0.0.51
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        FontColor: =RGBA(0, 0, 0, 1)
+                        Height: =35
+                        Size: =12
+                        Text: ="Field Plant Date"
+                        VerticalAlign: =VerticalAlign.Middle
+                        Width: =100
+                        X: =610
+                        Y: =94
+                  - DatePickerCanvas1:
+                      Control: DatePicker@0.0.46
+                      Properties:
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        BorderStyle: =BorderStyle.Solid
+                        BorderThickness: =2
+                        Format: ='DatePickerCanvas.Format'.Short
+                        SelectedDate: =Now()
+                        Width: =125
+                        X: =722
+                        Y: =97
+                  - DatePickerCanvas1_1:
+                      Control: DatePicker@0.0.46
+                      Properties:
+                        Appearance: ='DatePickerCanvas.Appearance'.Outline
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        BorderStyle: =BorderStyle.Solid
+                        BorderThickness: =2
+                        DisplayMode: =DisplayMode.View
+                        Format: ='DatePickerCanvas.Format'.Short
+                        SelectedDate: =DateAdd((DatePickerCanvas1.SelectedDate),dcvMarkerResultsDead.Text*7,TimeUnit.Days)
+                        Width: =100
+                        X: =1354
+                        Y: =51
+                  - DatePickerCanvas1_2:
+                      Control: DatePicker@0.0.46
+                      Properties:
+                        Appearance: ='DatePickerCanvas.Appearance'.Outline
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        BorderStyle: =BorderStyle.Solid
+                        BorderThickness: =2
+                        DisplayMode: =DisplayMode.View
+                        Format: ='DatePickerCanvas.Format'.Short
+                        SelectedDate: =DateAdd((DatePickerCanvas1.SelectedDate),dcvScreenDead.Text*7,TimeUnit.Days)
+                        Width: =100
+                        X: =1252
+                        Y: =51
+                  - labShipQty_2:
+                      Control: Text@0.0.51
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        FontColor: =RGBA(0, 0, 0, 1)
+                        Height: =35
+                        Size: =12
+                        Text: ="Fruit Collect Start"
+                        VerticalAlign: =VerticalAlign.Middle
+                        Width: =102
+                        X: =334
+                        Y: =16
+                  - labShipQty_3:
+                      Control: Text@0.0.51
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        FontColor: =RGBA(0, 0, 0, 1)
+                        Height: =35
+                        Size: =12
+                        Text: ="Pollination Deadline"
+                        VerticalAlign: =VerticalAlign.Middle
+                        Width: =102
+                        X: =232
+                        Y: =16
+                  - labShipQty_4:
+                      Control: Text@0.0.51
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        FontColor: =RGBA(0, 0, 0, 1)
+                        Height: =35
+                        Size: =12
+                        Text: ="Pollination Start"
+                        VerticalAlign: =VerticalAlign.Middle
+                        Width: =102
+                        X: =130
+                        Y: =16
+                  - labShipQty_5:
+                      Control: Text@0.0.51
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        FontColor: =RGBA(0, 0, 0, 1)
+                        Height: =35
+                        Size: =12
+                        Text: ="Crossing File Deadline"
+                        VerticalAlign: =VerticalAlign.Middle
+                        Width: =102
+                        X: =28
+                        Y: =16
+                  - DatePickerCanvas1_3:
+                      Control: DatePicker@0.0.46
+                      Properties:
+                        Appearance: ='DatePickerCanvas.Appearance'.Outline
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        BorderStyle: =BorderStyle.Solid
+                        BorderThickness: =2
+                        DisplayMode: =DisplayMode.View
+                        Format: ='DatePickerCanvas.Format'.Short
+                        SelectedDate: =DateAdd((DatePickerCanvas1.SelectedDate),dcvScreenStart.Text*7,TimeUnit.Days)
+                        Width: =100
+                        X: =1150
+                        Y: =51
+                  - DatePickerCanvas1_4:
+                      Control: DatePicker@0.0.46
+                      Properties:
+                        Appearance: ='DatePickerCanvas.Appearance'.Outline
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        BorderStyle: =BorderStyle.Solid
+                        BorderThickness: =2
+                        DisplayMode: =DisplayMode.View
+                        Format: ='DatePickerCanvas.Format'.Short
+                        SelectedDate: =DateAdd((DatePickerCanvas1.SelectedDate),dcvTransDead.Text*7,TimeUnit.Days)
+                        Width: =100
+                        X: =1048
+                        Y: =51
+                  - DatePickerCanvas1_5:
+                      Control: DatePicker@0.0.46
+                      Properties:
+                        Appearance: ='DatePickerCanvas.Appearance'.Outline
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        BorderStyle: =BorderStyle.Solid
+                        BorderThickness: =2
+                        DisplayMode: =DisplayMode.View
+                        Format: ='DatePickerCanvas.Format'.Short
+                        SelectedDate: =DateAdd((DatePickerCanvas1.SelectedDate),dcvTransStart.Text*7,TimeUnit.Days)
+                        Width: =100
+                        X: =946
+                        Y: =51
+                  - DatePickerCanvas1_6:
+                      Control: DatePicker@0.0.46
+                      Properties:
+                        Appearance: ='DatePickerCanvas.Appearance'.Outline
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        BorderStyle: =BorderStyle.Solid
+                        BorderThickness: =2
+                        DisplayMode: =DisplayMode.View
+                        Format: ='DatePickerCanvas.Format'.Short
+                        SelectedDate: =DateAdd((DatePickerCanvas1.SelectedDate),dcvSowDead.Text*7,TimeUnit.Days)
+                        Width: =100
+                        X: =844
+                        Y: =51
+                  - DatePickerCanvas1_7:
+                      Control: DatePicker@0.0.46
+                      Properties:
+                        Appearance: ='DatePickerCanvas.Appearance'.Outline
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        BorderStyle: =BorderStyle.Solid
+                        BorderThickness: =2
+                        DisplayMode: =DisplayMode.View
+                        Format: ='DatePickerCanvas.Format'.Short
+                        SelectedDate: =DateAdd((DatePickerCanvas1.SelectedDate),dcvSowStart.Text*7,TimeUnit.Days)
+                        Width: =100
+                        X: =742
+                        Y: =51
+                  - DatePickerCanvas1_8:
+                      Control: DatePicker@0.0.46
+                      Properties:
+                        Appearance: ='DatePickerCanvas.Appearance'.Outline
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        BorderStyle: =BorderStyle.Solid
+                        BorderThickness: =2
+                        DisplayMode: =DisplayMode.View
+                        Format: ='DatePickerCanvas.Format'.Short
+                        SelectedDate: =DateAdd((DatePickerCanvas1.SelectedDate),dcvAcidDead.Text*7,TimeUnit.Days)
+                        Width: =100
+                        X: =640
+                        Y: =51
+                  - DatePickerCanvas1_9:
+                      Control: DatePicker@0.0.46
+                      Properties:
+                        Appearance: ='DatePickerCanvas.Appearance'.Outline
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        BorderStyle: =BorderStyle.Solid
+                        BorderThickness: =2
+                        DisplayMode: =DisplayMode.View
+                        Format: ='DatePickerCanvas.Format'.Short
+                        SelectedDate: =DateAdd((DatePickerCanvas1.SelectedDate),dcvAcidStart.Text*7,TimeUnit.Days)
+                        Width: =100
+                        X: =538
+                        Y: =51
+                  - DatePickerCanvas1_10:
+                      Control: DatePicker@0.0.46
+                      Properties:
+                        Appearance: ='DatePickerCanvas.Appearance'.Outline
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        BorderStyle: =BorderStyle.Solid
+                        BorderThickness: =2
+                        DisplayMode: =DisplayMode.View
+                        Format: ='DatePickerCanvas.Format'.Short
+                        SelectedDate: =DateAdd((DatePickerCanvas1.SelectedDate),dcvFruitDead.Text*7,TimeUnit.Days)
+                        Width: =100
+                        X: =436
+                        Y: =51
+                  - DatePickerCanvas1_11:
+                      Control: DatePicker@0.0.46
+                      Properties:
+                        Appearance: ='DatePickerCanvas.Appearance'.Outline
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        BorderStyle: =BorderStyle.Solid
+                        BorderThickness: =2
+                        DisplayMode: =DisplayMode.View
+                        Format: ='DatePickerCanvas.Format'.Short
+                        SelectedDate: =DateAdd((DatePickerCanvas1.SelectedDate),dcvFruitStart.Text*7,TimeUnit.Days)
+                        Width: =100
+                        X: =334
+                        Y: =51
+                  - DatePickerCanvas1_12:
+                      Control: DatePicker@0.0.46
+                      Properties:
+                        Appearance: ='DatePickerCanvas.Appearance'.Outline
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        BorderStyle: =BorderStyle.Solid
+                        BorderThickness: =2
+                        DisplayMode: =DisplayMode.View
+                        Format: ='DatePickerCanvas.Format'.Short
+                        SelectedDate: =DateAdd((DatePickerCanvas1.SelectedDate),dcvPollinationDead.Text*7,TimeUnit.Days)
+                        Width: =100
+                        X: =232
+                        Y: =51
+                  - DatePickerCanvas1_13:
+                      Control: DatePicker@0.0.46
+                      Properties:
+                        Appearance: ='DatePickerCanvas.Appearance'.Outline
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        BorderStyle: =BorderStyle.Solid
+                        BorderThickness: =2
+                        DisplayMode: =DisplayMode.View
+                        Format: ='DatePickerCanvas.Format'.Short
+                        SelectedDate: =DateAdd((DatePickerCanvas1.SelectedDate),dcvPollinationStart.Text*7,TimeUnit.Days)
+                        Width: =100
+                        X: =130
+                        Y: =51
+                  - DatePickerCanvas1_14:
+                      Control: DatePicker@0.0.46
+                      Properties:
+                        Appearance: ='DatePickerCanvas.Appearance'.Outline
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        BorderStyle: =BorderStyle.Solid
+                        BorderThickness: =2
+                        DisplayMode: =DisplayMode.View
+                        Format: ='DatePickerCanvas.Format'.Short
+                        SelectedDate: =DateAdd((DatePickerCanvas1.SelectedDate),dcvCrossingDead.Text*7,TimeUnit.Days)
+                        Width: =100
+                        X: =28
+                        Y: =51
+            - TextCanvas2_1:
+                Control: Text@0.0.51
+                Properties:
+                  Size: =18
+                  Text: ="Example"
+                  VerticalAlign: =VerticalAlign.Middle
+                  X: =31
+                  Y: =413
+      - labDeadlineInstruct_1:
+          Control: Label@2.5.1
+          Properties:
+            Align: =Align.Center
+            Height: =22
+            Text: ="These are the number of weeks prior to the requested field plant date that each step should happen."
+            Width: =1100
+            X: =274
+            Y: =64
+      - conMenu_4:
+          Control: GroupContainer@1.5.0
+          Variant: ManualLayout
+          Properties:
+            Height: =325
+            Visible: =varshowmenu
+            Width: =159
+            Y: =26
+          Children:
+            - butReports_14:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenReports,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Reports"
+                  Y: =300
+            - butEmployees_14:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  DisplayMode: =If(tgAdminLevel.Value,DisplayMode.Edit,DisplayMode.Disabled)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenEmployees,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Employees"
+                  Y: =275
+            - butDeadlines_17:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenDeadlines,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Deadlines"
+                  Y: =250
+            - butRatios_14:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenRatios,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Ratios"
+                  Y: =225
+            - butLTT9:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenLabsTeamsTrays,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Reference Tables"
+                  Y: =200
+            - butShip9:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenShip,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Ship"
+                  Y: =175
+            - butScreen_14:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenScreenDiscard,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Screen & Discards"
+                  Y: =150
+            - butTransplant_14:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenTransplantAdj,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Transplant"
+                  Y: =125
+            - butSeed_14:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenSeedList,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Seed"
+                  Y: =100
+            - butFruit_14:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenFruitList,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Fruit"
+                  Y: =75
+            - butPollination_14:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenPollinationList,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Pollination"
+                  Y: =50
+            - butCrossingList_15:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenCrossingListShort,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Crossing List"
+                  Y: =25
+            - butHome_11:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenHome,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Home"
+      - butAddNewCross_8:
+          Control: Classic/Button@2.2.0
+          Properties:
+            Color: =RGBA(252,218,35,1)
+            Fill: =RGBA(72,119,60,1)
+            FontWeight: =FontWeight.Bold
+            Height: =25
+            OnSelect: =Set(vardeadinfoshow,true);
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            Size: =11
+            Text: ="?"
+            Width: =25
+            X: =1623
+      - conInfoDeadline:
+          Control: GroupContainer@1.5.0
+          Variant: ManualLayout
+          Properties:
+            BorderThickness: =2
+            Fill: =RGBA(252, 218, 35, 100)
+            Height: =210
+            Visible: =vardeadinfoshow
+            Width: =767
+            X: =440
+            Y: =402
+          Children:
+            - InfoDeadPurpose:
+                Control: Label@2.5.1
+                Properties:
+                  Height: =38
+                  Text: ="Purpose of Deadlines:"
+                  Width: =Parent.Width
+                  Y: =6
+            - InfoDead1:
+                Control: Label@2.5.1
+                Properties:
+                  Height: =38
+                  Text: ="1.  Provide automated email reminders for certain deadlines."
+                  Width: =Parent.Width
+                  Y: =40
+            - InfoDead2:
+                Control: Label@2.5.1
+                Properties:
+                  Height: =44
+                  Text: ="2.  Prevent changing calculated required amounts for each step in propagation process that are already past the deadline dates."
+                  Width: =Parent.Width
+                  Y: =78
+            - InfoDead3:
+                Control: Label@2.5.1
+                Properties:
+                  Height: =38
+                  Text: ="3.  Used as a checkbox filter in KPI graphs for required amounts meeting deadline dates or not."
+                  Width: =Parent.Width
+                  Y: =122
+            - butReset_24:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  BorderThickness: =0
+                  Color: =Color.White
+                  Fill: =RGBA(218, 40, 28, 1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =30
+                  HoverFill: =RGBA(118, 0, 0, 1)
+                  OnSelect: =Set(vardeadinfoshow,false);
+                  PaddingBottom: =6.67
+                  PaddingLeft: =6.67
+                  PaddingRight: =7.36
+                  PaddingTop: =7.36
+                  Size: =14
+                  Text: ="Close"
+                  Width: =130
+                  X: =318
+                  Y: =170

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="hsl(198, 90%, 30%)"/>
+      <stop offset="100%" stop-color="hsl(198, 90%, 40%)"/>
+    </linearGradient>
+  </defs>
+  <!-- Matches the sidebar: 40x40 rounded-xl box (rx 12) scaled down to 32, so rx ≈ 9.6 → 9.
+       The Lucide `Leaf` icon is 24×24; centered in the 32×32 favicon at 20×20
+       (scale 20/24 ≈ 0.8333), offset (6, 6). -->
+  <rect width="32" height="32" rx="9" fill="url(#bg)"/>
+  <g transform="translate(6 6) scale(0.8333)" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/>
+    <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+  </g>
+</svg>

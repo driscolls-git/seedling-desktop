@@ -1,0 +1,1166 @@
+Screens:
+  ScreenFruitList:
+    Properties:
+      Fill: =RGBA(255, 255, 255, 1)
+    Children:
+      - labTitleBar_5:
+          Control: Label@2.5.1
+          Properties:
+            Align: =Align.Center
+            Color: =RGBA(252, 252, 249, 1)
+            Fill: =RGBA(218, 40, 28, 1)
+            FontWeight: =FontWeight.Semibold
+            Height: =25
+            PaddingBottom: =5.00
+            PaddingLeft: =5.00
+            PaddingRight: =7.36
+            PaddingTop: =7.36
+            Size: =14
+            Text: ="GH Seedling App"
+            Width: =1648
+            X: =0.00
+      - butNavigation_5:
+          Control: Classic/Button@2.2.0
+          Properties:
+            Color: =RGBA(72,119,60,1)
+            Fill: =RGBA(252,218,35,1)
+            FontWeight: =FontWeight.Bold
+            Height: =25
+            OnSelect: =Set(varshowmenu,true)
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            RadiusBottomLeft: =0
+            RadiusBottomRight: =0
+            RadiusTopLeft: =0
+            RadiusTopRight: =0
+            Size: =11
+            Text: ="Navigation"
+            X: =0.00
+      - IconChevron2_8:
+          Control: Classic/Icon@2.5.0
+          Properties:
+            Height: =25
+            Icon: =Icon.ChevronUp
+            OnSelect: =Set(varshowmenu,false)
+            PaddingBottom: =0.00
+            PaddingLeft: =0.00
+            PaddingRight: =0.00
+            PaddingTop: =0.00
+            Visible: =varshowmenu
+            Width: =30
+            X: =125
+      - DriscollsLogo2_8:
+          Control: Image@2.2.3
+          Properties:
+            Height: =50
+            Image: ='Driscoll''s Logo 2'
+            PaddingBottom: =0.00
+            PaddingLeft: =0.00
+            PaddingRight: =0.00
+            PaddingTop: =0.00
+            Width: =170
+            X: =1478
+      - Rectangle2_12:
+          Control: Rectangle@2.3.0
+          Properties:
+            Fill: =RGBA(252, 218, 35, 0.25)
+            Height: =45
+            Width: =1648
+            X: =0.00
+            Y: =25
+      - labTitleFruitList:
+          Control: Label@2.5.1
+          Properties:
+            Align: =Align.Center
+            FontWeight: =FontWeight.Bold
+            Height: =37
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            Size: =26
+            Text: ="Fruit List"
+            VerticalAlign: =VerticalAlign.Bottom
+            Width: =482
+            X: =582
+            Y: =27
+      - butExportCSV_5:
+          Control: Classic/Button@2.2.0
+          Properties:
+            Color: =RGBA(252,218,35,1)
+            Fill: =RGBA(72,119,60,1)
+            FontWeight: =FontWeight.Bold
+            Height: =25
+            OnSelect: "=Export_FruitDesk_View.Run(\r\n    (varberry),\r\n    Coalesce(ddTeam_3.Selected.Value, \" \"),\r\n    (Value(ddPollinationYear_3.Selected.Value)),\r\n    Coalesce(ddProgram_5.Selected.Value,\" \"),\r\n    Coalesce(tiParent_1.Value, \" \"),\r\n    (varfruittogo)\r\n    \r\n);\r\n\r\nIf(ddTeam_3.Selected.Value = \"Guzman\", Launch(\"https://driscollsinc.sharepoint.com/:f:/s/CdGuzmanGreenhouseOps/IgA8cuxK6M6-Sb5-ElA0_sw2AZS3NsVLWrKY2yvxaLTuTGE?e=cfhxEq\"),\r\nLaunch(\"https://driscollsinc.sharepoint.com/sites/General/Shared%20Documents/Forms/AllItems.aspx?FolderCTID=0x0120007018F6A0AA7B1A45BF24275192588A14&id=%2Fsites%2FGeneral%2FShared%20Documents%2FGeneral%20GH%2FGH%20Seedling%20App%20Export%20Files\"));\r\n\r\n"
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            Size: =11
+            Text: ="Export to CSV"
+            Width: =120
+            X: =1358
+      - ConFilterFruitList:
+          Control: GroupContainer@1.5.0
+          Variant: ManualLayout
+          Properties:
+            Fill: =RGBA(252, 218, 35, 100)
+            Height: =698
+            PaddingRight: =0.00
+            PaddingTop: =0.00
+            Width: =160
+            X: =0.00
+            Y: =70
+          Children:
+            - TextFilterBox_8:
+                Control: Text@0.0.51
+                Properties:
+                  Align: ='TextCanvas.Align'.Center
+                  BorderStyle: =BorderStyle.Solid
+                  Font: =App.Theme.Font
+                  Height: =Parent.Height
+                  Size: =18
+                  Text: ="Filters"
+                  VerticalAlign: =VerticalAlign.Top
+                  Weight: ='TextCanvas.Weight'.Semibold
+                  Width: =Parent.Width
+                  X: =0.00
+            - Image1_9:
+                Control: Image@2.2.3
+                Properties:
+                  BorderColor: =RGBA(218, 40, 28, 1)
+                  BorderThickness: =If(varberry="STRAW",4,0)
+                  Height: =50
+                  Image: ='Strawberry Icon 3'
+                  OnSelect: =Set(varberry,"STRAW");Set(varberryID,4);Set(varfillcolor,RGBA(218, 40, 28, 0.4));
+                  PaddingBottom: =0.00
+                  PaddingLeft: =0.00
+                  PaddingRight: =0.00
+                  PaddingTop: =0.00
+                  Width: =45
+                  X: =25
+                  Y: =38
+            - Image4_9:
+                Control: Image@2.2.3
+                Properties:
+                  BorderColor: =RGBA(109, 49, 162, 1)
+                  BorderThickness: =If(varberry="BLACK",4,0)
+                  Height: =50
+                  Image: ='Blackberry Icon 3'
+                  OnSelect: =Set(varberry,"BLACK");Set(varberryID,1);Set(varfillcolor,RGBA(109, 49, 162, 0.6));
+                  PaddingBottom: =0.00
+                  PaddingLeft: =0.00
+                  PaddingRight: =0.00
+                  PaddingTop: =0.00
+                  Width: =45
+                  X: =90
+                  Y: =38
+            - Image3_10:
+                Control: Image@2.2.3
+                Properties:
+                  BorderColor: =RGBA(39, 113, 194, 1)
+                  BorderThickness: =If(varberry="BLUE",4,0)
+                  Height: =50
+                  Image: ='Blueberry Icon 3'
+                  OnSelect: =Set(varberry,"BLUE");Set(varberryID,2);Set(varfillcolor,RGBA(39, 113, 194, 0.6));
+                  PaddingBottom: =0.00
+                  PaddingLeft: =0.00
+                  PaddingRight: =0.00
+                  PaddingTop: =0.00
+                  Width: =45
+                  X: =25
+                  Y: =111
+            - Image2_15:
+                Control: Image@2.2.3
+                Properties:
+                  BorderColor: =RGBA(233, 79, 76, 1)
+                  BorderThickness: =If(varberry="RASP",4,0)
+                  Height: =50
+                  Image: ='Raspberry Icon 3'
+                  OnSelect: =Set(varberry,"RASP");Set(varberryID,3);Set(varfillcolor,RGBA(233, 79, 76, 0.6));
+                  PaddingBottom: =0.00
+                  PaddingLeft: =0.00
+                  PaddingRight: =0.00
+                  PaddingTop: =0.00
+                  Width: =45
+                  X: =90
+                  Y: =111
+            - TextTeam_3:
+                Control: Text@0.0.51
+                Properties:
+                  Align: ='TextCanvas.Align'.Start
+                  Font: =App.Theme.Font
+                  Height: =23
+                  Text: ="Team"
+                  Width: =130
+                  X: =15
+                  Y: =167
+            - ddTeam_3:
+                Control: Classic/DropDown@2.3.1
+                Properties:
+                  AllowEmptySelection: =true
+                  ChevronBackground: =RGBA(72,119,60,1)
+                  Default: =ddTeamMain.Selected.Value
+                  Height: =30
+                  Items: =Distinct(M_GHTeams,Team_Name)
+                  Items.Value: =Value
+                  OnChange: =
+                  PaddingBottom: =0
+                  PaddingLeft: =5
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  Size: =11
+                  Width: =130
+                  X: =15
+                  Y: =190
+            - txPollinationYr_4:
+                Control: Text@0.0.51
+                Properties:
+                  Align: ='TextCanvas.Align'.Start
+                  Font: =App.Theme.Font
+                  Height: =23
+                  Text: ="Pollination Year"
+                  Width: =130
+                  X: =15
+                  Y: =232
+            - ddPollinationYear_3:
+                Control: Classic/DropDown@2.3.1
+                Properties:
+                  AllowEmptySelection: =true
+                  ChevronBackground: =RGBA(72,119,60,1)
+                  Default: =Year(Now())
+                  Height: =30
+                  Items: =Distinct(M_Year,DateYear)
+                  Items.Value: =Value
+                  OnChange: =
+                  PaddingBottom: =0
+                  PaddingLeft: =5
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  Size: =11
+                  Width: =130
+                  X: =15
+                  Y: =255
+            - TextProgeny_5:
+                Control: Text@0.0.51
+                Properties:
+                  Align: ='TextCanvas.Align'.Start
+                  Font: =App.Theme.Font
+                  Height: =23
+                  Text: ="Progeny"
+                  Width: =130
+                  X: =15
+                  Y: =298
+            - tiProgeny_4:
+                Control: TextInput@0.0.54
+                Properties:
+                  Align: =Align.Left
+                  BorderColor: =RGBA(0, 0, 0, 1)
+                  BorderRadius: =0
+                  BorderStyle: =BorderStyle.Solid
+                  BorderThickness: =2
+                  Font: =App.Theme.Font
+                  FontSize: =14
+                  Height: =33
+                  Mode: ='TextInputCanvas.Mode'.SingleLine
+                  OnChange: =
+                  PaddingBottom: =0
+                  PaddingLeft: =5
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  Placeholder: ="Progeny Search"
+                  TriggerOutput: ='TextInputCanvas.TriggerOutput'.Keypress
+                  Type: ='TextInputCanvas.Type'.Search
+                  Width: =130
+                  X: =15
+                  Y: =320
+            - txParent_4:
+                Control: Text@0.0.51
+                Properties:
+                  Align: ='TextCanvas.Align'.Start
+                  Font: =App.Theme.Font
+                  Height: =23
+                  Text: ="Parent"
+                  Width: =130
+                  X: =15
+                  Y: =362
+            - tiParent_1:
+                Control: TextInput@0.0.54
+                Properties:
+                  Align: =Align.Left
+                  BorderColor: =RGBA(0, 0, 0, 1)
+                  BorderRadius: =0
+                  BorderStyle: =BorderStyle.Solid
+                  BorderThickness: =2
+                  Font: =App.Theme.Font
+                  FontSize: =14
+                  Height: =33
+                  Mode: ='TextInputCanvas.Mode'.SingleLine
+                  OnChange: =
+                  PaddingBottom: =0
+                  PaddingLeft: =5
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  Placeholder: ="Parent Search"
+                  TriggerOutput: ='TextInputCanvas.TriggerOutput'.Keypress
+                  Type: ='TextInputCanvas.Type'.Search
+                  Width: =130
+                  X: =15
+                  Y: =385
+            - TextProgram_7:
+                Control: Text@0.0.51
+                Properties:
+                  Align: ='TextCanvas.Align'.Start
+                  Font: =App.Theme.Font
+                  Height: =23
+                  Text: ="Program"
+                  Width: =130
+                  X: =15
+                  Y: =427
+            - ddProgram_5:
+                Control: Classic/DropDown@2.3.1
+                Properties:
+                  AllowEmptySelection: =true
+                  ChevronBackground: =RGBA(72,119,60,1)
+                  Default: =false
+                  Height: =30
+                  Items: |-
+                    =//Filter the list of programs based on the berry selected
+                    SortByColumns(Distinct(Filter(M_SrcBreedingProgram,BerryType = varberryID), SrcBreedingProgram),"Value")
+                  Items.Value: =Value
+                  OnChange: =
+                  PaddingBottom: =0
+                  PaddingLeft: =5
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  Size: =11
+                  Width: =130
+                  X: =15
+                  Y: =450
+            - cbFruitToGo:
+                Control: Classic/CheckBox@2.1.0
+                Properties:
+                  CheckboxSize: =30
+                  OnCheck: =Set(varfruittogo,0);
+                  OnSelect: =
+                  OnUncheck: =Set(varfruittogo,-1000);
+                  Size: =10
+                  Text: ="Fruit To Go > 0"
+                  Width: =160
+                  Y: =480
+            - butReset_8:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  BorderThickness: =0
+                  Color: =Color.White
+                  Fill: =RGBA(218, 40, 28, 1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =30
+                  HoverFill: =RGBA(118, 0, 0, 1)
+                  OnSelect: |-
+                    =Reset(tiProgeny_4);
+                    Reset(tiParent_1);
+                    Reset(ddProgram_5);
+                    Reset(ddPollinationYear_3);
+                    Reset(ddTeam_3);
+                    Reset(cbFruitToGo);
+                    Set(varfruittogo,-1000);
+                  PaddingBottom: =6.67
+                  PaddingLeft: =6.67
+                  PaddingRight: =7.36
+                  PaddingTop: =7.36
+                  Size: =14
+                  Text: ="Reset"
+                  Width: =130
+                  X: =15
+                  Y: =650
+      - conFruitList:
+          Control: GroupContainer@1.5.0
+          Variant: AutoLayout
+          Properties:
+            Height: =698
+            LayoutDirection: =LayoutDirection.Horizontal
+            LayoutOverflowX: =LayoutOverflow.Scroll
+            Width: =1488
+            X: =160
+            Y: =70
+          Children:
+            - conMainFruit:
+                Control: GroupContainer@1.5.0
+                Variant: ManualLayout
+                Properties:
+                  AlignInContainer: =AlignInContainer.Start
+                  Fill: =varfillcolor
+                  FillPortions: =0
+                  Height: =Parent.Height
+                  LayoutMaxHeight: =
+                  LayoutMaxWidth: =
+                  PaddingBottom: =0.00
+                  PaddingLeft: =0.00
+                  PaddingRight: =0.00
+                  PaddingTop: =0.00
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Width: =1488
+                  X: =200
+                  Y: =118
+                Children:
+                  - conTotals_6:
+                      Control: GroupContainer@1.5.0
+                      Variant: ManualLayout
+                      Properties:
+                        Height: =17
+                        Width: =Parent.Width
+                        Y: =Parent.Y
+                      Children:
+                        - labTotal_2:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              FontWeight: =FontWeight.Bold
+                              Height: =17
+                              Size: =11
+                              Text: ="Totals:"
+                              Width: =90
+                              X: =384
+                        - TotRecipDone_1:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              FontWeight: =FontWeight.Bold
+                              Height: =17
+                              Size: =11
+                              Text: |-
+                                =//Filters list based on filters entered and sums the results of the field below
+                                Text(
+                                    Sum(
+                                        galFruitList.AllItems,
+                                        Reciprocal_Done
+                                    ),
+                                    "##,##0"
+                                )
+                              Width: =75
+                              X: =474
+                        - TotFruitRequired:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              FontWeight: =FontWeight.Bold
+                              Height: =17
+                              Size: =11
+                              Text: |-
+                                =//Filters list based on filters entered and sums the results of the field below
+                                Text(
+                                    Sum(
+                                        galFruitList.AllItems,
+                                        FRUIT_REQUIRED
+                                    ),
+                                    "##,##0"
+                                )
+                              Width: =75
+                              X: =549
+                        - TotFruitCollected:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              FontWeight: =FontWeight.Bold
+                              Height: =17
+                              Size: =11
+                              Text: |-
+                                =//Filters list based on filters entered and sums the results of the field below
+                                Text(
+                                    Sum(
+                                        galFruitList.AllItems,
+                                        Total_Fruit_Collected
+                                    ),
+                                    "##,##0"
+                                )
+                              Width: =75
+                              X: =624
+                        - TotFruitToGo:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              FontWeight: =FontWeight.Bold
+                              Height: =17
+                              Size: =11
+                              Text: |-
+                                =//Filters list based on filters entered and sums the results of the field below
+                                Text(
+                                    Sum(
+                                        galFruitList.AllItems,
+                                        Fruit_Collected_VS_Successful_Pollinations
+                                    ),
+                                    "##,##0"
+                                )
+                              Width: =75
+                              X: =699
+                  - conHeader_5:
+                      Control: GroupContainer@1.5.0
+                      Variant: ManualLayout
+                      Properties:
+                        Height: =42
+                        Width: =Parent.Width
+                        Y: =Parent.Y+17
+                      Children:
+                        - butProgeny_4:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(0, 0, 0, 1)
+                              Fill: =RGBA(252, 218, 35, 1)
+                              OnSelect: |+
+                                =Set(varFruitSort1,"Progeny");
+                                Set(varFruitSort2,"D1_Program");
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Progeny"
+                              Width: =120
+                              Y: =1
+                        - butParent1_4:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Parent 1"
+                              Width: =115
+                              X: =120
+                              Y: =1
+                        - butParent2_4:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Parent 2"
+                              Width: =115
+                              X: =235
+                              Y: =1
+                        - butProgram_4:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(0, 0, 0, 1)
+                              Fill: =RGBA(252, 218, 35, 1)
+                              OnSelect: |-
+                                =Set(varFruitSort1,"D1_Program");
+                                Set(varFruitSort2,"Progeny");
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Destination 1 Program"
+                              Width: =125
+                              X: =350
+                              Y: =1
+                        - butReciprocalDone_4:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Reciprocal Done?"
+                              Width: =75
+                              X: =475
+                              Y: =1
+                        - butFruitRequired:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Fruit Required"
+                              Width: =75
+                              X: =550
+                              Y: =1
+                        - butFruitCollected:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Fruit Collected"
+                              Width: =75
+                              X: =625
+                              Y: =1
+                        - butFruitToGo:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Fruit vs Pollination"
+                              Width: =75
+                              X: =700
+                              Y: =1
+                        - butGHSeedMasterID_4:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="ID"
+                              Width: =75
+                              X: =775
+                              Y: =1
+                        - SortProgeny_2:
+                            Control: Label@2.5.1
+                            Properties:
+                              Height: =15
+                              Size: =10
+                              Text: =If(varFruitSort1="Progeny","1","2")
+                              Width: =20
+                              Y: =26
+                        - SortProgram_2:
+                            Control: Label@2.5.1
+                            Properties:
+                              Height: =15
+                              Size: =10
+                              Text: =If(varFruitSort1="D1_Program","1","2")
+                              Width: =20
+                              X: =350
+                              Y: =25
+                  - galFruitList:
+                      Control: Gallery@2.15.0
+                      Variant: BrowseLayout_Vertical_TwoTextOneImageVariant_ver5.0
+                      Properties:
+                        Height: =624
+                        Items: |-
+                          =//Filters list based on filters entered and sorts results by user selected column heading and then by progeny then by program
+                          SortByColumns(
+                              Search(
+                                  Search(
+                                      Filter(
+                                          vw_GH_FruitDesk,
+                                          Berry = varberry,
+                                          IsBlank(ddTeam_3.Selected.Value) || Team_Name = ddTeam_3.Selected.Value,
+                                          IsBlank(ddProgram_5.Selected.Value) || D1_Program = ddProgram_5.Selected.Value,
+                                          IsBlank(ddPollinationYear_3.Selected.Value) || Pollination_Year = Value(ddPollinationYear_3.Selected.Value),
+                                          Fruit_Collected_VS_Successful_Pollinations > varfruittogo,
+                                          Active = true
+                                      ),
+                                      tiProgeny_4.Value,
+                                      Progeny
+                                  ),
+                                  tiParent_1.Value,
+                                  PARENT1,
+                                  PARENT2
+                              ),
+                              varFruitSort1,
+                              SortOrder.Ascending,
+                              varFruitSort2,
+                              SortOrder.Ascending
+                          )
+                        ShowNavigation: =true
+                        TemplatePadding: =0.00
+                        TemplateSize: =27
+                        Width: =Parent.Width
+                        Y: =59
+                      Children:
+                        - Rectangle1_7:
+                            Control: Rectangle@2.3.0
+                            Properties:
+                              Fill: =App.Theme.Colors.Darker30
+                              Height: =27
+                              OnSelect: =Select(Parent)
+                              Visible: =ThisItem.IsSelected
+                              Width: =5.90
+                              X: =0.00
+                              Y: =0.00
+                        - Progeny_6:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Progeny
+                              Width: =120
+                              Y: =0.00
+                        - Parent1_4:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.PARENT1
+                              Width: =115
+                              X: =120
+                        - Parent2_4:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.PARENT2
+                              Width: =115
+                              X: =235
+                        - Program_4:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =10
+                              Text: =ThisItem.D1_Program
+                              Width: =125
+                              X: =350
+                        - RecipDone_4:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Reciprocal_Done
+                              Width: =75
+                              X: =475
+                        - FruitRequired:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(255, 255, 255, .5))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.FRUIT_REQUIRED
+                              Width: =75
+                              X: =550
+                        - FruitCollected:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(255, 255, 255, .5))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Total_Fruit_Collected
+                              Width: =75
+                              X: =625
+                        - FruitToGo:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(255, 255, 255, .5))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Fruit_Collected_VS_Successful_Pollinations
+                              Width: =75
+                              X: =700
+                        - GHSeedMasterID_4:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.GHSeedlingMaster_ID
+                              Width: =75
+                              X: =775
+                        - Separator1_7:
+                            Control: Rectangle@2.3.0
+                            Properties:
+                              Fill: =RGBA(252, 218, 35, 1)
+                              Height: =3
+                              OnSelect: =Select(Parent)
+                              Width: =Parent.Width
+                              X: =0.00
+                              Y: =24
+      - conMenu_7:
+          Control: GroupContainer@1.5.0
+          Variant: ManualLayout
+          Properties:
+            Height: =325
+            Visible: =varshowmenu
+            Width: =159
+            Y: =26
+          Children:
+            - butReports_17:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenReports,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Reports"
+                  Y: =300
+            - butEmployees_17:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  DisplayMode: =If(tgAdminLevel.Value,DisplayMode.Edit,DisplayMode.Disabled)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenEmployees,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Employees"
+                  Y: =275
+            - butDeadlines_20:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenDeadlines,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Deadlines"
+                  Y: =250
+            - butRatios_17:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenRatios,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Ratios"
+                  Y: =225
+            - butLTT5:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenLabsTeamsTrays,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Reference Tables"
+                  Y: =200
+            - butShip5:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenShip,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Ship"
+                  Y: =175
+            - butScreen_17:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenScreenDiscard,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Screen & Discards"
+                  Y: =150
+            - butTransplant_17:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenTransplantAdj,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Transplant"
+                  Y: =125
+            - butSeed_17:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenSeedList,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Seed"
+                  Y: =100
+            - butFruit_17:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenFruitList,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Fruit"
+                  Y: =75
+            - butPollination_17:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenPollinationList,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Pollination"
+                  Y: =50
+            - butCrossingList_18:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenCrossingListShort,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Crossing List"
+                  Y: =25
+            - butHome_14:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenHome,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Home"

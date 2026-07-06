@@ -1,0 +1,493 @@
+{
+  "common": {
+    "loading": "Cargando...",
+    "saving": "Guardando...",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "add": "Agregar",
+    "new": "Nuevo",
+    "close": "Cerrar",
+    "search": "Buscar",
+    "reset": "Restablecer",
+    "export": "Exportar CSV",
+    "noData": "Sin datos disponibles",
+    "noResults": "No se encontraron resultados",
+    "typeToSearch": "Escriba para buscar...",
+    "show": "Mostrar",
+    "entries": "registros",
+    "of": "de",
+    "page": "Página",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "yes": "Sí",
+    "no": "No",
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "all": "Todos",
+    "required": "Requerido",
+    "optional": "Opcional",
+    "actions": "Acciones",
+    "confirm": "Confirmar",
+    "complete": "Completo",
+    "template": "Plantilla",
+    "upload": "Subir",
+    "download": "Descargar",
+    "uploadFailed": "Error al subir",
+    "networkError": "Error de red",
+    "warnings": "Advertencias",
+    "user": "Usuario",
+    "team": "Equipo",
+    "filter": "Filtro"
+  },
+  "auth": {
+    "seedlingPortal": "Portal de Plántulas de Escritorio",
+    "signInDescription": "Inicie sesión con su cuenta de empleado y PIN de 4 dígitos para continuar.",
+    "selectEmployee": "Seleccionar Empleado",
+    "selectYourName": "Seleccione su nombre...",
+    "fourDigitCode": "Código de 4 Dígitos",
+    "signIn": "Iniciar Sesión",
+    "authenticating": "Autenticando...",
+    "logout": "Cerrar Sesión",
+    "gettingStartedButton": "Guía de Inicio"
+  },
+  "nav": {
+    "seedling": "Plántula",
+    "desktopPortal": "Portal de Escritorio",
+    "homeDashboard": "Panel Principal",
+    "analytics": "Análisis",
+    "crosses": "Cruces",
+    "crossingListSimplified": "Resumen de Lista de Cruces",
+    "crossingListFull": "Lista de Cruces Completa",
+    "crossForm": "Formulario de Cruce",
+    "parentInventory": "Inventario de Padres",
+    "propagationLifecycle": "Ciclo de Propagación",
+    "lifecycleSummary": "Resumen del Ciclo",
+    "pollen": "Polen",
+    "pollination": "Polinización",
+    "fruit": "Fruta",
+    "seed": "Semilla",
+    "transplant": "Trasplante",
+    "screenByProgeny": "Evaluación por Progenie",
+    "screenByPlate": "Evaluación por Placa",
+    "ship": "Envío",
+    "sortAllocation": "Asignación de Grupos de Selección",
+    "referenceTables": "Tablas de Referencia",
+    "labs": "Laboratorios",
+    "teams": "Equipos",
+    "trays": "Bandejas",
+    "ratios": "Proporciones",
+    "deadlines": "Fechas Límite",
+    "employees": "Empleados",
+    "markerList": "Lista de Marcadores",
+    "markerAllocations": "Asignaciones de Marcadores",
+    "markerPrices": "Precios de Marcadores",
+    "rightClickForMenu": "(clic derecho para menú)",
+    "pinSidebar": "Fijar barra lateral",
+    "unpinSidebar": "Desfijar barra lateral",
+    "expandSidebar": "Expandir barra lateral",
+    "collapseSidebar": "Contraer barra lateral",
+    "uploadData": "Cargar Datos",
+    "help": "Manual de Usuario"
+  },
+  "filters": {
+    "globalFilters": "Filtros Globales",
+    "berry": "Baya",
+    "team": "Equipo",
+    "pollinationYear": "Año de Polinización",
+    "allTeams": "Todos los Equipos",
+    "spCrosses": "Cruces SP",
+    "resetFilters": "Restablecer Filtros",
+    "allPrograms": "Todos los Programas",
+    "allLabs": "Todos los Laboratorios",
+    "allDestinations": "Todos los Destinos",
+    "searchProgeny": "Buscar progenie...",
+    "searchParent": "Buscar padre...",
+    "year": "Año",
+    "program": "Programa",
+    "destination": "Destino"
+  },
+  "home": {
+    "dashboardOverview": "Resumen del Panel",
+    "summaryMetrics": "Métricas resumidas para Año de Polinización {{year}}",
+    "pollinationProgress": "Progreso de Polinización",
+    "seedProgress": "Progreso de Semilla",
+    "transplantProgress": "Progreso de Trasplante",
+    "shipProgress": "Progreso de Envío",
+    "required": "Requerido",
+    "requiredG": "Requerido (g)",
+    "requested": "Solicitado",
+    "crossesByBerry": "Cruces por Tipo de Baya",
+    "propagationFunnel": "Embudo de Propagación",
+    "shipRequest": "Solicitud de Envío",
+    "transplantsRequired": "Trasplantes Requeridos",
+    "pollinationsRequired": "Polinizaciones Requeridas",
+    "crosses": "Cruces"
+  },
+  "analytics": {
+    "title": "Análisis",
+    "pollinations": "Polinizaciones",
+    "seed": "Semilla",
+    "transplants": "Trasplantes",
+    "ship": "Envío",
+    "markers": "Marcadores",
+    "parents": "Padres",
+    "capAtRequired": "Limitar al requerido",
+    "byProgram": "por Programa",
+    "byDestination": "por Destino",
+    "byTeam": "por Equipo",
+    "byYear": "por Año de Polinización",
+    "byBerry": "por Baya",
+    "byType": "por Tipo",
+    "samples": "Muestras",
+    "cost": "Costo",
+    "allocation": "Asignación",
+    "crossList": "Lista de Cruces",
+    "actual": "Real",
+    "planned": "Planificado",
+    "markersPlannedByType": "Marcadores Planificados — Por Tipo",
+    "markerTotals": "Totales de Marcadores",
+    "female": "Femenino",
+    "male": "Masculino"
+  },
+  "crosses": {
+    "title": "Cruces",
+    "shortList": "Lista de Cruces — Resumen",
+    "fullList": "Lista de Cruces — Completa",
+    "crossForm": "Formulario de Cruce",
+    "newCross": "Nuevo Cruce",
+    "editCross": "Editar Cruce",
+    "copyAsNew": "Copiar como Nuevo",
+    "inactivate": "Inactivar",
+    "reactivate": "Reactivar",
+    "parentList": "Lista de Padres",
+    "downloadTemplate": "Descargar Plantilla de Cruces",
+    "uploadCrossingFile": "Subir Archivo de Cruces"
+  },
+  "propagation": {
+    "pollen": {
+      "title": "Polen",
+      "description": "Seguimiento de recolección e inventario de polen",
+      "pollenToGo": "Polen Pendiente",
+      "showL2L4": "Mostrar L2–L4"
+    },
+    "pollination": {
+      "title": "Polinización",
+      "description": "Seguimiento del progreso de polinización y emasculación",
+      "pollinationToGo": "Polinización Pendiente",
+      "emasculationToGo": "Emasculación Pendiente"
+    },
+    "fruit": {
+      "title": "Fruta",
+      "description": "Seguimiento del progreso de recolección de fruta",
+      "fruitToGo": "Fruta Pendiente"
+    },
+    "seed": {
+      "title": "Semilla",
+      "description": "Seguimiento de recolección, siembra y tratamiento ácido de semillas",
+      "seedSowToGo": "Siembra Pendiente",
+      "sowSeed": "Sembrar Semilla",
+      "acidDateRange": "Rango de Fecha Ácida",
+      "howCalcsWork": "Cómo Funcionan los Cálculos",
+      "seedCalcs": "Cálculos de Semilla"
+    },
+    "transplant": {
+      "title": "Trasplante",
+      "description": "Seguimiento del progreso y disponibilidad de trasplante",
+      "availablePlants": "Disponible > 0",
+      "exportTrayCodes": "Exportar Códigos de Bandeja e Índices de Placa CSV",
+      "exportTrayCodesSuccess": "Códigos de bandeja exportados"
+    },
+    "screenProgeny": {
+      "title": "Evaluación por Progenie",
+      "description": "Resultados de evaluación agrupados por progenie"
+    },
+    "screenPlate": {
+      "title": "Evaluación por Placa",
+      "description": "Resultados de evaluación agrupados por placa",
+      "plateIndex": "Índice de Placa #"
+    },
+    "ship": {
+      "title": "Envío",
+      "description": "Seguimiento del progreso de envío",
+      "shipped": "Enviado"
+    },
+    "sortAllocation": {
+      "title": "Asignación de Grupos de Selección",
+      "description": "Divida los recuentos de Grupos de Selección de cada progenie entre sus destinos D1 y D2.",
+      "saveAll": "Guardar Todo",
+      "savedTitle": "Guardado",
+      "savedDescription": "Se guardaron {{count}} filas de asignación.",
+      "filtersRequiredTitle": "Primero seleccione Baya, Equipo y Año de Polinización",
+      "filtersRequiredBody": "Esta pantalla necesita los tres filtros globales para cargar progenies elegibles. Faltan:",
+      "rowCount": "{{count}} progenie",
+      "rowCount_other": "{{count}} progenies",
+      "galleryTotalsTitle": "Totales y Prioridades de la Galería",
+      "galleryTotalsDesc": "Establezca una prioridad por Grupo de Selección; D1 se llena primero hasta su solicitud de envío, luego el exceso va a D2 (o reflejado para prioridad D2, o 50/50 para Igual). La capacidad se consume en orden SG1 → SG5.",
+      "sortGroup": "Grupo de Selección",
+      "total": "Total",
+      "priority": "Prioridad",
+      "toD1": "A D1",
+      "toD2": "A D2",
+      "sgRow": "SG {{n}}",
+      "totalsRow": "Totales",
+      "equal": "División igual",
+      "d1Priority": "Prioridad D1",
+      "d2Priority": "Prioridad D2",
+      "noEligible": "No hay progenies elegibles para esta Baya / Equipo / Año. Las progenies elegibles requieren un destino D2 y al menos un Grupo de Selección con un recuento > 0.",
+      "dest1": "Destino 1",
+      "dest2": "Destino 2",
+      "shipRequest": "Solicitud de envío",
+      "planned": "Planeado"
+    },
+    "lifecycle": {
+      "title": "Resumen del Ciclo de Vida",
+      "description": "Seguimiento de finalización de etapas del ciclo por Baya/Equipo/Año",
+      "berry": "Baya",
+      "teamName": "Nombre del Equipo",
+      "pollinationYear": "Año de Polinización",
+      "progenyCount": "Cantidad de Progenie",
+      "pollenDone": "Polen",
+      "pollinationDone": "Polinización",
+      "fruitDone": "Fruta",
+      "seedDone": "Semilla",
+      "transplantDone": "Trasplante",
+      "screenDone": "Evaluación",
+      "shipDone": "Envío",
+      "lastModified": "Última Modificación",
+      "modifiedBy": "Modificado Por"
+    }
+  },
+  "reference": {
+    "labs": {
+      "title": "Laboratorios de Prueba",
+      "description": "Administrar laboratorios de prueba",
+      "labName": "Nombre del Laboratorio",
+      "newLab": "Nuevo Laboratorio",
+      "editLab": "Editar Laboratorio"
+    },
+    "teams": {
+      "title": "Equipos",
+      "description": "Administrar equipos de invernadero",
+      "teamName": "Nombre del Equipo",
+      "newTeam": "Nuevo Equipo",
+      "editTeam": "Editar Equipo"
+    },
+    "trays": {
+      "title": "Bandejas",
+      "description": "Administrar tipos y tamaños de bandejas",
+      "traySize": "Tamaño de Bandeja",
+      "cellCount": "Cantidad de Celdas",
+      "newTray": "Nueva Bandeja",
+      "editTray": "Editar Bandeja"
+    },
+    "ratios": {
+      "title": "Proporciones",
+      "description": "Administrar factores y proporciones de propagación",
+      "newRatio": "Nueva Proporción",
+      "editRatio": "Editar Proporción"
+    },
+    "deadlines": {
+      "title": "Fechas Límite",
+      "description": "Administrar plantillas de fechas límite para etapas del ciclo",
+      "newDeadline": "Nueva Fecha Límite",
+      "editDeadline": "Editar Fecha Límite"
+    },
+    "employees": {
+      "title": "Empleados",
+      "description": "Administrar cuentas de empleados y niveles de acceso",
+      "fullName": "Nombre Completo",
+      "employeeNum": "Número de Empleado",
+      "email": "Correo Electrónico",
+      "userLevel": "Nivel de Usuario",
+      "newEmployee": "Nuevo Empleado",
+      "editEmployee": "Editar Empleado",
+      "accessRestriction": "Solo los usuarios Admin2 y Admin3 pueden acceder a la pantalla de Empleados."
+    },
+    "markers": {
+      "title": "Marcadores",
+      "description": "Administrar marcadores de rasgos y laboratorios preferidos",
+      "traitMarker": "Marcador de Rasgo",
+      "preferredLab": "Laboratorio Preferido",
+      "newMarker": "Nuevo Marcador",
+      "editMarker": "Editar Marcador"
+    },
+    "markerBudget": {
+      "title": "Asignaciones de Marcadores",
+      "description": "Administrar presupuestos de asignación de marcadores"
+    },
+    "markerPrices": {
+      "title": "Precios de Marcadores",
+      "description": "Administrar precios de marcadores por laboratorio y pantalla",
+      "samplePrice": "Precio de Muestra",
+      "allScreens": "Todas las Pantallas de Genotipado"
+    }
+  },
+  "inactivateDialog": {
+    "title": "Inactivar Cruce",
+    "confirmMessage": "¿Está seguro de que desea inactivar este cruce? Agregue comentarios relevantes a continuación.",
+    "breederComment": "Comentario del Criador",
+    "ghTeamComment": "Comentario del Equipo GH",
+    "optionalBreeder": "Comentario opcional del criador...",
+    "optionalGh": "Comentario opcional del equipo GH...",
+    "noCancel": "No, Cancelar",
+    "yesInactivate": "Sí, Inactivar",
+    "inactivating": "Inactivando..."
+  },
+  "dataTable": {
+    "editCount": "{{count}} edición(es)",
+    "saveChanges": "Guardar Cambios",
+    "discardChanges": "Descartar",
+    "dataList": "Lista de Datos",
+    "resetFilters": "Restablecer"
+  },
+  "notFound": {
+    "title": "404 Página No Encontrada",
+    "message": "¿Olvidó agregar la página al enrutador?"
+  },
+  "language": {
+    "label": "Idioma"
+  },
+  "help": {
+    "title": "Manual de Usuario",
+    "subtitle": "Guía completa para usar la aplicación Seedling Desktop.",
+    "gettingStartedButton": "Guía de Inicio",
+    "gettingStarted": {
+      "title": "Primeros Pasos",
+      "content": "### Iniciar Sesión\n\n1. Abra la aplicación Seedling Desktop en su navegador web.\n2. En la pantalla de inicio de sesión, seleccione su nombre de la lista desplegable.\n3. Ingrese su PIN de 4 dígitos (su Número de Empleado).\n4. Haga clic en Iniciar Sesión.\n\nSi su PIN es incorrecto, aparecerá un mensaje de error. Contacte a un administrador si necesita restablecer su PIN.\n\n### Nuevos Usuarios\n\nSu administrador debe crear su cuenta de empleado en la tabla de referencia de Empleados antes de que pueda iniciar sesión. Necesitará:\n\n- Su nombre agregado al sistema\n- Un Número de Empleado de 4 dígitos asignado (este es su PIN)\n- Un Nivel de Usuario apropiado asignado\n\n### Roles de Usuario\n\n- Nivel 1 (Usuario) — Ver todos los datos, sin edición\n- Nivel 2 (Mejorador) — Agregar/editar cruces, edición en línea de envíos y comentarios\n- Nivel 3 (Admin) — Gestionar empleados, alternar etapas del ciclo de vida, configuraciones de administración\n- Nivel 4 (Admin3) — Editar datos y configuraciones de marcadores\n- Nivel 5 (Molecular) — Acceso completo a todas las funciones incluyendo datos moleculares"
+    },
+    "navigation": {
+      "title": "Navegación y Diseño",
+      "content": "La aplicación utiliza una barra lateral en el lado izquierdo de la pantalla para la navegación. Está organizada en cuatro secciones:\n\n- Inicio y Análisis — Panel de resumen y gráficos detallados\n- Cruces — Registros de cruces, inventario de padres y formulario de cruces\n- Ciclo de Propagación — Seguimiento etapa por etapa desde polen hasta envío\n- Tablas de Referencia — Datos de configuración del sistema (equipos, laboratorios, marcadores, etc.)\n\n### Controles de la Barra Lateral\n\n- Haga clic en el icono de pin para mantener la barra lateral siempre visible.\n- Haga clic en su avatar de usuario en la parte inferior para cerrar sesión.\n- Haga clic derecho en un icono de sección cuando esté colapsado para ver el menú emergente."
+    },
+    "globalFilters": {
+      "title": "Filtros Globales",
+      "content": "La barra superior contiene filtros persistentes que afectan los datos en todas las páginas:\n\n- Tipo de Baya — Filtrar por baya (ej., Fresa, Arándano, Frambuesa, Mora)\n- Equipo — Filtrar por equipo de mejoramiento\n- Año de Polinización — Seleccionar el año objetivo\n- Cruces SP — Alternar para mostrar/ocultar cruces SP\n\nEstos filtros permanecen activos mientras navega entre páginas."
+    },
+    "dashboard": {
+      "title": "Panel de Inicio",
+      "content": "El panel proporciona una vista rápida del progreso de la temporada de mejoramiento actual.\n\n### Tarjetas de Progreso\n\n- Progreso de Polinización — Porcentaje completado vs. requerido\n- Progreso de Semilla — Semilla recolectada (gramos) vs. requerida\n- Progreso de Trasplante — Plántulas trasplantadas vs. requeridas\n- Progreso de Envío — Plántulas enviadas vs. total solicitado\n\n### Gráficos\n\n- Cruces por Tipo de Baya — Gráfico de barras mostrando cruces activos\n- Embudo de Propagación — Gráfico de embudo visualizando volumen a través de las etapas"
+    },
+    "analytics": {
+      "title": "Análisis",
+      "content": "La página de Análisis proporciona gráficos detallados y desgloses más allá del resumen del panel.\n\n- Polinizaciones, Semilla, Trasplantes y Envío — Gráficos de barras agrupados filtrables por Programa, Destino, Equipo o Año\n- Análisis de Marcadores — Compara Totales de Marcadores y muestra Marcadores Planificados por Tipo\n- Análisis de Padres — Gráficos de rendimiento de padres femeninos y masculinos"
+    },
+    "crosses": {
+      "title": "Cruces",
+      "content": "La sección de Cruces gestiona todos los registros de cruces, inventario de plantas madre y el formulario para crear o editar cruces.",
+      "simplified": {
+        "title": "Lista de Cruces (Simplificada)",
+        "content": "Una tabla condensada que muestra los datos de cruces más comúnmente referenciados.\n\n### Columnas Clave\n\n- Nombre de progenie, Destino 1 y 2, Solicitudes de envío, Ajustes\n- Requisito total de envío, Plantas estimadas para enviar\n\n### Codificación de Colores\n\n- Est Ship # (from Seed): Verde si cumple/supera el requisito; rojo si no alcanza\n- D1/D2 Adj +/-: Resaltado ámbar cuando se han ingresado ajustes\n\n### Edición en Línea (Nivel Mejorador y superior)\n\n- Destino 1 y 2, Ajustes, % de Descarte Esperado, % de Descarte Espinoso"
+      },
+      "full": {
+        "title": "Lista de Cruces (Completa)",
+        "content": "La tabla completa mostrando todos los campos de datos de cruces.\n\n### Edición en Línea (Nivel Mejorador y superior)\n\n- Destino 1 y 2, Ajustes D1/D2, % de Descarte\n- Comentarios del Mejorador, Comentarios del Equipo GH\n\n### Guardado por Lotes\n\nDespués de hacer ediciones en línea en múltiples filas, haga clic en Guardar para enviar todos los cambios a la vez."
+      },
+      "form": {
+        "title": "Formulario de Cruce (Agregar / Editar / Copiar)",
+        "content": "El formulario para crear un nuevo cruce, editar uno existente o copiar un cruce.\n\n### Secciones\n\n- Info del Cruce: Baya, Progenie, Año/Equipo de Polinización, Padres, Recíproco, Cruces SP\n- Destinos y Envío: Ubicación, Programa, Solicitud de Envío, Ajuste, Fecha de Plantación\n- Selección y Marcadores: Selección, Marcador 1–6, Laboratorio 1–2\n\n### Modos\n\n- Agregar: Todos los campos editables\n- Editar: Algunos campos bloqueados\n- Copiar como Nuevo: Datos prellenados; debe ingresar nuevo nombre de Progenie"
+      },
+      "parents": {
+        "title": "Inventario de Padres",
+        "content": "Gestiona el inventario de plantas madre utilizadas en cruces.\n\n- Nombre de selección, Código de campo L1 y conteo\n- L2–L4 (alternables con botón Mostrar/Ocultar)\n- Total de Padres, Padres Requeridos\n\n### Resaltado de Filas\n\n- Filas resaltadas en rojo si el padre no tiene suficientes plantas"
+      }
+    },
+    "propagation": {
+      "title": "Ciclo de Propagación",
+      "content": "Las páginas del Ciclo de Propagación rastrean el progreso de los cruces a través de cada etapa del proceso de mejoramiento.",
+      "lifecycle": {
+        "title": "Resumen del Ciclo de Vida",
+        "content": "Lista de verificación de alto nivel mostrando el estado de finalización de cada etapa.\n\n- Etapas rastreadas: Polen, Polinización, Fruta, Semilla, Trasplante, Selección, Envío\n- Los administradores pueden alternar el estado de Completado\n- Muestra quién modificó por última vez y cuándo"
+      },
+      "pollen": {
+        "title": "Polen",
+        "content": "Rastrea la recolección de flores y disponibilidad de polen para cada planta madre.\n\n- Flores Requeridas vs. Total Recolectado\n- Polen Disponible, Utilizado, Malo\n- Filtro Polen Pendiente resalta padres que necesitan más recolección"
+      },
+      "pollination": {
+        "title": "Polinización",
+        "content": "Monitorea la ejecución de cruces entre plantas madre.\n\n- Polinización Requerida vs. Polinizaciones Exitosas\n- Exportación de Etiquetas para impresión de etiquetas de campo (CSV)"
+      },
+      "fruit": {
+        "title": "Fruta",
+        "content": "Rastrea el progreso de recolección de fruta.\n\n- Fruta Requerida vs. Total Recolectado\n- Filtro Fruta Pendiente resalta cruces donde no se ha alcanzado el objetivo"
+      },
+      "seed": {
+        "title": "Semilla",
+        "content": "Gestiona el procesamiento de semillas incluyendo tratamiento ácido y siembra.\n\n- Peso de Semilla Requerido vs. Inventario\n- Estado de preparación para tratamiento Ácido/GA\n- Fechas de inicio y plazos de tratamiento"
+      },
+      "transplant": {
+        "title": "Trasplante",
+        "content": "Rastrea el trasplante de plántulas germinadas en bandejas.\n\n- Trasplantes Requeridos vs. Plantas Trasplantadas\n- Instrucciones de Trasplante\n- Los mejoradores pueden modificar ajustes de trasplante D1/D2"
+      },
+      "screenProgeny": {
+        "title": "Selección (por Progenie)",
+        "content": "Estado de selección genotípica resumido por cruce/progenie.\n\n- Muestras Requeridas vs. Recolectadas\n- Solicitudes de Mantener vs. Reales\n- Grupos de Clasificación (1–5)"
+      },
+      "screenPlate": {
+        "title": "Selección (por Placa)",
+        "content": "Estado de selección genotípica organizado por placas de laboratorio.\n\n- Índice de Placa, Laboratorio, Marcador\n- Muestras Requeridas vs. Recolectadas"
+      },
+      "sortAllocation": {
+        "title": "Asignación de Grupos de Selección",
+        "content": "Se usa entre la selección y el envío para dividir los conteos de Grupos de Selección (1–5) de cada progenie entre sus dos destinos (D1 y D2).\n\nRequiere los filtros Baya, Equipo y Año de Polinización en la parte superior. Solo aparecen progenies con destinos D1 y D2 y al menos un Grupo de Selección con conteo distinto de cero.\n\nPara cada Grupo de Selección, elija una prioridad:\n- División igual — divide 50/50, limitado por la solicitud de envío de cada lado.\n- Prioridad D1 — llena D1 hasta su solicitud de envío, el excedente va a D2.\n- Prioridad D2 — espejo de D1.\n\nLas prioridades se aplican en orden SG1 → SG5, rastreando la capacidad de solicitud restante por lado. La división D1 + D2 siempre es igual al total de la fuente.\n\nGuardar Todo escribe todas las divisiones en una sola transacción. El guardado se rechaza si alguna (progenie, grupo de selección) excede el total de la fuente. Breeder (nivel 2) o superior puede guardar."
+      },
+      "ship": {
+        "title": "Envío",
+        "content": "Etapa final — preparación y seguimiento de envíos de plántulas.\n\n- Plan Total de Envío vs. Envío Real Total\n- Información de Bandeja/Caja, Estante/Paleta\n- Extras No Enviados"
+      }
+    },
+    "reference": {
+      "title": "Tablas de Referencia",
+      "content": "Las tablas de referencia contienen los datos de configuración que impulsan los cálculos y opciones en toda la aplicación.",
+      "labs": {
+        "title": "Laboratorios",
+        "content": "Gestione los laboratorios de pruebas externos.\n\n- Nombre del Laboratorio, Número de Muestras por Placa, Estado Activo\n\nSolo los usuarios Molecular (Nivel 5) pueden crear, editar o inactivar laboratorios. Los demás usuarios tienen acceso de solo lectura."
+      },
+      "teams": {
+        "title": "Equipos",
+        "content": "Gestione los equipos de mejoramiento.\n\n- Nombre del Equipo, Estado Activo\n\nSolo Admin2 (Nivel 3) y Admin3 (Nivel 4) pueden crear, editar o inactivar equipos. Los demás usuarios tienen acceso de solo lectura."
+      },
+      "trays": {
+        "title": "Bandejas",
+        "content": "Defina los tamaños de bandejas estándar.\n\n- Tamaño de Bandeja (celdas), M² por Bandeja\n\nSolo Admin2 (Nivel 3) y Admin3 (Nivel 4) pueden crear, editar o inactivar bandejas. Los demás usuarios tienen acceso de solo lectura."
+      },
+      "ratios": {
+        "title": "Proporciones",
+        "content": "Gestione porcentajes de éxito y factores de rendimiento.\n\n- % de Éxito de Trasplante, % de Germinación, % de Éxito de Polinización\n- Semillas por Gramo, Gramos de Semilla por Fruta\n\nSolo Admin2 (Nivel 3) y Admin3 (Nivel 4) pueden crear, editar o inactivar proporciones. Los demás usuarios tienen acceso de solo lectura."
+      },
+      "deadlines": {
+        "title": "Plazos",
+        "content": "Configure el cronograma operativo para cada etapa.\n\n- Hitos: Archivos de Cruce, Polinización, Recolección de Fruta, Tratamiento, Siembra, Trasplante, Selección\n- Cada hito tiene Semana de Inicio y Semana Límite\n\nSolo Admin2 (Nivel 3) y Admin3 (Nivel 4) pueden crear, editar o inactivar plazos. Los demás usuarios tienen acceso de solo lectura."
+      },
+      "employees": {
+        "title": "Empleados",
+        "content": "Gestione cuentas de usuario y permisos de acceso.\n\n- Nombre, Número de Empleado (PIN, oculto para no administradores), Equipo, Email, Nivel de Usuario, Estado Activo\n\nTodos los usuarios pueden ver la pantalla de Empleados, pero solo Admin2 (Nivel 3) y Admin3 (Nivel 4) pueden crear, editar o inactivar empleados. Los números de empleado se muestran como puntos para usuarios no administradores."
+      },
+      "markers": {
+        "title": "Lista de Marcadores",
+        "content": "Gestione el catálogo de marcadores genéticos.\n\n- Nombre del Rasgo, Tipo de Baya, Laboratorio Preferido, Alias, Estado del Laboratorio\n\nSolo los usuarios Molecular (Nivel 5) pueden crear, editar o inactivar marcadores. Baya, Laboratorio Preferido y Alias (Driscolls) son campos obligatorios. Los demás usuarios tienen acceso de solo lectura."
+      },
+      "markerBudget": {
+        "title": "Asignaciones de Marcadores",
+        "content": "Rastree el presupuesto y límites de muestras para genotipado.\n\n- Total de Asignación de Muestras, Total de Asignación de Costos\n\nSolo los usuarios Molecular (Nivel 5) pueden agregar, editar o eliminar asignaciones de marcadores. Los demás usuarios tienen acceso de solo lectura."
+      },
+      "markerPrices": {
+        "title": "Precios de Marcadores",
+        "content": "Gestione los costos unitarios para pruebas genéticas.\n\n- Precio por Muestra, Año, Baya, Pantalla de Genotipado, Laboratorio\n\nSolo los usuarios Molecular (Nivel 5) pueden agregar, editar o eliminar precios de marcadores. Los demás usuarios tienen acceso de solo lectura."
+      }
+    },
+    "languages": {
+      "title": "Soporte de Idiomas",
+      "content": "La aplicación soporta cuatro idiomas:\n\n- Inglés\n- Español\n- Portugués\n- Árabe (diseño de derecha a izquierda)\n\nPara cambiar el idioma, use el selector de idiomas en la barra superior."
+    },
+    "roles": {
+      "title": "Roles y Permisos de Usuario",
+      "content": "El acceso a funciones está controlado por su Nivel de Usuario asignado:\n\n- Nivel 1 (Usuario) — Ver todos los datos. Sin capacidades de edición. Los números de empleado están ocultos.\n- Nivel 2 (Mejorador) — Agregar/editar cruces, edición en línea. Los números de empleado están ocultos.\n- Nivel 3 (Admin2) — Todas las capacidades de Mejorador, más gestionar Equipos, Bandejas, Proporciones, Plazos y Empleados. Alternar etapas del ciclo.\n- Nivel 4 (Admin3) — Todas las capacidades de Admin2.\n- Nivel 5 (Molecular) — Gestionar Laboratorios, Lista de Marcadores, Asignaciones y Precios de Marcadores. Acceso de solo lectura a Equipos, Bandejas, Proporciones, Plazos y Empleados. Los números de empleado están ocultos.\n\n### Resumen de Acceso por Pantalla\n\n- Equipos, Bandejas, Proporciones, Plazos, Empleados — Editables solo por Admin2 (Nivel 3) y Admin3 (Nivel 4). Los demás usuarios tienen acceso de solo lectura.\n- Laboratorios, Lista de Marcadores, Asignaciones, Precios de Marcadores — Editables solo por Molecular (Nivel 5). Los demás usuarios tienen acceso de solo lectura.\n- Pantalla de Empleados — Visible para todos los usuarios, pero los Números de Empleado se muestran como puntos para usuarios no administradores."
+    },
+    "tips": {
+      "title": "Consejos y Atajos",
+      "content": "- Edición en Línea: En las Listas de Cruces, haga clic directamente en celdas editables. Haga clic en Guardar para enviar su lote.\n- Guardado por Lotes: Todos los cambios se guardan juntos.\n- Encabezados Fijos: Los encabezados de tabla permanecen visibles al desplazarse.\n- Codificación de Colores: Verde significa que cumple el requisito; rojo significa que no alcanza.\n- Copiar como Nuevo: Use esta acción para crear rápidamente un cruce similar.\n- Restablecer Filtros: Cada página tiene un botón de Restablecer para limpiar todos los filtros."
+    }
+  }
+}

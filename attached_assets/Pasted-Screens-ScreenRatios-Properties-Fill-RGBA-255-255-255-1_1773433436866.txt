@@ -1,0 +1,3721 @@
+Screens:
+  ScreenRatios:
+    Properties:
+      Fill: =RGBA(255, 255, 255, 1)
+    Children:
+      - labTitleBar_2:
+          Control: Label@2.5.1
+          Properties:
+            Align: =Align.Center
+            Color: =RGBA(252, 252, 249, 1)
+            Fill: =RGBA(218, 40, 28, 1)
+            FontWeight: =FontWeight.Semibold
+            Height: =25
+            PaddingBottom: =5.00
+            PaddingLeft: =5.00
+            PaddingRight: =7.36
+            PaddingTop: =7.36
+            Size: =14
+            Text: ="GH Seedling App"
+            Width: =1648
+            X: =0.00
+      - butNavigation_2:
+          Control: Classic/Button@2.2.0
+          Properties:
+            Color: =RGBA(72,119,60,1)
+            Fill: =RGBA(252,218,35,1)
+            FontWeight: =FontWeight.Bold
+            Height: =25
+            OnSelect: =Set(varshowmenu,true)
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            RadiusBottomLeft: =0
+            RadiusBottomRight: =0
+            RadiusTopLeft: =0
+            RadiusTopRight: =0
+            Size: =11
+            Text: ="Navigation"
+            X: =0.00
+      - IconChevron2_5:
+          Control: Classic/Icon@2.5.0
+          Properties:
+            Height: =25
+            Icon: =Icon.ChevronUp
+            OnSelect: =Set(varshowmenu,false)
+            PaddingBottom: =0.00
+            PaddingLeft: =0.00
+            PaddingRight: =0.00
+            PaddingTop: =0.00
+            Visible: =varshowmenu
+            Width: =30
+            X: =125
+      - DriscollsLogo2_5:
+          Control: Image@2.2.3
+          Properties:
+            Height: =50
+            Image: ='Driscoll''s Logo 2'
+            PaddingBottom: =0.00
+            PaddingLeft: =0.00
+            PaddingRight: =0.00
+            PaddingTop: =0.00
+            Width: =170
+            X: =1478
+      - Rectangle2_9:
+          Control: Rectangle@2.3.0
+          Properties:
+            Fill: =RGBA(252, 218, 35, 0.25)
+            Height: =45
+            Width: =1648
+            X: =0.00
+            Y: =25
+      - labTitleCrossingList_1:
+          Control: Label@2.5.1
+          Properties:
+            Align: =Align.Center
+            FontWeight: =FontWeight.Bold
+            Height: =37
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            Size: =26
+            Text: ="Seedling Propagation Ratios"
+            VerticalAlign: =VerticalAlign.Bottom
+            Width: =482
+            X: =582
+            Y: =27
+      - butAddNewCross_2:
+          Control: Classic/Button@2.2.0
+          Properties:
+            Color: =RGBA(252,218,35,1)
+            DisplayMode: =If(tgAdminLevel.Value,DisplayMode.Edit,DisplayMode.Disabled)
+            Fill: =RGBA(72,119,60,1)
+            FontWeight: =FontWeight.Bold
+            Height: =25
+            OnSelect: |-
+              =GHSeed.dbouspUpdateGHSeedlingMasterCalculations();
+              ResetForm(FormRatios);
+              NewForm(FormRatios);
+              Set(varratioshow,true);
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            Size: =11
+            Text: ="Add New Ratio"
+            Width: =120
+            X: =180
+      - conFilterRatios:
+          Control: GroupContainer@1.5.0
+          Variant: ManualLayout
+          Properties:
+            Fill: =RGBA(252, 218, 35, 100)
+            Height: =698
+            PaddingRight: =0.00
+            PaddingTop: =0.00
+            Width: =160
+            X: =0.00
+            Y: =70
+          Children:
+            - TextFilterBox_3:
+                Control: Text@0.0.51
+                Properties:
+                  Align: ='TextCanvas.Align'.Center
+                  BorderStyle: =BorderStyle.Solid
+                  Font: =App.Theme.Font
+                  Height: =Parent.Height
+                  Size: =18
+                  Text: ="Filters"
+                  VerticalAlign: =VerticalAlign.Top
+                  Weight: ='TextCanvas.Weight'.Semibold
+                  Width: =Parent.Width
+                  X: =0.00
+            - TextProgram_3:
+                Control: Text@0.0.51
+                Properties:
+                  Align: ='TextCanvas.Align'.Start
+                  Font: =App.Theme.Font
+                  Height: =23
+                  Text: ="Program"
+                  Width: =130
+                  X: =15
+                  Y: =232
+            - ddProgramRatio:
+                Control: Classic/DropDown@2.3.1
+                Properties:
+                  AllowEmptySelection: =true
+                  ChevronBackground: =RGBA(72,119,60,1)
+                  Default: =
+                  Height: =30
+                  Items: |-
+                    =//Filter the list of programs based on the berry selected
+                    SortByColumns(Distinct(Filter(vw_GH_Ratios,BerryType = varberry), SrcBreedingProgram),"Value")
+                  Items.Value: =Value
+                  OnChange: =
+                  PaddingBottom: =0
+                  PaddingLeft: =5
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  Size: =11
+                  Width: =130
+                  X: =15
+                  Y: =255
+            - TextDest1_1:
+                Control: Text@0.0.51
+                Properties:
+                  Align: ='TextCanvas.Align'.Start
+                  Font: =App.Theme.Font
+                  Height: =23
+                  Text: ="Team"
+                  Width: =130
+                  X: =15
+                  Y: =167
+            - ddTeamRatio:
+                Control: Classic/DropDown@2.3.1
+                Properties:
+                  AllowEmptySelection: =true
+                  ChevronBackground: =RGBA(72,119,60,1)
+                  Default: =ddTeamMain.Selected.Value
+                  Height: =30
+                  Items: =Distinct(M_GHTeams,Team_Name)
+                  Items.Value: =Value
+                  OnChange: =
+                  PaddingBottom: =0
+                  PaddingLeft: =5
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  Size: =11
+                  Width: =130
+                  X: =15
+                  Y: =190
+            - butReset_1:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  BorderThickness: =0
+                  Color: =Color.White
+                  Fill: =RGBA(218, 40, 28, 1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =30
+                  HoverFill: =RGBA(118, 0, 0, 1)
+                  OnSelect: |-
+                    =Reset(ddProgramRatio);
+                    Reset(ddTeamRatio);
+                    Set(
+                        varfillcolor,
+                        RGBA(
+                            252,
+                            218,
+                            35,
+                            0.25
+                        )
+                    );
+                    Set(
+                        varberry,
+                        ""
+                    );
+                  PaddingBottom: =6.67
+                  PaddingLeft: =6.67
+                  PaddingRight: =7.36
+                  PaddingTop: =7.36
+                  Size: =14
+                  Text: ="Reset"
+                  Width: =130
+                  X: =15
+                  Y: =650
+            - Image1_6:
+                Control: Image@2.2.3
+                Properties:
+                  BorderColor: =RGBA(218, 40, 28, 1)
+                  BorderThickness: =If(varberry="STRAW",4,0)
+                  Height: =50
+                  Image: ='Strawberry Icon 3'
+                  OnSelect: =Set(varberry,"STRAW");Set(varberryID,4);Set(varfillcolor,RGBA(218, 40, 28, 0.4));
+                  PaddingBottom: =0.00
+                  PaddingLeft: =0.00
+                  PaddingRight: =0.00
+                  PaddingTop: =0.00
+                  Width: =45
+                  X: =25
+                  Y: =39
+            - Image4_6:
+                Control: Image@2.2.3
+                Properties:
+                  BorderColor: =RGBA(109, 49, 162, 1)
+                  BorderThickness: =If(varberry="BLACK",4,0)
+                  Height: =50
+                  Image: ='Blackberry Icon 3'
+                  OnSelect: =Set(varberry,"BLACK");Set(varberryID,1);Set(varfillcolor,RGBA(109, 49, 162, 0.6));
+                  PaddingBottom: =0.00
+                  PaddingLeft: =0.00
+                  PaddingRight: =0.00
+                  PaddingTop: =0.00
+                  Width: =45
+                  X: =90
+                  Y: =39
+            - Image3_7:
+                Control: Image@2.2.3
+                Properties:
+                  BorderColor: =RGBA(39, 113, 194, 1)
+                  BorderThickness: =If(varberry="BLUE",4,0)
+                  Height: =50
+                  Image: ='Blueberry Icon 3'
+                  OnSelect: =Set(varberry,"BLUE");Set(varberryID,2);Set(varfillcolor,RGBA(39, 113, 194, 0.6));
+                  PaddingBottom: =0.00
+                  PaddingLeft: =0.00
+                  PaddingRight: =0.00
+                  PaddingTop: =0.00
+                  Width: =45
+                  X: =25
+                  Y: =112
+            - Image2_6:
+                Control: Image@2.2.3
+                Properties:
+                  BorderColor: =RGBA(233, 79, 76, 1)
+                  BorderThickness: =If(varberry="RASP",4,0)
+                  Height: =50
+                  Image: ='Raspberry Icon 3'
+                  OnSelect: =Set(varberry,"RASP");Set(varberryID,3);Set(varfillcolor,RGBA(233, 79, 76, 0.6));
+                  PaddingBottom: =0.00
+                  PaddingLeft: =0.00
+                  PaddingRight: =0.00
+                  PaddingTop: =0.00
+                  Width: =45
+                  X: =90
+                  Y: =112
+      - conRatios:
+          Control: GroupContainer@1.5.0
+          Variant: AutoLayout
+          Properties:
+            Height: =698
+            LayoutDirection: =LayoutDirection.Horizontal
+            LayoutOverflowX: =LayoutOverflow.Scroll
+            Width: =1488
+            X: =160
+            Y: =70
+          Children:
+            - conMain_3:
+                Control: GroupContainer@1.5.0
+                Variant: ManualLayout
+                Properties:
+                  AlignInContainer: =AlignInContainer.Start
+                  Fill: =varfillcolor
+                  FillPortions: =0
+                  Height: =Parent.Height
+                  LayoutMaxHeight: =
+                  LayoutMaxWidth: =
+                  PaddingBottom: =0.00
+                  PaddingLeft: =0.00
+                  PaddingRight: =0.00
+                  PaddingTop: =0.00
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Width: =2653
+                  X: =200
+                  Y: =118
+                Children:
+                  - conTotals_3:
+                      Control: GroupContainer@1.5.0
+                      Variant: ManualLayout
+                      Properties:
+                        Height: =17
+                        Width: =Parent.Width
+                        Y: =Parent.Y
+                  - conHeader_3:
+                      Control: GroupContainer@1.5.0
+                      Variant: ManualLayout
+                      Properties:
+                        Height: =44
+                        Width: =Parent.Width
+                        Y: =Parent.Y+17
+                      Children:
+                        - butPKIDRatio:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="ID"
+                              Width: =90
+                              X: =2563
+                              Y: =2
+                        - butModifiedByRatio:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Modified By"
+                              Width: =140
+                              X: =2423
+                              Y: =2
+                        - butModifiedDateRatio:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Modified Date"
+                              Width: =150
+                              X: =2273
+                              Y: =2
+                        - butCommentsRatio:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Comments"
+                              Width: =640
+                              X: =1633
+                              Y: =2
+                        - butBufferStdDev:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Buffer % of Std Dev"
+                              Width: =90
+                              X: =1543
+                              Y: =2
+                        - butFlowersPerParentStdDev:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Flowers/Parent Std Dev"
+                              Width: =90
+                              X: =1453
+                              Y: =2
+                        - butFlowersPerParent:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Avg Flowers Per Parent"
+                              Width: =90
+                              X: =1363
+                              Y: =2
+                        - butFemaleToMale:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Female Flowers/Male"
+                              Width: =90
+                              X: =1273
+                              Y: =2
+                        - butPollinationStdDev:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Pollination Std Dev"
+                              Width: =90
+                              X: =1183
+                              Y: =2
+                        - butPollinationPercent:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Pollination Success %"
+                              Width: =90
+                              X: =1093
+                              Y: =2
+                        - butSeedPerFruitStdDev:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Seed g/fruit Std Dev"
+                              Width: =90
+                              X: =1003
+                              Y: =2
+                        - butSeedPerFruit:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Grams Seed Per Fruit"
+                              Width: =90
+                              X: =913
+                              Y: =2
+                        - butSeedsPerGramStdDev:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Seeds Per Gram Std Dev"
+                              Width: =100
+                              X: =813
+                              Y: =2
+                        - butSeedsPerGram:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Seeds Per Gram"
+                              Width: =90
+                              X: =723
+                              Y: =2
+                        - butSeedGermStdDev:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Seed Germ Std Dev"
+                              Width: =90
+                              X: =543
+                              Y: =2
+                        - butSeedGermPercent:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Avg Seed Germination %"
+                              Width: =100
+                              X: =443
+                              Y: =2
+                        - butSeedlingTransPercent:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Seedling Transplant %"
+                              Width: =90
+                              X: =353
+                              Y: =2
+                        - butProgramRatio:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Program"
+                              Width: =132
+                              X: =220
+                              Y: =2
+                        - butBerryRatio:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Berry"
+                              Width: =70
+                              X: =150
+                              Y: =2
+                        - butRegionRatio:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Team"
+                              Width: =100
+                              X: =50
+                              Y: =2
+                        - butSeedGermStdDev_1:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Seed Sow Buffer g"
+                              Width: =90
+                              X: =633
+                              Y: =2
+                        - butRegionRatio_1:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Edit / Delete"
+                              Width: =50
+                              Y: =2
+                  - galRatios:
+                      Control: Gallery@2.15.0
+                      Variant: BrowseLayout_Vertical_TwoTextOneImageVariant_ver5.0
+                      Properties:
+                        Height: =624
+                        Items: |-
+                          =//Filters list based on filters entered and sorts results by team then by berry
+                          SortByColumns(
+                              Filter(
+                                  vw_GH_Ratios,
+                                  BerryType = varberry,
+                                  IsBlank(ddTeamRatio.SelectedText) || Team_Name = ddTeamRatio.SelectedText.Value,
+                                  IsBlank(ddProgramRatio.SelectedText) || SrcBreedingProgram = ddProgramRatio.SelectedText.Value
+                              ),
+                              "Team_Name",
+                              SortOrder.Ascending,
+                              "BerryType",
+                              SortOrder.Ascending
+                          )
+                        ShowNavigation: =true
+                        TemplatePadding: =0.00
+                        TemplateSize: =27
+                        Width: =Parent.Width
+                        Y: =63
+                      Children:
+                        - Rectangle1_4:
+                            Control: Rectangle@2.3.0
+                            Properties:
+                              Fill: =App.Theme.Colors.Darker30
+                              Height: =27
+                              OnSelect: =Select(Parent)
+                              Visible: =ThisItem.IsSelected
+                              Width: =5.90
+                              X: =0.00
+                              Y: =0.00
+                        - Separator1_4:
+                            Control: Rectangle@2.3.0
+                            Properties:
+                              Fill: =RGBA(252, 218, 35, 1)
+                              Height: =3
+                              OnSelect: =Select(Parent)
+                              Width: =Parent.Width
+                              X: =0.00
+                              Y: =24
+                        - PKIDRatio:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.GHRatios_ID
+                              Width: =90
+                              X: =2563
+                        - ModifiedByRatio:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Modified_By
+                              Width: =140
+                              X: =2423
+                        - ModifiedDateRatio:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Modified_Date
+                              X: =2273
+                        - CommentsRatio:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Comments
+                              Width: =640
+                              X: =1633
+                        - BufferStdDev:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Buffer_Percent_Of_Std_Dev
+                              Width: =90
+                              X: =1543
+                        - FlowersPerParentStdDev:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Flowers_Per_Parent_Std_Dev
+                              Width: =90
+                              X: =1453
+                        - FlowersPerParent:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Avg_Flowers_Per_Parent
+                              Width: =90
+                              X: =1363
+                        - FemaleToMale:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Female_Flowers_Per_Male_Flower
+                              Width: =90
+                              X: =1273
+                        - PollinationStdDev:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Pollination_Std_Dev
+                              Width: =90
+                              X: =1183
+                        - PollinationPercent:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Pollination_Success_Percentage
+                              Width: =90
+                              X: =1093
+                        - SeedPerFruitStdDev:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Grams_Seed_Per_Fruit_Std_Dev
+                              Width: =90
+                              X: =1003
+                        - GramsSeedPerFruit:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Grams_Seed_Per_Fruit
+                              Width: =90
+                              X: =913
+                        - SeedsPerGramStdDev:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Seed_Num_Per_Gram_Std_Dev
+                              Width: =100
+                              X: =813
+                        - SeedsPerGram:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Seeds_Per_Gram_Of_Seed
+                              Width: =90
+                              X: =723
+                        - SeedGermStdDev:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Seed_Germination_Std_Dev
+                              Width: =90
+                              X: =543
+                        - SeedGermPercent:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Avg_Seed_Germination_Percentage
+                              Width: =100
+                              X: =443
+                        - SeedlingTransPercent:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Seedling_Transplant_Success_Percentage
+                              Width: =90
+                              X: =353
+                        - ProgramRatio:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =10.5
+                              Text: =ThisItem.SrcBreedingProgram
+                              Width: =132
+                              X: =220
+                        - BerryRatio:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.BerryType
+                              Width: =70
+                              X: =150
+                        - RegionRatio:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Team_Name
+                              Width: =100
+                              X: =50
+                              Y: =0.00
+                        - IconEdit_1:
+                            Control: Classic/Icon@2.5.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              DisabledFill: =RGBA(106, 122, 127, 1)
+                              DisplayMode: =If(tgAdminLevel.Value,DisplayMode.Edit,DisplayMode.Disabled)
+                              Fill: =RGBA(72,119,60,1)
+                              Height: =23
+                              Icon: =Icon.Edit
+                              OnSelect: |-
+                                =Select(Parent);
+                                ResetForm(FormRatios);
+                                EditForm(FormRatios);
+                                Set(varratioshow,true);
+                              Width: =25
+                        - IconEdit_2:
+                            Control: Classic/Icon@2.5.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              DisabledFill: =RGBA(106, 122, 127, 1)
+                              DisplayMode: =If(tgAdminLevel.Value,DisplayMode.Edit,DisplayMode.Disabled)
+                              Fill: =RGBA(218, 40, 28, 1)
+                              Height: =23
+                              Icon: =Icon.Trash
+                              OnSelect: |-
+                                =Select(Parent);
+                                Set(varratioinactiveshow,true);
+                              Width: =25
+                              X: =25
+                        - SeedGermStdDev_1:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Seed_Sow_Buffer_Grams
+                              Width: =90
+                              X: =633
+      - conEditRatios:
+          Control: GroupContainer@1.5.0
+          Variant: ManualLayout
+          Properties:
+            DropShadow: =DropShadow.Semibold
+            Fill: =RGBA(252, 218, 35, 100)
+            Height: =535
+            PaddingRight: =0.00
+            PaddingTop: =0.00
+            Visible: =varratioshow
+            Width: =1400
+            X: =200
+            Y: =190
+          Children:
+            - TextFilterBox_4:
+                Control: Text@0.0.51
+                Properties:
+                  Align: ='TextCanvas.Align'.Center
+                  BorderStyle: =BorderStyle.Solid
+                  Font: =App.Theme.Font
+                  Height: =Parent.Height
+                  Size: =18
+                  Text: =If(FormRatios.Mode=FormMode.Edit,"Edit Ratios","New Ratio Entry")
+                  VerticalAlign: =VerticalAlign.Top
+                  Weight: ='TextCanvas.Weight'.Semibold
+                  Width: =Parent.Width
+                  X: =0.00
+            - butReset_2:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  BorderThickness: =0
+                  Color: =Color.White
+                  Fill: =RGBA(218, 40, 28, 1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =30
+                  HoverFill: =RGBA(118, 0, 0, 1)
+                  OnSelect: |-
+                    =ResetForm(FormRatios);
+                    Set(varratioshow,false);
+                  PaddingBottom: =6.67
+                  PaddingLeft: =6.67
+                  PaddingRight: =7.36
+                  PaddingTop: =7.36
+                  Size: =14
+                  Text: ="Cancel"
+                  Width: =130
+                  X: =505
+                  Y: =325
+            - FormRatios:
+                Control: Form@2.4.4
+                Variant: Classic
+                Layout: Vertical
+                Properties:
+                  DataSource: =M_GHRatios
+                  Height: =295
+                  Item: =LookUp('M_GHRatios',GHRatios_ID=galRatios.Selected.GHRatios_ID)
+                  NumberOfColumns: =6
+                  Width: =1400
+                  Y: =30
+                Children:
+                  - Team_ID_DataCard1:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicNumberEdit
+                      Properties:
+                        DataField: ="Team_ID"
+                        Default: =ThisItem.Team_ID
+                        DisplayName: =DataSourceInfo([@M_GHRatios],DataSourceInfo.DisplayName,Team_ID)
+                        Required: =true
+                        Update: =Value(dcvTeamIDRatios.Text)
+                        Width: =233
+                        X: =0
+                        Y: =0
+                      Children:
+                        - DataCardKey107:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =34
+                              PaddingBottom: =0
+                              PaddingTop: =0
+                              Size: =9
+                              Text: ="Team"
+                              Width: =Parent.Width - 60
+                              Wrap: =false
+                              X: =30
+                              Y: =5
+                        - dcvTeamIDRatios:
+                            Control: Classic/TextInput@2.3.2
+                            MetadataKey: FieldValue
+                            Properties:
+                              BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                              Default: =LookUp(M_GHTeams,Team_Name=ddTeamRatios.SelectedText.Value,Team_ID)
+                              DelayOutput: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Format: =TextFormat.Number
+                              Height: =22
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =9
+                              Tooltip: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              X: =1
+                              Y: =DataCardKey107.Y + DataCardKey107.Height + 5
+                        - ErrorMessage80:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =14
+                              Text: =Parent.Error
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =dcvTeamIDRatios.Y + dcvTeamIDRatios.Height
+                        - StarVisible104:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey107.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey107.Y
+                        - ddTeamRatios:
+                            Control: Classic/DropDown@2.3.1
+                            Properties:
+                              ChevronBackground: =RGBA(72,119,60,1)
+                              Default: =galRatios.Selected.Team_Name
+                              Height: =22
+                              Items: =Distinct(M_GHTeams,Team_Name)
+                              Items.Value: =Value
+                              Size: =9
+                              Width: =173
+                              X: =30
+                              Y: =26
+                  - Berry_ID_DataCard1:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicNumberEdit
+                      Properties:
+                        DataField: ="Berry_ID"
+                        Default: =ThisItem.Berry_ID
+                        DisplayName: =DataSourceInfo([@M_GHRatios],DataSourceInfo.DisplayName,'Berry_ID')
+                        Required: =true
+                        Update: =Value(dcvBerryIDRatios.Text)
+                        Width: =233
+                        X: =1
+                        Y: =0
+                      Children:
+                        - DataCardKey42:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =34
+                              PaddingBottom: =0
+                              PaddingTop: =0
+                              Size: =9
+                              Text: ="Berry"
+                              Width: =Parent.Width - 60
+                              Wrap: =false
+                              X: =30
+                              Y: =5
+                        - dcvBerryIDRatios:
+                            Control: Classic/TextInput@2.3.2
+                            MetadataKey: FieldValue
+                            Properties:
+                              BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                              Default: =LookUp(M_BerryID,BerryType=ddBerryRatios.SelectedText.Value,PK_BerryID)
+                              DelayOutput: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Format: =TextFormat.Number
+                              Height: =22
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =9
+                              Tooltip: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              X: =1
+                              Y: =DataCardKey42.Y + DataCardKey42.Height + 5
+                        - ErrorMessage34:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =14
+                              Text: =Parent.Error
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =dcvBerryIDRatios.Y + dcvBerryIDRatios.Height
+                        - StarVisible41:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey42.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey42.Y
+                        - ddBerryRatios:
+                            Control: Classic/DropDown@2.3.1
+                            Properties:
+                              ChevronBackground: =RGBA(72,119,60,1)
+                              Default: =galRatios.Selected.BerryType
+                              Height: =22
+                              Items: =Distinct(M_BerryID,BerryType)
+                              Items.Value: =Value
+                              PaddingBottom: =5
+                              PaddingLeft: =5
+                              PaddingRight: =5
+                              PaddingTop: =5
+                              Size: =9
+                              Width: =173
+                              X: =30
+                              Y: =26
+                  - Program_ID_DataCard1:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicNumberEdit
+                      Properties:
+                        DataField: ="Program_ID"
+                        Default: =ThisItem.Program_ID
+                        DisplayName: =DataSourceInfo([@M_GHRatios],DataSourceInfo.DisplayName,Program_ID)
+                        Required: =true
+                        Update: =Value(dcvProgramIDRatios.Text)
+                        Width: =233
+                        X: =2
+                        Y: =0
+                      Children:
+                        - DataCardKey106:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =16
+                              PaddingBottom: =0
+                              PaddingTop: =0
+                              Size: =9
+                              Text: ="Program"
+                              Width: =Parent.Width - 60
+                              Wrap: =false
+                              X: =30
+                              Y: =5
+                        - dcvProgramIDRatios:
+                            Control: Classic/TextInput@2.3.2
+                            MetadataKey: FieldValue
+                            Properties:
+                              BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                              Default: =LookUp(M_SrcBreedingProgram,SrcBreedingProgram=ddProgramRatios.SelectedText.Value,SrcBreedingProgramId)
+                              DelayOutput: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Format: =TextFormat.Number
+                              Height: =22
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =9
+                              Tooltip: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              X: =1
+                              Y: =DataCardKey106.Y + DataCardKey106.Height + 5
+                        - ErrorMessage78:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =14
+                              Text: =Parent.Error
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =dcvProgramIDRatios.Y + dcvProgramIDRatios.Height
+                        - StarVisible103:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey106.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey106.Y
+                        - ddProgramRatios:
+                            Control: Classic/DropDown@2.3.1
+                            Properties:
+                              ChevronBackground: =RGBA(72,119,60,1)
+                              Default: =galRatios.Selected.SrcBreedingProgram
+                              Height: =22
+                              Items: |-
+                                =//Filter the list of programs based on the berry selected
+                                SortByColumns(Distinct(Filter(M_SrcBreedingProgram,BerryType = Value(dcvBerryIDRatios.Text)), SrcBreedingProgram),"Value")
+                              Items.Value: =Value
+                              Size: =9
+                              Width: =173
+                              X: =30
+                              Y: =26
+                  - Seedling_Transplant_Success_Percentage_DataCard1:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicNumberEdit
+                      Properties:
+                        DataField: ="Seedling_Transplant_Success_Percentage"
+                        Default: =ThisItem.Seedling_Transplant_Success_Percentage
+                        DisplayName: =DataSourceInfo([@M_GHRatios],DataSourceInfo.DisplayName,Seedling_Transplant_Success_Percentage)
+                        Required: =true
+                        Update: =Value(dcvSeedlingTransPercent.Text)
+                        Width: =233
+                        X: =3
+                        Y: =0
+                      Children:
+                        - DataCardKey97:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =34
+                              PaddingBottom: =0
+                              PaddingTop: =0
+                              Size: =9
+                              Text: ="Seedling Transplant Success %"
+                              Width: =Parent.Width - 30
+                              Wrap: =false
+                              X: =30
+                              Y: =5
+                        - dcvSeedlingTransPercent:
+                            Control: Classic/TextInput@2.3.2
+                            MetadataKey: FieldValue
+                            Properties:
+                              BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                              Default: =Parent.Default
+                              DelayOutput: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Format: =TextFormat.Number
+                              Height: =22
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =9
+                              Tooltip: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =DataCardKey97.Y + DataCardKey97.Height + 5
+                        - emSeedTransPercent:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              Align: =Align.Center
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =10
+                              Text: |-
+                                =//Show error if value is negative or zero
+                                Coalesce(
+                                    Parent.Error,
+                                    If(
+                                        Value(dcvSeedlingTransPercent.Text) <= 0 || Value(dcvSeedlingTransPercent.Text) > 1,
+                                        "This value can't be negative or zero or greater than 1"
+                                    )
+                                )
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width
+                              Y: =dcvSeedlingTransPercent.Y + dcvSeedlingTransPercent.Height
+                        - StarVisible97:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey97.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey97.Y
+                  - Avg_Seed_Germination_Percentage_DataCard1:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicNumberEdit
+                      Properties:
+                        DataField: ="Avg_Seed_Germination_Percentage"
+                        Default: =ThisItem.Avg_Seed_Germination_Percentage
+                        DisplayName: =DataSourceInfo([@M_GHRatios],DataSourceInfo.DisplayName,Avg_Seed_Germination_Percentage)
+                        Required: =true
+                        Update: =Value(dcvSeedGermPercent.Text)
+                        Width: =233
+                        X: =4
+                        Y: =0
+                      Children:
+                        - DataCardKey78:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =34
+                              PaddingBottom: =0
+                              PaddingTop: =0
+                              Size: =9
+                              Text: ="Average Seed Germination %"
+                              Width: =Parent.Width - 30
+                              Wrap: =false
+                              X: =30
+                              Y: =5
+                        - dcvSeedGermPercent:
+                            Control: Classic/TextInput@2.3.2
+                            MetadataKey: FieldValue
+                            Properties:
+                              BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                              Default: =Parent.Default
+                              DelayOutput: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Format: =TextFormat.Number
+                              Height: =22
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =9
+                              Tooltip: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =DataCardKey78.Y + DataCardKey78.Height + 5
+                        - emAvgSeedGerm:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              Align: =Align.Center
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =10
+                              Text: |-
+                                =//Show error if value is negative or zero
+                                Coalesce(
+                                    Parent.Error,
+                                    If(
+                                        Value(dcvSeedGermPercent.Text) <= 0 || Value(dcvSeedGermPercent.Text) >= 1,
+                                        "This value needs to be between 0 and 1"
+                                    )
+                                )
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width
+                              Y: =dcvSeedGermPercent.Y + dcvSeedGermPercent.Height
+                        - StarVisible78:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey78.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey78.Y
+                  - Seed_Germination_Std_Dev_DataCard1:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicNumberEdit
+                      Properties:
+                        DataField: ="Seed_Germination_Std_Dev"
+                        Default: =ThisItem.Seed_Germination_Std_Dev
+                        DisplayName: =DataSourceInfo([@M_GHRatios],DataSourceInfo.DisplayName,Seed_Germination_Std_Dev)
+                        Required: =true
+                        Update: =Value(dcvSeedGermStdDev.Text)
+                        Width: =233
+                        X: =5
+                        Y: =0
+                      Children:
+                        - DataCardKey95:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =34
+                              PaddingBottom: =0
+                              PaddingTop: =0
+                              Size: =9
+                              Text: ="Seed Germination Std Dev"
+                              Width: =Parent.Width - 30
+                              Wrap: =false
+                              X: =30
+                              Y: =5
+                        - dcvSeedGermStdDev:
+                            Control: Classic/TextInput@2.3.2
+                            MetadataKey: FieldValue
+                            Properties:
+                              BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                              Default: =Parent.Default
+                              DelayOutput: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Format: =TextFormat.Number
+                              Height: =22
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =9
+                              Tooltip: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =DataCardKey95.Y + DataCardKey95.Height + 5
+                        - ErrorMessage95:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =14
+                              Text: =Parent.Error
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =dcvSeedGermStdDev.Y + dcvSeedGermStdDev.Height
+                        - StarVisible95:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey95.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey95.Y
+                  - Seed_Sow_Buffer_Grams_DataCard1:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicNumberEdit
+                      Properties:
+                        DataField: ="Seed_Sow_Buffer_Grams"
+                        Default: =ThisItem.Seed_Sow_Buffer_Grams
+                        DisplayName: =DataSourceInfo([@M_GHRatios],DataSourceInfo.DisplayName,Seed_Sow_Buffer_Grams)
+                        Required: =true
+                        Update: =Value(dcvSeedSowBuffer.Text)
+                        Width: =233
+                        X: =0
+                        Y: =1
+                      Children:
+                        - DataCardKey127:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =16
+                              PaddingBottom: =0
+                              PaddingTop: =0
+                              Size: =9
+                              Text: ="Seed Sow Buffer Grams"
+                              Width: =Parent.Width - 30
+                              Wrap: =false
+                              X: =30
+                              Y: =5
+                        - dcvSeedSowBuffer:
+                            Control: Classic/TextInput@2.3.2
+                            MetadataKey: FieldValue
+                            Properties:
+                              BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                              Default: =Parent.Default
+                              DelayOutput: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Format: =TextFormat.Number
+                              Height: =22
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =9
+                              Tooltip: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =DataCardKey127.Y + DataCardKey127.Height + 5
+                        - ErrorMessage115:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =14
+                              Text: =Parent.Error
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =dcvSeedSowBuffer.Y + dcvSeedSowBuffer.Height
+                        - StarVisible123:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey127.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey127.Y
+                  - Seeds_Per_Gram_Of_Seed_DataCard1:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicNumberEdit
+                      Properties:
+                        DataField: ="Seeds_Per_Gram_Of_Seed"
+                        Default: =ThisItem.Seeds_Per_Gram_Of_Seed
+                        DisplayName: =DataSourceInfo([@M_GHRatios],DataSourceInfo.DisplayName,Seeds_Per_Gram_Of_Seed)
+                        Required: =true
+                        Update: =Value(dcvSeedsPerGram.Text)
+                        Width: =233
+                        X: =1
+                        Y: =1
+                      Children:
+                        - DataCardKey98:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =34
+                              PaddingBottom: =0
+                              PaddingTop: =0
+                              Size: =9
+                              Text: ="Seed Number Per Gram of Seed"
+                              Width: =Parent.Width - 30
+                              Wrap: =false
+                              X: =30
+                              Y: =5
+                        - emSeedPerGram:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              Align: =Align.Center
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =10
+                              Text: |-
+                                =//Show error if value is negative or zero
+                                Coalesce(
+                                    Parent.Error,
+                                    If(
+                                        Value(dcvSeedsPerGram.Text) < 1,
+                                        "This value can't be less than 1"
+                                    )
+                                )
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width
+                              Y: =dcvSeedsPerGram.Y + dcvSeedsPerGram.Height
+                        - StarVisible98:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey98.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey98.Y
+                        - dcvSeedsPerGram:
+                            Control: Classic/TextInput@2.3.2
+                            Properties:
+                              Default: =Parent.Default
+                              Format: =TextFormat.Number
+                              Height: =22
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =9
+                              Width: =173
+                              X: =30
+                              Y: =26
+                  - Seed_Num_Per_Gram_Std_Dev_DataCard1:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicNumberEdit
+                      Properties:
+                        DataField: ="Seed_Num_Per_Gram_Std_Dev"
+                        Default: =ThisItem.Seed_Num_Per_Gram_Std_Dev
+                        DisplayName: =DataSourceInfo([@M_GHRatios],DataSourceInfo.DisplayName,Seed_Num_Per_Gram_Std_Dev)
+                        Required: =true
+                        Update: =Value(dcvSeedsPerGramStdDev.Text)
+                        Width: =233
+                        X: =2
+                        Y: =1
+                      Children:
+                        - DataCardKey96:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =34
+                              PaddingBottom: =0
+                              PaddingTop: =0
+                              Size: =9
+                              Text: ="Seed Number Per Gram Std Dev"
+                              Width: =Parent.Width - 30
+                              Wrap: =false
+                              X: =30
+                              Y: =5
+                        - dcvSeedsPerGramStdDev:
+                            Control: Classic/TextInput@2.3.2
+                            MetadataKey: FieldValue
+                            Properties:
+                              BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                              Default: =Parent.Default
+                              DelayOutput: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Format: =TextFormat.Number
+                              Height: =22
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =9
+                              Tooltip: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =DataCardKey96.Y + DataCardKey96.Height + 5
+                        - ErrorMessage96:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =14
+                              Text: =Parent.Error
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =dcvSeedsPerGramStdDev.Y + dcvSeedsPerGramStdDev.Height
+                        - StarVisible96:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey96.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey96.Y
+                  - Grams_Seed_Per_Fruit_DataCard1:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicNumberEdit
+                      Properties:
+                        DataField: ="Grams_Seed_Per_Fruit"
+                        Default: =ThisItem.Grams_Seed_Per_Fruit
+                        DisplayName: =DataSourceInfo([@M_GHRatios],DataSourceInfo.DisplayName,Grams_Seed_Per_Fruit)
+                        Required: =true
+                        Update: =Value(dcvSeedPerFruit.Text)
+                        Width: =233
+                        X: =3
+                        Y: =1
+                      Children:
+                        - DataCardKey86:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =34
+                              PaddingBottom: =0
+                              PaddingTop: =0
+                              Size: =9
+                              Text: ="Grams of Seed Per Fruit"
+                              Width: =Parent.Width - 30
+                              Wrap: =false
+                              X: =30
+                              Y: =5
+                        - dcvSeedPerFruit:
+                            Control: Classic/TextInput@2.3.2
+                            MetadataKey: FieldValue
+                            Properties:
+                              BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                              Default: =Parent.Default
+                              DelayOutput: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Format: =TextFormat.Number
+                              Height: =22
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =9
+                              Tooltip: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =DataCardKey86.Y + DataCardKey86.Height + 5
+                        - emGramSeedPerFruit:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              Align: =Align.Center
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =10
+                              Text: |-
+                                =//Show error if value is negative or zero
+                                Coalesce(
+                                    Parent.Error,
+                                    If(
+                                        Value(dcvSeedPerFruit.Text) <= 0,
+                                        "This value can't be negative or zero"
+                                    )
+                                )
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width
+                              Y: =dcvSeedPerFruit.Y + dcvSeedPerFruit.Height
+                        - StarVisible86:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey86.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey86.Y
+                  - Grams_Seed_Per_Fruit_Std_Dev_DataCard1:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicNumberEdit
+                      Properties:
+                        DataField: ="Grams_Seed_Per_Fruit_Std_Dev"
+                        Default: =ThisItem.Grams_Seed_Per_Fruit_Std_Dev
+                        DisplayName: =DataSourceInfo([@M_GHRatios],DataSourceInfo.DisplayName,Grams_Seed_Per_Fruit_Std_Dev)
+                        Required: =true
+                        Update: =Value(dcvSeedPerFruitStdDev.Text)
+                        Width: =233
+                        X: =4
+                        Y: =1
+                      Children:
+                        - DataCardKey87:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =34
+                              PaddingBottom: =0
+                              PaddingTop: =0
+                              Size: =9
+                              Text: ="Grams of Seed Per Fruit Std Dev"
+                              Width: =Parent.Width - 30
+                              Wrap: =false
+                              X: =30
+                              Y: =5
+                        - dcvSeedPerFruitStdDev:
+                            Control: Classic/TextInput@2.3.2
+                            MetadataKey: FieldValue
+                            Properties:
+                              BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                              Default: =Parent.Default
+                              DelayOutput: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Format: =TextFormat.Number
+                              Height: =22
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =9
+                              Tooltip: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =DataCardKey87.Y + DataCardKey87.Height + 5
+                        - ErrorMessage87:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =14
+                              Text: =Parent.Error
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =dcvSeedPerFruitStdDev.Y + dcvSeedPerFruitStdDev.Height
+                        - StarVisible87:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey87.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey87.Y
+                  - Pollination_Success_Percentage_DataCard1:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicNumberEdit
+                      Properties:
+                        DataField: ="Pollination_Success_Percentage"
+                        Default: =ThisItem.Pollination_Success_Percentage
+                        DisplayName: =DataSourceInfo([@M_GHRatios],DataSourceInfo.DisplayName,Pollination_Success_Percentage)
+                        Required: =true
+                        Update: =Value(dcvPollinationPercent.Text)
+                        Width: =233
+                        X: =5
+                        Y: =1
+                      Children:
+                        - DataCardKey92:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =34
+                              PaddingBottom: =0
+                              PaddingTop: =0
+                              Size: =9
+                              Text: ="Pollination Success %"
+                              Width: =Parent.Width - 30
+                              Wrap: =false
+                              X: =30
+                              Y: =5
+                        - dcvPollinationPercent:
+                            Control: Classic/TextInput@2.3.2
+                            MetadataKey: FieldValue
+                            Properties:
+                              BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                              Default: =Parent.Default
+                              DelayOutput: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Format: =TextFormat.Number
+                              Height: =22
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =9
+                              Tooltip: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =DataCardKey92.Y + DataCardKey92.Height + 5
+                        - emPollinationPercent:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              Align: =Align.Center
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =10
+                              Text: |-
+                                =//Show error if value is negative or zero
+                                Coalesce(
+                                    Parent.Error,
+                                    If(
+                                        Value(dcvPollinationPercent.Text) <= 0 || Value(dcvPollinationPercent.Text) > 1,
+                                        "This value can't be negative or zero or greater than 1"
+                                    )
+                                )
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width
+                              Y: =dcvPollinationPercent.Y + dcvPollinationPercent.Height
+                        - StarVisible92:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey92.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey92.Y
+                  - Pollination_Std_Dev_DataCard1:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicNumberEdit
+                      Properties:
+                        DataField: ="Pollination_Std_Dev"
+                        Default: =ThisItem.Pollination_Std_Dev
+                        DisplayName: =DataSourceInfo([@M_GHRatios],DataSourceInfo.DisplayName,Pollination_Std_Dev)
+                        Required: =true
+                        Update: =Value(dcvPollinationStdDev.Text)
+                        Width: =233
+                        X: =0
+                        Y: =2
+                      Children:
+                        - DataCardKey91:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =34
+                              PaddingBottom: =0
+                              PaddingTop: =0
+                              Size: =9
+                              Text: ="Pollination Success % Std Dev"
+                              Width: =Parent.Width - 30
+                              Wrap: =false
+                              X: =30
+                              Y: =5
+                        - dcvPollinationStdDev:
+                            Control: Classic/TextInput@2.3.2
+                            MetadataKey: FieldValue
+                            Properties:
+                              BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                              Default: =Parent.Default
+                              DelayOutput: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Format: =TextFormat.Number
+                              Height: =22
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =9
+                              Tooltip: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =DataCardKey91.Y + DataCardKey91.Height + 5
+                        - ErrorMessage91:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =14
+                              Text: =Parent.Error
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =dcvPollinationStdDev.Y + dcvPollinationStdDev.Height
+                        - StarVisible91:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey91.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey91.Y
+                  - Female_Flowers_Per_Male_Flower_DataCard1:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicNumberEdit
+                      Properties:
+                        DataField: ="Female_Flowers_Per_Male_Flower"
+                        Default: =ThisItem.Female_Flowers_Per_Male_Flower
+                        DisplayName: =DataSourceInfo([@M_GHRatios],DataSourceInfo.DisplayName,Female_Flowers_Per_Male_Flower)
+                        Required: =true
+                        Update: =Value(dcvFemaleToMale.Text)
+                        Width: =233
+                        X: =1
+                        Y: =2
+                      Children:
+                        - DataCardKey84:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =34
+                              PaddingBottom: =0
+                              PaddingTop: =0
+                              Size: =9
+                              Text: ="Female Flowers Per Male Flower"
+                              Width: =Parent.Width - 30
+                              Wrap: =false
+                              X: =30
+                              Y: =5
+                        - dcvFemaleToMale:
+                            Control: Classic/TextInput@2.3.2
+                            MetadataKey: FieldValue
+                            Properties:
+                              BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                              Default: =Parent.Default
+                              DelayOutput: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Format: =TextFormat.Number
+                              Height: =22
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =9
+                              Tooltip: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =DataCardKey84.Y + DataCardKey84.Height + 5
+                        - emFemalePerMale:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              Align: =Align.Center
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =10
+                              Text: |-
+                                =//Show error if value is negative or zero
+                                Coalesce(
+                                    Parent.Error,
+                                    If(
+                                        Value(dcvFemaleToMale.Text) <= 0,
+                                        "This value can't be negative or zero"
+                                    )
+                                )
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width
+                              Y: =dcvFemaleToMale.Y + dcvFemaleToMale.Height
+                        - StarVisible84:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey84.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey84.Y
+                  - Avg_Flowers_Per_Parent_DataCard1:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicNumberEdit
+                      Properties:
+                        DataField: ="Avg_Flowers_Per_Parent"
+                        Default: =ThisItem.Avg_Flowers_Per_Parent
+                        DisplayName: =DataSourceInfo([@M_GHRatios],DataSourceInfo.DisplayName,Avg_Flowers_Per_Parent)
+                        Required: =true
+                        Update: =Value(dcvFlowersPerParent.Text)
+                        Width: =233
+                        X: =2
+                        Y: =2
+                      Children:
+                        - DataCardKey74:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =34
+                              PaddingBottom: =0
+                              PaddingTop: =0
+                              Size: =9
+                              Text: ="Average Flowers Per Parent"
+                              Width: =Parent.Width - 30
+                              Wrap: =false
+                              X: =30
+                              Y: =5
+                        - dcvFlowersPerParent:
+                            Control: Classic/TextInput@2.3.2
+                            MetadataKey: FieldValue
+                            Properties:
+                              BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                              Default: =Parent.Default
+                              DelayOutput: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Format: =TextFormat.Number
+                              Height: =22
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =9
+                              Tooltip: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =DataCardKey74.Y + DataCardKey74.Height + 5
+                        - emAvgFlowersParent:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              Align: =Align.Center
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =10
+                              Text: |-
+                                =//Show error if value is negative or zero
+                                Coalesce(
+                                    Parent.Error,
+                                    If(
+                                        Value(dcvFlowersPerParent.Text) <= 0,
+                                        "This value can't be negative or zero"
+                                    )
+                                )
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width
+                              Y: =dcvFlowersPerParent.Y + dcvFlowersPerParent.Height
+                        - StarVisible74:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey74.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey74.Y
+                  - Flowers_Per_Parent_Std_Dev_DataCard1:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicNumberEdit
+                      Properties:
+                        DataField: ="Flowers_Per_Parent_Std_Dev"
+                        Default: =ThisItem.Flowers_Per_Parent_Std_Dev
+                        DisplayName: =DataSourceInfo([@M_GHRatios],DataSourceInfo.DisplayName,Flowers_Per_Parent_Std_Dev)
+                        Required: =true
+                        Update: =Value(dcvFlowersPerParentStdDev.Text)
+                        Width: =233
+                        X: =3
+                        Y: =2
+                      Children:
+                        - DataCardKey85:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =34
+                              PaddingBottom: =0
+                              PaddingTop: =0
+                              Size: =9
+                              Text: ="Flowers Per Parent Std Dev"
+                              Width: =Parent.Width - 30
+                              Wrap: =false
+                              X: =30
+                              Y: =5
+                        - dcvFlowersPerParentStdDev:
+                            Control: Classic/TextInput@2.3.2
+                            MetadataKey: FieldValue
+                            Properties:
+                              BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                              Default: =Parent.Default
+                              DelayOutput: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Format: =TextFormat.Number
+                              Height: =22
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =9
+                              Tooltip: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =DataCardKey85.Y + DataCardKey85.Height + 5
+                        - ErrorMessage85:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =14
+                              Text: =Parent.Error
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =dcvFlowersPerParentStdDev.Y + dcvFlowersPerParentStdDev.Height
+                        - StarVisible85:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey85.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey85.Y
+                  - Buffer_Percent_Of_Std_Dev_DataCard1:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicNumberEdit
+                      Properties:
+                        DataField: ="Buffer_Percent_Of_Std_Dev"
+                        Default: =ThisItem.Buffer_Percent_Of_Std_Dev
+                        DisplayName: =DataSourceInfo([@M_GHRatios],DataSourceInfo.DisplayName,Buffer_Percent_Of_Std_Dev)
+                        Required: =true
+                        Update: =Value(dcvBufferStdDev.Text)
+                        Width: =233
+                        X: =4
+                        Y: =2
+                      Children:
+                        - DataCardKey80:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =34
+                              PaddingBottom: =0
+                              PaddingTop: =0
+                              Size: =9
+                              Text: ="Buffer % of Std Dev"
+                              Width: =Parent.Width - 30
+                              Wrap: =false
+                              X: =30
+                              Y: =5
+                        - dcvBufferStdDev:
+                            Control: Classic/TextInput@2.3.2
+                            MetadataKey: FieldValue
+                            Properties:
+                              BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                              Default: =Parent.Default
+                              DelayOutput: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Format: =TextFormat.Number
+                              Height: =22
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =9
+                              Tooltip: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =DataCardKey80.Y + DataCardKey80.Height + 5
+                        - emBufferPercent:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              Align: =Align.Center
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =10
+                              Text: |-
+                                =//Show error if value is negative or greater than 3
+                                Coalesce(
+                                    Parent.Error,
+                                    If(
+                                        Value(dcvBufferStdDev.Text) < 0 || Value(dcvBufferStdDev.Text) > 3,
+                                        "This value can't be negative or greater than 3"
+                                    )
+                                )
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width
+                              Y: =dcvBufferStdDev.Y + dcvBufferStdDev.Height
+                        - StarVisible80:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey80.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey80.Y
+                  - GHRatios_ID_DataCard1:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicTextualView
+                      Properties:
+                        DataField: ="GHRatios_ID"
+                        Default: =ThisItem.GHRatios_ID
+                        DisplayName: =DataSourceInfo([@M_GHRatios],DataSourceInfo.DisplayName,GHRatios_ID)
+                        Height: =42
+                        Required: =false
+                        Width: =233
+                        X: =5
+                        Y: =2
+                      Children:
+                        - DataCardKey79:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =34
+                              PaddingBottom: =0
+                              PaddingTop: =0
+                              Size: =9
+                              Text: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              Wrap: =false
+                              X: =30
+                              Y: =5
+                        - dcvGHRatiosID:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldValue
+                            Properties:
+                              AutoHeight: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Height: =22
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =9
+                              Text: =Parent.Default
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =DataCardKey79.Y + DataCardKey79.Height + 5
+                  - Comments_DataCard1:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicTextualEdit
+                      Properties:
+                        DataField: ="Comments"
+                        Default: =ThisItem.Comments
+                        DisplayName: =DataSourceInfo([@M_GHRatios],DataSourceInfo.DisplayName,Comments)
+                        MaxLength: =DataSourceInfo([@M_GHRatios], DataSourceInfo.MaxLength, Comments)
+                        Required: =false
+                        Update: =dcvCommentsRatio.Text
+                        Width: =699
+                        X: =0
+                        Y: =3
+                      Children:
+                        - DataCardKey81:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =34
+                              PaddingBottom: =0
+                              PaddingTop: =0
+                              Size: =9
+                              Text: =Parent.DisplayName
+                              Width: =Parent.Width - 30
+                              Wrap: =false
+                              X: =30
+                              Y: =5
+                        - dcvCommentsRatio:
+                            Control: Classic/TextInput@2.3.2
+                            MetadataKey: FieldValue
+                            Properties:
+                              BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                              Default: =Parent.Default
+                              DelayOutput: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Height: =22
+                              MaxLength: =Parent.MaxLength
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =9
+                              Tooltip: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =DataCardKey81.Y + DataCardKey81.Height + 5
+                        - ErrorMessage81:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =14
+                              Text: =Parent.Error
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =dcvCommentsRatio.Y + dcvCommentsRatio.Height
+                        - StarVisible81:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey81.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey81.Y
+                  - Active_DataCard1:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicNumberEdit
+                      Properties:
+                        DataField: ="Active"
+                        Default: =ThisItem.Active
+                        DisplayName: =DataSourceInfo([@M_GHRatios],DataSourceInfo.DisplayName,Active)
+                        Required: =false
+                        Update: =Value(DataCardValue19.Text)
+                        Visible: =false
+                        Width: =466
+                        X: =3
+                        Y: =3
+                      Children:
+                        - DataCardKey128:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =34
+                              Text: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              Wrap: =false
+                              X: =30
+                              Y: =10
+                        - DataCardValue19:
+                            Control: Classic/TextInput@2.3.2
+                            MetadataKey: FieldValue
+                            Properties:
+                              BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                              Default: =If(FormRatios.Mode=FormMode.New,1,Parent.Default)
+                              DelayOutput: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Format: =TextFormat.Number
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Tooltip: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =DataCardKey128.Y + DataCardKey128.Height + 5
+                        - ErrorMessage116:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =14
+                              Text: =Parent.Error
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =DataCardValue19.Y + DataCardValue19.Height
+                        - StarVisible124:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey128.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey128.Y
+            - butReset_3:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  BorderThickness: =0
+                  Color: =Color.White
+                  DisplayMode: |-
+                    =If(
+                        !FormRatios.Valid || !IsBlank(emSeedTransPercent.Text) || !IsBlank(emAvgSeedGerm.Text) || !IsBlank(emSeedPerGram.Text) || !IsBlank(emGramSeedPerFruit.Text) || !IsBlank(emPollinationPercent.Text) || !IsBlank(emFemalePerMale.Text) || !IsBlank(emAvgFlowersParent.Text) || !IsBlank(emBufferPercent.Text) || !tgAdminLevel.Value,
+                        DisplayMode.Disabled,
+                        DisplayMode.Edit
+                    )
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =30
+                  HoverFill: =RGBA(118, 0, 0, 1)
+                  OnSelect: |-
+                    =//Submits cross update in form to TPN table
+                    If(
+                        FormRatios.Mode = FormMode.New,
+                        Patch(
+                            'M_GHRatios',
+                            Defaults('M_GHRatios'),
+                            {
+                                Seedling_Transplant_Success_Percentage: Value(dcvSeedlingTransPercent.Text),
+                                Avg_Seed_Germination_Percentage: Value(dcvSeedGermPercent.Text),
+                                Seed_Germination_Std_Dev: Value(dcvSeedGermStdDev.Text),
+                                Seed_Sow_Buffer_Grams: Value(dcvSeedSowBuffer.Text),
+                                Seeds_Per_Gram_Of_Seed: Value(dcvSeedsPerGram.Text),
+                                Seed_Num_Per_Gram_Std_Dev: Value(dcvSeedsPerGramStdDev.Text),
+                                Grams_Seed_Per_Fruit: Value(dcvSeedPerFruit.Text),
+                                Grams_Seed_Per_Fruit_Std_Dev: Value(dcvSeedPerFruitStdDev.Text),
+                                Pollination_Success_Percentage: Value(dcvPollinationPercent.Text),
+                                Pollination_Std_Dev: Value(dcvPollinationStdDev.Text),
+                                Female_Flowers_Per_Male_Flower: Value(dcvFemaleToMale.Text),
+                                Avg_Flowers_Per_Parent: Value(dcvFlowersPerParent.Text),
+                                Flowers_Per_Parent_Std_Dev: Value(dcvFlowersPerParentStdDev.Text),
+                                Buffer_Percent_Of_Std_Dev: Value(dcvBufferStdDev.Text),
+                                Comments: dcvCommentsRatio.Text,
+                                Program_ID: Value(dcvProgramIDRatios.Text),
+                                Team_ID: Value(dcvTeamIDRatios.Text),
+                                Berry_ID: Value(dcvBerryIDRatios.Text),
+                                Created_Date: Now(),
+                                Created_By: User().FullName,
+                                Modified_Date: Now(),
+                                Modified_By: User().FullName,
+                                Active: true
+                            }
+                        ),
+                        Patch(
+                            'M_GHRatios',
+                            LookUp(
+                                'M_GHRatios',
+                                GHRatios_ID = galRatios.Selected.GHRatios_ID
+                            ),
+                            {
+                                Seedling_Transplant_Success_Percentage: Value(dcvSeedlingTransPercent.Text),
+                                Avg_Seed_Germination_Percentage: Value(dcvSeedGermPercent.Text),
+                                Seed_Germination_Std_Dev: Value(dcvSeedGermStdDev.Text),
+                                Seed_Sow_Buffer_Grams: Value(dcvSeedSowBuffer.Text),
+                                Seeds_Per_Gram_Of_Seed: Value(dcvSeedsPerGram.Text),
+                                Seed_Num_Per_Gram_Std_Dev: Value(dcvSeedsPerGramStdDev.Text),
+                                Grams_Seed_Per_Fruit: Value(dcvSeedPerFruit.Text),
+                                Grams_Seed_Per_Fruit_Std_Dev: Value(dcvSeedPerFruitStdDev.Text),
+                                Pollination_Success_Percentage: Value(dcvPollinationPercent.Text),
+                                Pollination_Std_Dev: Value(dcvPollinationStdDev.Text),
+                                Female_Flowers_Per_Male_Flower: Value(dcvFemaleToMale.Text),
+                                Avg_Flowers_Per_Parent: Value(dcvFlowersPerParent.Text),
+                                Flowers_Per_Parent_Std_Dev: Value(dcvFlowersPerParentStdDev.Text),
+                                Buffer_Percent_Of_Std_Dev: Value(dcvBufferStdDev.Text),
+                                Comments: dcvCommentsRatio.Text,
+                                Program_ID: Value(dcvProgramIDRatios.Text),
+                                Team_ID: Value(dcvTeamIDRatios.Text),
+                                Berry_ID: Value(dcvBerryIDRatios.Text),
+                                Modified_Date: Now(),
+                                Modified_By: User().FullName
+                            }
+                        )
+                    );
+                    //Error or Success notification of submission
+                    If(
+                        IsEmpty(Errors('M_GHRatios')),
+                        Notify(
+                            "Success",
+                            NotificationType.Success
+                        );
+                        ,
+                        Notify(
+                            First(Errors('M_GHRatios')).Message & "Error with Ratio Form Submission",
+                            NotificationType.Error
+                        )
+                    );
+                    ResetForm(FormRatios);
+                    Set(
+                        varratioshow,
+                        false
+                    );
+                    Refresh(vw_GH_Ratios);
+                    GHSM_Required_Amounts_Calc.Run();
+                  PaddingBottom: =6.67
+                  PaddingLeft: =6.67
+                  PaddingRight: =7.36
+                  PaddingTop: =7.36
+                  Size: =14
+                  Text: ="Submit"
+                  Width: =130
+                  X: =765
+                  Y: =325
+            - conExample:
+                Control: GroupContainer@1.5.0
+                Variant: ManualLayout
+                Properties:
+                  BorderThickness: =2
+                  DropShadow: =DropShadow.Semibold
+                  Fill: =RGBA(218, 40, 28, .3)
+                  Height: =100
+                  Width: =1343
+                  X: =28
+                  Y: =380
+                Children:
+                  - niShipQty:
+                      Control: NumberInput@2.9.12
+                      Properties:
+                        Align: =Align.Center
+                        Appearance: ='NumberInput.Appearance'.FilledLighter
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        BorderStyle: =BorderStyle.Solid
+                        BorderThickness: =1
+                        Min: =1
+                        Precision: ='NumberInput.Precision'.'0'
+                        Value: =100
+                        Width: =100
+                        X: =128
+                        Y: =47
+                  - labShipQty:
+                      Control: Text@0.0.51
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        FontColor: =RGBA(0, 0, 0, 1)
+                        Height: =35
+                        Size: =12
+                        Text: ="Ship Qty"
+                        VerticalAlign: =VerticalAlign.Middle
+                        Width: =100
+                        X: =128
+                        Y: =12
+                  - labDiscardPercent:
+                      Control: Text@0.0.51
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        FontColor: =RGBA(0, 0, 0, 1)
+                        Height: =35
+                        Size: =12
+                        Text: ="Discard %"
+                        VerticalAlign: =VerticalAlign.Middle
+                        Width: =100
+                        X: =228
+                        Y: =12
+                  - labPlateQty:
+                      Control: Text@0.0.51
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        FontColor: =RGBA(0, 0, 0, 1)
+                        Height: =35
+                        Size: =12
+                        Text: ="Lab Plate Qty"
+                        VerticalAlign: =VerticalAlign.Middle
+                        Width: =100
+                        X: =328
+                        Y: =12
+                  - labSpinyDiscard:
+                      Control: Text@0.0.51
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        FontColor: =RGBA(0, 0, 0, 1)
+                        Height: =35
+                        Size: =12
+                        Text: ="Spiny Discard %"
+                        VerticalAlign: =VerticalAlign.Middle
+                        Width: =100
+                        X: =528
+                        Y: =12
+                  - niDiscardPercent:
+                      Control: NumberInput@2.9.12
+                      Properties:
+                        Align: =Align.Center
+                        Appearance: ='NumberInput.Appearance'.FilledLighter
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        BorderStyle: =BorderStyle.Solid
+                        BorderThickness: =1
+                        Max: =0.99
+                        Min: =0
+                        Precision: ='NumberInput.Precision'.'2'
+                        Value: =0.5
+                        Width: =100
+                        X: =228
+                        Y: =47
+                  - niPlateQty:
+                      Control: NumberInput@2.9.12
+                      Properties:
+                        Align: =Align.Center
+                        Appearance: ='NumberInput.Appearance'.FilledLighter
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        BorderStyle: =BorderStyle.Solid
+                        BorderThickness: =1
+                        Max: =100
+                        Min: =1
+                        Precision: ='NumberInput.Precision'.'0'
+                        Value: =95
+                        Width: =100
+                        X: =328
+                        Y: =47
+                  - niSpinyDiscard:
+                      Control: NumberInput@2.9.12
+                      Properties:
+                        Align: =Align.Center
+                        Appearance: ='NumberInput.Appearance'.FilledLighter
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        BorderStyle: =BorderStyle.Solid
+                        BorderThickness: =1
+                        Max: =0.99
+                        Min: =0
+                        Precision: ='NumberInput.Precision'.'2'
+                        Value: =0
+                        Width: =100
+                        X: =528
+                        Y: =47
+                  - numTransplantsReq:
+                      Control: Text@0.0.51
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        BorderStyle: =BorderStyle.Solid
+                        BorderThickness: =1
+                        FontColor: =RGBA(0, 0, 0, 1)
+                        Size: =12
+                        Text: |-
+                          =If(
+                              And(FormRatios.Valid,IsBlank(emSeedTransPercent.Text)),
+                              RoundUp(
+                                  ((niShipQty.Value / (1 - niDiscardPercent.Value)) / niPlateQty.Value) / Value(dcvSeedlingTransPercent.Text),
+                                  0
+                              ) * niPlateQty.Value,
+                              0
+                          )
+                        VerticalAlign: =VerticalAlign.Middle
+                        Width: =100
+                        X: =428
+                        Y: =47
+                  - labTransplantQty:
+                      Control: Text@0.0.51
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        FontColor: =RGBA(0, 0, 0, 1)
+                        Height: =35
+                        Size: =12
+                        Text: ="Transplants Required"
+                        VerticalAlign: =VerticalAlign.Middle
+                        Width: =100
+                        X: =428
+                        Y: =12
+                  - labSeedReq:
+                      Control: Text@0.0.51
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        FontColor: =RGBA(0, 0, 0, 1)
+                        Height: =35
+                        Size: =12
+                        Text: ="Seed Weight Required"
+                        VerticalAlign: =VerticalAlign.Middle
+                        Width: =100
+                        X: =628
+                        Y: =12
+                  - labFruitReq:
+                      Control: Text@0.0.51
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        FontColor: =RGBA(0, 0, 0, 1)
+                        Height: =35
+                        Size: =12
+                        Text: ="Fruit Required"
+                        VerticalAlign: =VerticalAlign.Middle
+                        Width: =100
+                        X: =728
+                        Y: =12
+                  - labPollinationsReq:
+                      Control: Text@0.0.51
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        FontColor: =RGBA(0, 0, 0, 1)
+                        Height: =35
+                        Size: =12
+                        Text: ="Pollinations Required"
+                        VerticalAlign: =VerticalAlign.Middle
+                        Width: =100
+                        X: =828
+                        Y: =12
+                  - labPollenReq:
+                      Control: Text@0.0.51
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        FontColor: =RGBA(0, 0, 0, 1)
+                        Height: =35
+                        Size: =12
+                        Text: ="Pollen Required"
+                        VerticalAlign: =VerticalAlign.Middle
+                        Width: =100
+                        X: =928
+                        Y: =12
+                  - labParent1Req:
+                      Control: Text@0.0.51
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        FontColor: =RGBA(0, 0, 0, 1)
+                        Height: =35
+                        Size: =12
+                        Text: ="Parent 1 Plants Required"
+                        VerticalAlign: =VerticalAlign.Middle
+                        Width: =100
+                        X: =1028
+                        Y: =12
+                  - labParent2Req:
+                      Control: Text@0.0.51
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        FontColor: =RGBA(0, 0, 0, 1)
+                        Height: =35
+                        Size: =12
+                        Text: ="Parent 2 Plants Required"
+                        VerticalAlign: =VerticalAlign.Middle
+                        Width: =100
+                        X: =1128
+                        Y: =12
+                  - numSeedReq:
+                      Control: Text@0.0.51
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        BorderStyle: =BorderStyle.Solid
+                        BorderThickness: =1
+                        FontColor: =RGBA(0, 0, 0, 1)
+                        Size: =12
+                        Text: |-
+                          =If(
+                              And(FormRatios.Valid,IsBlank(emAvgSeedGerm.Text),IsBlank(emSeedPerGram.Text),IsBlank(emBufferPercent.Text)),
+                              Round(
+                                  ((Value(numTransplantsReq.Text) / (Value(dcvSeedGermPercent.Text) - (Value(dcvSeedGermStdDev.Text) * Value(dcvBufferStdDev.Text)))) / (Value(dcvSeedsPerGram.Text) - (Value(dcvSeedsPerGramStdDev.Text) * Value(dcvBufferStdDev.Text))) / (1 - niSpinyDiscard.Value)),
+                                  4
+                              ),
+                              0
+                          )
+                        VerticalAlign: =VerticalAlign.Middle
+                        Width: =100
+                        X: =628
+                        Y: =47
+                  - numFruitReq:
+                      Control: Text@0.0.51
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        BorderStyle: =BorderStyle.Solid
+                        BorderThickness: =1
+                        FontColor: =RGBA(0, 0, 0, 1)
+                        Size: =12
+                        Text: |-
+                          =If(
+                              And(FormRatios.Valid,IsBlank(emGramSeedPerFruit.Text),IsBlank(emBufferPercent.Text)),
+                              RoundUp(
+                                  Value(numSeedReq.Text) / (Value(dcvSeedPerFruit.Text) - (Value(dcvSeedPerFruitStdDev.Text) * Value(dcvBufferStdDev.Text))),
+                                  0
+                              ),
+                              0
+                          )
+                        VerticalAlign: =VerticalAlign.Middle
+                        Width: =100
+                        X: =728
+                        Y: =47
+                  - numPollinationsReq:
+                      Control: Text@0.0.51
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        BorderStyle: =BorderStyle.Solid
+                        BorderThickness: =1
+                        FontColor: =RGBA(0, 0, 0, 1)
+                        Size: =12
+                        Text: |-
+                          =If(
+                              And(FormRatios.Valid,IsBlank(emPollinationPercent.Text),IsBlank(emBufferPercent.Text)),
+                              RoundUp(
+                                  Value(numFruitReq.Text) / (Value(dcvPollinationPercent.Text) - (Value(dcvPollinationStdDev.Text) * Value(dcvBufferStdDev.Text))),
+                                  0
+                              ),
+                              0
+                          )
+                        VerticalAlign: =VerticalAlign.Middle
+                        Width: =100
+                        X: =828
+                        Y: =47
+                  - numPollenReq:
+                      Control: Text@0.0.51
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        BorderStyle: =BorderStyle.Solid
+                        BorderThickness: =1
+                        FontColor: =RGBA(0, 0, 0, 1)
+                        Size: =12
+                        Text: |-
+                          =If(
+                              And(FormRatios.Valid,IsBlank(emFemalePerMale.Text),IsBlank(emBufferPercent.Text)),
+                              RoundUp(
+                                  Value(numPollinationsReq.Text) / Value(dcvFemaleToMale.Text),
+                                  0
+                              ),
+                              0
+                          )
+                        VerticalAlign: =VerticalAlign.Middle
+                        Width: =100
+                        X: =928
+                        Y: =47
+                  - numParent1Req:
+                      Control: Text@0.0.51
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        BorderStyle: =BorderStyle.Solid
+                        BorderThickness: =1
+                        FontColor: =RGBA(0, 0, 0, 1)
+                        Size: =12
+                        Text: |-
+                          =If(
+                              And(FormRatios.Valid,IsBlank(emAvgFlowersParent.Text),IsBlank(emBufferPercent.Text)),
+                              RoundUp(
+                                  Value(numPollinationsReq.Text) / (Value(dcvFlowersPerParent.Text) - (Value(dcvFlowersPerParentStdDev.Text) * Value(dcvBufferStdDev.Text))),
+                                  3
+                              ),
+                              0
+                          )
+                        VerticalAlign: =VerticalAlign.Middle
+                        Width: =100
+                        X: =1028
+                        Y: =47
+                  - numParent2Req:
+                      Control: Text@0.0.51
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        BorderStyle: =BorderStyle.Solid
+                        BorderThickness: =1
+                        FontColor: =RGBA(0, 0, 0, 1)
+                        Size: =12
+                        Text: |-
+                          =If(
+                              And(FormRatios.Valid,IsBlank(emAvgFlowersParent.Text),IsBlank(emBufferPercent.Text)),
+                              RoundUp(
+                                  Value(numPollenReq.Text) / (Value(dcvFlowersPerParent.Text) - (Value(dcvFlowersPerParentStdDev.Text) * Value(dcvBufferStdDev.Text))),
+                                  3
+                              ),
+                              0
+                          )
+                        VerticalAlign: =VerticalAlign.Middle
+                        Width: =100
+                        X: =1128
+                        Y: =47
+            - TextCanvas2:
+                Control: Text@0.0.51
+                Properties:
+                  Size: =18
+                  Text: ="Example"
+                  VerticalAlign: =VerticalAlign.Middle
+                  X: =28
+                  Y: =350
+      - butRatiosCalcsInfo:
+          Control: Classic/Button@2.2.0
+          Properties:
+            Color: =RGBA(252,218,35,1)
+            Fill: =RGBA(72,119,60,1)
+            FontWeight: =FontWeight.Bold
+            Height: =25
+            OnSelect: =Set(varformulashow,true);
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            Size: =11
+            Text: ="?"
+            Width: =25
+            X: =1623
+      - conRatiosCalcsInfo:
+          Control: GroupContainer@1.5.0
+          Variant: ManualLayout
+          Properties:
+            Fill: =RGBA(252,218,35,1)
+            Height: =396
+            Visible: =varformulashow
+            Width: =1648
+            Y: =371
+          Children:
+            - Image5:
+                Control: Image@2.2.3
+                Properties:
+                  Height: =298
+                  Image: ='Seedling App Formulas'
+                  Width: =1341
+                  X: =153
+                  Y: =25
+            - butClose:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: =Set(varformulashow,false);
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  Size: =11
+                  Text: ="Close"
+                  Width: =120
+                  X: =764
+                  Y: =360
+      - conInactivate2:
+          Control: GroupContainer@1.5.0
+          Variant: ManualLayout
+          Properties:
+            Fill: =RGBA(252,218,35,1)
+            Visible: =varratioinactiveshow
+            X: =650
+            Y: =227
+          Children:
+            - Label4:
+                Control: Label@2.5.1
+                Properties:
+                  Align: =Align.Center
+                  Height: =72
+                  Text: |-
+                    ="Are you sure you want to inactivate this ratio? Team: "&galRatios.Selected.Team_Name&" Berry: "&galRatios.Selected.BerryType&" Program: "&galRatios.Selected.SrcBreedingProgram
+                  Width: =381
+                  X: =60
+                  Y: =32
+            - butReset_6:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  BorderThickness: =0
+                  Color: =Color.White
+                  Fill: =RGBA(218, 40, 28, 1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =30
+                  HoverFill: =RGBA(118, 0, 0, 1)
+                  OnSelect: =Set(varratioinactiveshow,false);
+                  PaddingBottom: =6.67
+                  PaddingLeft: =6.67
+                  PaddingRight: =7.36
+                  PaddingTop: =7.36
+                  Size: =14
+                  Text: ="No"
+                  Width: =130
+                  X: =104
+                  Y: =140
+            - butReset_7:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  BorderThickness: =0
+                  Color: =Color.White
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =30
+                  HoverFill: =RGBA(118, 0, 0, 1)
+                  OnSelect: |-
+                    =Patch(
+                        M_GHRatios,
+                        LookUp(
+                            M_GHRatios,
+                            GHRatios_ID = galRatios.Selected.GHRatios_ID
+                        ),
+                        {Active: false}
+                    );
+                    Set(
+                        varratioinactiveshow,
+                        false
+                    );
+                    Refresh(vw_GH_Ratios);
+                  PaddingBottom: =6.67
+                  PaddingLeft: =6.67
+                  PaddingRight: =7.36
+                  PaddingTop: =7.36
+                  Size: =14
+                  Text: ="Yes"
+                  Width: =130
+                  X: =295
+                  Y: =140
+      - conMenu_3:
+          Control: GroupContainer@1.5.0
+          Variant: ManualLayout
+          Properties:
+            Height: =325
+            Visible: =varshowmenu
+            Width: =159
+            Y: =26
+          Children:
+            - butReports_13:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenReports,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Reports"
+                  Y: =300
+            - butEmployees_13:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  DisplayMode: =If(tgAdminLevel.Value,DisplayMode.Edit,DisplayMode.Disabled)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenEmployees,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Employees"
+                  Y: =275
+            - butDeadlines_16:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenDeadlines,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Deadlines"
+                  Y: =250
+            - butRatios_13:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenRatios,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Ratios"
+                  Y: =225
+            - butLTT8:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenLabsTeamsTrays,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Reference Tables"
+                  Y: =200
+            - butShip8:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenShip,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Ship"
+                  Y: =175
+            - butScreen_13:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenScreenDiscard,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Screen & Discards"
+                  Y: =150
+            - butTransplant_13:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenTransplantAdj,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Transplant"
+                  Y: =125
+            - butSeed_13:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenSeedList,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Seed"
+                  Y: =100
+            - butFruit_13:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenFruitList,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Fruit"
+                  Y: =75
+            - butPollination_13:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenPollinationList,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Pollination"
+                  Y: =50
+            - butCrossingList_14:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenCrossingListShort,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Crossing List"
+                  Y: =25
+            - butHome_10:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenHome,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Home"

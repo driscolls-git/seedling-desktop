@@ -1,0 +1,2376 @@
+Screens:
+  ScreenSeedList:
+    Properties:
+      Fill: =RGBA(255, 255, 255, 1)
+    Children:
+      - labTitleBar_6:
+          Control: Label@2.5.1
+          Properties:
+            Align: =Align.Center
+            Color: =RGBA(252, 252, 249, 1)
+            Fill: =RGBA(218, 40, 28, 1)
+            FontWeight: =FontWeight.Semibold
+            Height: =25
+            PaddingBottom: =5.00
+            PaddingLeft: =5.00
+            PaddingRight: =7.36
+            PaddingTop: =7.36
+            Size: =14
+            Text: ="GH Seedling App"
+            Width: =1648
+            X: =0.00
+      - butNavigation_6:
+          Control: Classic/Button@2.2.0
+          Properties:
+            Color: =RGBA(72,119,60,1)
+            Fill: =RGBA(252,218,35,1)
+            FontWeight: =FontWeight.Bold
+            Height: =25
+            OnSelect: =Set(varshowmenu,true)
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            RadiusBottomLeft: =0
+            RadiusBottomRight: =0
+            RadiusTopLeft: =0
+            RadiusTopRight: =0
+            Size: =11
+            Text: ="Navigation"
+            X: =0.00
+      - IconChevron2_9:
+          Control: Classic/Icon@2.5.0
+          Properties:
+            Height: =25
+            Icon: =Icon.ChevronUp
+            OnSelect: =Set(varshowmenu,false)
+            PaddingBottom: =0.00
+            PaddingLeft: =0.00
+            PaddingRight: =0.00
+            PaddingTop: =0.00
+            Visible: =varshowmenu
+            Width: =30
+            X: =125
+      - DriscollsLogo2_9:
+          Control: Image@2.2.3
+          Properties:
+            Height: =50
+            Image: ='Driscoll''s Logo 2'
+            PaddingBottom: =0.00
+            PaddingLeft: =0.00
+            PaddingRight: =0.00
+            PaddingTop: =0.00
+            Width: =170
+            X: =1478
+      - Rectangle2_13:
+          Control: Rectangle@2.3.0
+          Properties:
+            Fill: =RGBA(252, 218, 35, 0.25)
+            Height: =45
+            Width: =1648
+            X: =0.00
+            Y: =25
+      - butExportCSV_6:
+          Control: Classic/Button@2.2.0
+          Properties:
+            Color: =RGBA(252,218,35,1)
+            Fill: =RGBA(72,119,60,1)
+            FontWeight: =FontWeight.Normal
+            Height: =25
+            OnSelect: |+
+              =
+
+              Export_GHSeedDesk_View.Run(
+                  varberry,
+                  Coalesce(ddTeam_4.Selected.Value, " "),
+                  Value(ddPollinationYear_4.Selected.Value),
+                  Coalesce(ddProgram_6.Selected.Value, " "),
+                  varseedtogo,
+                  cbSowSeed_1.Value,
+                  cbAcidDateRange.Value
+              );
+
+
+              If(ddTeam_4.Selected.Value = "Guzman", Launch("https://driscollsinc.sharepoint.com/:f:/s/CdGuzmanGreenhouseOps/IgA8cuxK6M6-Sb5-ElA0_sw2AZS3NsVLWrKY2yvxaLTuTGE?e=cfhxEq"),
+              Launch("https://driscollsinc.sharepoint.com/sites/General/Shared%20Documents/Forms/AllItems.aspx?FolderCTID=0x0120007018F6A0AA7B1A45BF24275192588A14&id=%2Fsites%2FGeneral%2FShared%20Documents%2FGeneral%20GH%2FGH%20Seedling%20App%20Export%20Files"));
+
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            Size: =11
+            Text: ="Export to CSV"
+            Width: =120
+            X: =1344
+      - labTitleSeedList:
+          Control: Label@2.5.1
+          Properties:
+            Align: =Align.Center
+            FontWeight: =FontWeight.Bold
+            Height: =37
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            Size: =26
+            Text: ="Seed List"
+            VerticalAlign: =VerticalAlign.Bottom
+            Width: =482
+            X: =582
+            Y: =27
+      - ConFilterSeedList:
+          Control: GroupContainer@1.5.0
+          Variant: ManualLayout
+          Properties:
+            Fill: =RGBA(252, 218, 35, 100)
+            Height: =698
+            PaddingRight: =0.00
+            PaddingTop: =0.00
+            Width: =160
+            X: =0.00
+            Y: =70
+          Children:
+            - TextFilterBox_9:
+                Control: Text@0.0.51
+                Properties:
+                  Align: ='TextCanvas.Align'.Center
+                  BorderStyle: =BorderStyle.Solid
+                  Font: =App.Theme.Font
+                  Height: =Parent.Height
+                  Size: =18
+                  Text: ="Filters"
+                  VerticalAlign: =VerticalAlign.Top
+                  Weight: ='TextCanvas.Weight'.Semibold
+                  Width: =Parent.Width
+                  X: =0.00
+            - Image1_10:
+                Control: Image@2.2.3
+                Properties:
+                  BorderColor: =RGBA(218, 40, 28, 1)
+                  BorderThickness: =If(varberry="STRAW",4,0)
+                  Height: =50
+                  Image: ='Strawberry Icon 3'
+                  OnSelect: =Set(varberry,"STRAW");Set(varberryID,4);Set(varfillcolor,RGBA(218, 40, 28, 0.4));
+                  PaddingBottom: =0.00
+                  PaddingLeft: =0.00
+                  PaddingRight: =0.00
+                  PaddingTop: =0.00
+                  Width: =45
+                  X: =25
+                  Y: =38
+            - Image4_10:
+                Control: Image@2.2.3
+                Properties:
+                  BorderColor: =RGBA(109, 49, 162, 1)
+                  BorderThickness: =If(varberry="BLACK",4,0)
+                  Height: =50
+                  Image: ='Blackberry Icon 3'
+                  OnSelect: =Set(varberry,"BLACK");Set(varberryID,1);Set(varfillcolor,RGBA(109, 49, 162, 0.6));
+                  PaddingBottom: =0.00
+                  PaddingLeft: =0.00
+                  PaddingRight: =0.00
+                  PaddingTop: =0.00
+                  Width: =45
+                  X: =90
+                  Y: =38
+            - Image3_11:
+                Control: Image@2.2.3
+                Properties:
+                  BorderColor: =RGBA(39, 113, 194, 1)
+                  BorderThickness: =If(varberry="BLUE",4,0)
+                  Height: =50
+                  Image: ='Blueberry Icon 3'
+                  OnSelect: =Set(varberry,"BLUE");Set(varberryID,2);Set(varfillcolor,RGBA(39, 113, 194, 0.6));
+                  PaddingBottom: =0.00
+                  PaddingLeft: =0.00
+                  PaddingRight: =0.00
+                  PaddingTop: =0.00
+                  Width: =45
+                  X: =25
+                  Y: =111
+            - Image2_16:
+                Control: Image@2.2.3
+                Properties:
+                  BorderColor: =RGBA(233, 79, 76, 1)
+                  BorderThickness: =If(varberry="RASP",4,0)
+                  Height: =50
+                  Image: ='Raspberry Icon 3'
+                  OnSelect: =Set(varberry,"RASP");Set(varberryID,3);Set(varfillcolor,RGBA(233, 79, 76, 0.6));
+                  PaddingBottom: =0.00
+                  PaddingLeft: =0.00
+                  PaddingRight: =0.00
+                  PaddingTop: =0.00
+                  Width: =45
+                  X: =90
+                  Y: =111
+            - TextTeam_4:
+                Control: Text@0.0.51
+                Properties:
+                  Align: ='TextCanvas.Align'.Start
+                  Font: =App.Theme.Font
+                  Height: =23
+                  Text: ="Team"
+                  Width: =130
+                  X: =15
+                  Y: =167
+            - ddTeam_4:
+                Control: Classic/DropDown@2.3.1
+                Properties:
+                  AllowEmptySelection: =true
+                  ChevronBackground: =RGBA(72,119,60,1)
+                  Default: =ddTeamMain.Selected.Value
+                  Height: =30
+                  Items: =Distinct(M_GHTeams,Team_Name)
+                  Items.Value: =Value
+                  OnChange: =
+                  PaddingBottom: =0
+                  PaddingLeft: =5
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  Size: =11
+                  Width: =130
+                  X: =15
+                  Y: =190
+            - txPollinationYr_5:
+                Control: Text@0.0.51
+                Properties:
+                  Align: ='TextCanvas.Align'.Start
+                  Font: =App.Theme.Font
+                  Height: =23
+                  Text: ="Pollination Year"
+                  Width: =130
+                  X: =15
+                  Y: =232
+            - ddPollinationYear_4:
+                Control: Classic/DropDown@2.3.1
+                Properties:
+                  AllowEmptySelection: =true
+                  ChevronBackground: =RGBA(72,119,60,1)
+                  Default: =Year(Now())
+                  Height: =30
+                  Items: =Distinct(M_Year,DateYear)
+                  Items.Value: =Value
+                  OnChange: =
+                  PaddingBottom: =0
+                  PaddingLeft: =5
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  Size: =11
+                  Width: =130
+                  X: =15
+                  Y: =255
+            - TextProgeny_6:
+                Control: Text@0.0.51
+                Properties:
+                  Align: ='TextCanvas.Align'.Start
+                  Font: =App.Theme.Font
+                  Height: =23
+                  Text: ="Progeny"
+                  Width: =130
+                  X: =15
+                  Y: =298
+            - tiProgeny_5:
+                Control: TextInput@0.0.54
+                Properties:
+                  Align: =Align.Left
+                  BorderColor: =RGBA(0, 0, 0, 1)
+                  BorderRadius: =0
+                  BorderStyle: =BorderStyle.Solid
+                  BorderThickness: =2
+                  Font: =App.Theme.Font
+                  FontSize: =14
+                  Height: =33
+                  Mode: ='TextInputCanvas.Mode'.SingleLine
+                  PaddingBottom: =0
+                  PaddingLeft: =5
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  Placeholder: ="Progeny Search"
+                  TriggerOutput: ='TextInputCanvas.TriggerOutput'.Keypress
+                  Type: ='TextInputCanvas.Type'.Search
+                  Width: =130
+                  X: =15
+                  Y: =320
+            - TextProgram_8:
+                Control: Text@0.0.51
+                Properties:
+                  Align: ='TextCanvas.Align'.Start
+                  Font: =App.Theme.Font
+                  Height: =23
+                  Text: ="Program"
+                  Width: =130
+                  X: =15
+                  Y: =364
+            - ddProgram_6:
+                Control: Classic/DropDown@2.3.1
+                Properties:
+                  AllowEmptySelection: =true
+                  ChevronBackground: =RGBA(72,119,60,1)
+                  Default: =false
+                  Height: =30
+                  Items: |-
+                    =//Filter the list of programs based on the berry selected
+                    SortByColumns(Distinct(Filter(M_SrcBreedingProgram,BerryType = varberryID), SrcBreedingProgram),"Value")
+                  Items.Value: =Value
+                  PaddingBottom: =0
+                  PaddingLeft: =5
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  Size: =11
+                  Width: =130
+                  X: =15
+                  Y: =387
+            - cbSeedToGo:
+                Control: Classic/CheckBox@2.1.0
+                Properties:
+                  CheckboxSize: =30
+                  OnCheck: =Set(varseedtogo,0);
+                  OnUncheck: =Set(varseedtogo,-1000);
+                  Size: =10
+                  Text: ="Seed Sow To Go > 0"
+                  Width: =160
+                  Y: =420
+            - butReset_9:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  BorderThickness: =0
+                  Color: =Color.White
+                  Fill: =RGBA(218, 40, 28, 1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =30
+                  HoverFill: =RGBA(118, 0, 0, 1)
+                  OnSelect: |-
+                    =Reset(tiProgeny_5);
+                    Reset(ddProgram_6);
+                    Reset(ddPollinationYear_4);
+                    Reset(ddTeam_4);
+                    Reset(cbSeedToGo);
+                    Reset(cbSowSeed_1);
+                    Reset(cbAcidDateRange);
+                    Set(varseedtogo,-1000);
+                  PaddingBottom: =6.67
+                  PaddingLeft: =6.67
+                  PaddingRight: =7.36
+                  PaddingTop: =7.36
+                  Size: =14
+                  Text: ="Reset"
+                  Width: =130
+                  X: =15
+                  Y: =650
+            - cbSowSeed_1:
+                Control: Classic/CheckBox@2.1.0
+                Properties:
+                  CheckboxSize: =30
+                  Default: =true
+                  OnCheck: =
+                  OnUncheck: =
+                  Size: =10
+                  Text: ="Sow Seed (Do Not Bank/Store)"
+                  Width: =160
+                  Y: =465
+            - cbAcidDateRange:
+                Control: Classic/CheckBox@2.1.0
+                Properties:
+                  CheckboxSize: =30
+                  OnCheck: =
+                  OnSelect: |
+                    =false
+                  OnUncheck: =
+                  Size: =10
+                  Text: ="Now in Acid Date Range"
+                  Width: =160
+                  Y: =515
+      - conSeedList:
+          Control: GroupContainer@1.5.0
+          Variant: AutoLayout
+          Properties:
+            Height: =698
+            LayoutDirection: =LayoutDirection.Horizontal
+            LayoutOverflowX: =LayoutOverflow.Scroll
+            Width: =1488
+            X: =160
+            Y: =70
+          Children:
+            - conMainSeed:
+                Control: GroupContainer@1.5.0
+                Variant: ManualLayout
+                Properties:
+                  AlignInContainer: =AlignInContainer.Start
+                  Fill: =varfillcolor
+                  FillPortions: =0
+                  Height: =Parent.Height
+                  LayoutMaxHeight: =
+                  LayoutMaxWidth: =
+                  PaddingBottom: =0.00
+                  PaddingLeft: =0.00
+                  PaddingRight: =0.00
+                  PaddingTop: =0.00
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Width: =1808
+                  X: =200
+                  Y: =118
+                Children:
+                  - conTotals_8:
+                      Control: GroupContainer@1.5.0
+                      Variant: ManualLayout
+                      Properties:
+                        Height: =17
+                        Width: =Parent.Width
+                        Y: =Parent.Y
+                      Children:
+                        - labTotal_4:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              FontWeight: =FontWeight.Bold
+                              Height: =17
+                              Size: =11
+                              Text: ="Totals:"
+                              Width: =120
+                        - TotRecipDone_2:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              FontWeight: =FontWeight.Bold
+                              Height: =17
+                              Size: =11
+                              Text: |-
+                                =//Filters list based on filters entered and sums the results of the field below
+                                Text(
+                                    CountRows(galSeedList.AllItems),
+                                    "##,##0"
+                                )
+                              Width: =125
+                              X: =122
+                        - TotSeedReq:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              FontWeight: =FontWeight.Bold
+                              Height: =17
+                              Size: =11
+                              Text: |-
+                                =//Filters list based on filters entered and sums the results of the field below
+                                Text(
+                                    Sum(
+                                        galSeedList.AllItems,
+                                        SEED_WEIGHT_REQUIRED
+                                    ),
+                                    "##,##0"
+                                )
+                              Width: =90
+                              X: =370
+                        - TotSeedInv:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              FontWeight: =FontWeight.Bold
+                              Height: =17
+                              Size: =11
+                              Text: |-
+                                =//Filters list based on filters entered and sums the results of the field below
+                                Text(
+                                    Sum(
+                                        galSeedList.AllItems,
+                                        Seed_Weight_Inventory
+                                    ),
+                                    "##,##0"
+                                )
+                              Width: =90
+                              X: =460
+                        - TotSeedVar:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              FontWeight: =FontWeight.Bold
+                              Height: =17
+                              Size: =11
+                              Text: |-
+                                =//Filters list based on filters entered and sums the results of the field below
+                                Text(
+                                    Sum(
+                                        galSeedList.AllItems,
+                                        Seed_Weight_Variance
+                                    ),
+                                    "##,##0"
+                                )
+                              Width: =90
+                              X: =550
+                        - TotSeedAcidInv:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              FontWeight: =FontWeight.Bold
+                              Height: =17
+                              Size: =11
+                              Text: |-
+                                =//Filters list based on filters entered and sums the results of the field below
+                                Text(
+                                    Sum(
+                                        galSeedList.AllItems,
+                                        Seed_Weight_Acid_Treated
+                                    ),
+                                    "##,##0"
+                                )
+                              Width: =90
+                              X: =1090
+                        - TotSeedAcidVar:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              FontWeight: =FontWeight.Bold
+                              Height: =17
+                              Size: =11
+                              Text: |-
+                                =//Filters list based on filters entered and sums the results of the field below
+                                Text(
+                                    Sum(
+                                        galSeedList.AllItems,
+                                        Seed_Acid_Weight_Variance
+                                    ),
+                                    "##,##0"
+                                )
+                              Width: =90
+                              X: =1180
+                        - TotSeedToSow:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              FontWeight: =FontWeight.Bold
+                              Height: =17
+                              Size: =11
+                              Text: |-
+                                =//Filters list based on filters entered and sums the results of the field below
+                                Text(
+                                    Sum(
+                                        galSeedList.AllItems,
+                                        Seed_Weight_To_Sow
+                                    ),
+                                    "##,##0"
+                                )
+                              Width: =90
+                              X: =1360
+                        - TotSeedBank:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              FontWeight: =FontWeight.Bold
+                              Height: =17
+                              Size: =11
+                              Text: |-
+                                =//Filters list based on filters entered and sums the results of the field below
+                                Text(
+                                    Sum(
+                                        galSeedList.AllItems,
+                                        Seed_Weight_To_Bank
+                                    ),
+                                    "##,##0"
+                                )
+                              Width: =90
+                              X: =1450
+                        - TotSeedSown_2:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              FontWeight: =FontWeight.Bold
+                              Height: =17
+                              Size: =11
+                              Text: |-
+                                =//Filters list based on filters entered and sums the results of the field below
+                                Text(
+                                    Sum(
+                                        galSeedList.AllItems,
+                                        Total_Seed_Weight_Sown
+                                    ),
+                                    "##,##0"
+                                )
+                              Width: =90
+                              X: =1540
+                        - TotSeedSowYN:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              FontWeight: =FontWeight.Bold
+                              Height: =17
+                              Size: =11
+                              Text: |-
+                                =//Filters list based on filters entered and sums the results of the field below
+                                Text(
+                                    Sum(
+                                        galSeedList.AllItems,
+                                        SOW_SEED
+                                    ),
+                                    "##,##0"
+                                )
+                              Width: =90
+                              X: =1270
+                        - TotSowToGo:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              FontWeight: =FontWeight.Bold
+                              Height: =17
+                              Size: =11
+                              Text: |-
+                                =//Filters list based on filters entered and sums the results of the field below
+                                Text(
+                                    Sum(
+                                        galSeedList.AllItems,
+                                        Seed_Sow_To_Go
+                                    ),
+                                    "##,##0"
+                                )
+                              Width: =90
+                              X: =1630
+                  - conHeader_7:
+                      Control: GroupContainer@1.5.0
+                      Variant: ManualLayout
+                      Properties:
+                        Height: =42
+                        Width: =Parent.Width
+                        Y: =Parent.Y+17
+                      Children:
+                        - butProgeny_5:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(0, 0, 0, 1)
+                              Fill: =RGBA(252, 218, 35, 1)
+                              OnSelect: |+
+                                =Set(varSeedSort1,"PROGENY");
+                                Set(varSeedSort2,"D1_Program");
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Progeny"
+                              Width: =120
+                              Y: =1
+                        - butProgram_6:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(0, 0, 0, 1)
+                              Fill: =RGBA(252, 218, 35, 1)
+                              OnSelect: |-
+                                =Set(varSeedSort1,"D1_Program");
+                                Set(varSeedSort2,"PROGENY");
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Program Destination 1"
+                              Width: =125
+                              X: =120
+                              Y: =1
+                        - butSeedRequired:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Seed Grams Required"
+                              Width: =90
+                              X: =370
+                              Y: =1
+                        - butSeedPrev:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Seed Collected"
+                              Width: =90
+                              X: =460
+                              Y: =1
+                        - butSeedAcidToGo:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: =If(varberry = "BLUE","Seed GA To Go","Seed Acid To Go")
+                              Width: =90
+                              X: =1180
+                              Y: =1
+                        - butGHSeedMasterID_5:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="ID"
+                              Width: =75
+                              X: =1720
+                              Y: =1
+                        - SortProgeny_3:
+                            Control: Label@2.5.1
+                            Properties:
+                              Height: =15
+                              Size: =10
+                              Text: =If(varSeedSort1="PROGENY","1","2")
+                              Width: =20
+                              Y: =23
+                        - SortProgram_4:
+                            Control: Label@2.5.1
+                            Properties:
+                              Height: =15
+                              Size: =10
+                              Text: =If(varSeedSort1="D1_Program","1","2")
+                              Width: =20
+                              X: =120
+                              Y: =25
+                        - butSeedToGo:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =10
+                              Text: ="Seed Collected To Go"
+                              Width: =90
+                              X: =550
+                              Y: =1
+                        - butSeedAcid:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: =If(varberry = "BLUE","Seed GA Treated","Seed Acid Treated")
+                              Width: =90
+                              X: =1090
+                              Y: =1
+                        - butSeedAcidToGo_1:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Seed Sown Total"
+                              Width: =90
+                              X: =1540
+                              Y: =1
+                        - butSeedToSow:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Seed To Sow "
+                              Width: =90
+                              X: =1360
+                              Y: =1
+                        - butSeedToBank:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Seed To Bank"
+                              Width: =90
+                              X: =1450
+                              Y: =1
+                        - butSeedSowYN:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Sow Seed?"
+                              Width: =90
+                              X: =1270
+                              Y: =1
+                        - butSowToGo:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Seed Sow To Go"
+                              Width: =90
+                              X: =1630
+                              Y: =1
+                        - butSeedAcid_2:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: =If(varberry = "BLUE","GA Treat All?","Acid Treat All?")
+                              Width: =90
+                              X: =640
+                              Y: =1
+                        - butSeedAcid_3:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: =If(varberry = "BLUE","D1 GA Treat Start","D1 Acid Treat Start")
+                              Width: =90
+                              X: =910
+                              Y: =1
+                        - butSeedAcid_4:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: =If(varberry = "BLUE","D1 GA Treat Deadline","D1 Acid Treat Deadline")
+                              Width: =90
+                              X: =1000
+                              Y: =1
+                        - butSeedAcid_7:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: =If(varberry = "BLUE","Now in GA Date Range","Now in Acid Date Range")
+                              Width: =90
+                              X: =820
+                              Y: =1
+                        - butSeedAcid_15:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: =If(varberry = "BLUE","Seed Ready for GA?","Seed Ready for Acid?")
+                              Width: =90
+                              X: =730
+                              Y: =1
+                        - butSeedRequired_3:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              Color: =RGBA(252,218,35,1)
+                              Fill: =RGBA(72,119,60,1)
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: ="Program Destination 2"
+                              Width: =125
+                              X: =245
+                              Y: =1
+                  - galSeedList:
+                      Control: Gallery@2.15.0
+                      Variant: BrowseLayout_Vertical_TwoTextOneImageVariant_ver5.0
+                      Properties:
+                        Height: =624
+                        Items: |-
+                          =//Filters list based on filters entered and sorts results by user selected column heading and then by progeny then by program
+                          SortByColumns(
+                              Search(
+                              Filter(
+                                  vw_GHSeedDesk,
+                                  Berry = varberry,
+                                  IsBlank(ddTeam_4.Selected.Value) || GH_Team = ddTeam_4.Selected.Value,
+                                  IsBlank(ddProgram_6.Selected.Value) || D1_Program = ddProgram_6.Selected.Value || D2_Program = ddProgram_6.Selected.Value,
+                                  IsBlank(ddPollinationYear_4.Selected.Value) || POLLINATION_YEAR = Value(ddPollinationYear_4.Selected.Value),
+                                  Seed_Sow_To_Go > varseedtogo,
+                                  SOW_SEED = cbSowSeed_1.Value,
+                                  Acid_In_Date_Range = cbAcidDateRange.Value
+                              ),
+                              tiProgeny_5.Value,
+                              PROGENY
+                          ),
+                              varSeedSort1,
+                              SortOrder.Ascending,
+                              varSeedSort2,
+                              SortOrder.Ascending
+                          )
+                        ShowNavigation: =true
+                        TemplatePadding: =0.00
+                        TemplateSize: =27
+                        Width: =Parent.Width
+                        Y: =59
+                      Children:
+                        - Separator1_9:
+                            Control: Rectangle@2.3.0
+                            Properties:
+                              Fill: =RGBA(252, 218, 35, 1)
+                              Height: =3
+                              OnSelect: =Select(Parent)
+                              Width: =Parent.Width
+                              X: =0.00
+                              Y: =24
+                        - Rectangle1_9:
+                            Control: Rectangle@2.3.0
+                            Properties:
+                              Fill: =App.Theme.Colors.Darker30
+                              Height: =27
+                              OnSelect: =Select(Parent)
+                              Visible: =ThisItem.IsSelected
+                              Width: =5.90
+                              X: =0.00
+                              Y: =0.00
+                        - Progeny_7:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.PROGENY
+                              Width: =120
+                              Y: =0.00
+                        - Program_5:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =10
+                              Text: =ThisItem.D1_Program
+                              Width: =125
+                              X: =120
+                        - SeedRequired:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(255, 255, 255, .5))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.SEED_WEIGHT_REQUIRED
+                              Width: =90
+                              X: =370
+                        - SeedCollected:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(255, 255, 255, .5))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Seed_Weight_Inventory
+                              Width: =90
+                              X: =460
+                        - GHSeedMasterID_5:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.GHSeedlingMaster_ID
+                              Width: =75
+                              X: =1720
+                        - SeedToGo:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(255, 255, 255, .5))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Seed_Weight_Variance
+                              Width: =90
+                              X: =550
+                        - SeedAcid:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Seed_Weight_Acid_Treated
+                              Width: =90
+                              X: =1090
+                        - SeedAcidToGo:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: |+
+                                =ThisItem.Seed_Acid_Weight_Variance
+                              Width: =90
+                              X: =1180
+                        - SeedToSow:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(255, 255, 255, .5))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: |
+                                =ThisItem.Seed_Weight_To_Sow
+                              Width: =90
+                              X: =1360
+                        - SeedToBank:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(255, 255, 255, .5))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: |
+                                =ThisItem.Seed_Weight_To_Bank
+                              Width: =90
+                              X: =1450
+                        - SeedSownTot:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(255, 255, 255, .5))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: |
+                                =ThisItem.Total_Seed_Weight_Sown
+                              Width: =90
+                              X: =1540
+                        - SeedSowYN:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(255, 255, 255, .5))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: |
+                                =If(ThisItem.SOW_SEED=true,"Yes","No")
+                              Width: =90
+                              X: =1270
+                        - SowToGo:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(255, 255, 255, .5))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Seed_Sow_To_Go
+                              Width: =90
+                              X: =1630
+                        - SeedAcidAll:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.Acid_Treat_All,RGBA(72,119,60,1), ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Acid_Treat_All
+                              Width: =90
+                              X: =640
+                        - SeedAcidAll_1:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Acid_Start_Date
+                              Width: =90
+                              X: =910
+                        - SeedAcidAll_2:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Acid_Deadline_Date
+                              Width: =90
+                              X: =1000
+                        - SeedAcidAll_5:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.Acid_In_Date_Range,RGBA(72,119,60,1), ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Acid_In_Date_Range
+                              Width: =90
+                              X: =820
+                        - SeedAcidAll_7:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.Seed_Ready_For_Acid,RGBA(72,119,60,1), ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =11
+                              Text: =ThisItem.Seed_Ready_For_Acid
+                              Width: =90
+                              X: =730
+                        - Program_6:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              BorderThickness: =1
+                              Color: =RGBA(50, 49, 48, 1)
+                              Fill: =If(ThisItem.IsSelected,RGBA(252, 218, 35, 100), RGBA(0, 0, 0, 0))
+                              FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                              Height: =23
+                              OnSelect: =Select(Parent)
+                              PaddingBottom: =0.00
+                              PaddingLeft: =0.00
+                              PaddingRight: =0.00
+                              PaddingTop: =0.00
+                              Size: =10
+                              Text: =ThisItem.D2_Program
+                              Width: =125
+                              X: =245
+      - conEditSeed:
+          Control: GroupContainer@1.5.0
+          Variant: ManualLayout
+          Properties:
+            Fill: =RGBA(252, 218, 35, 100)
+            Height: =698
+            PaddingRight: =0.00
+            PaddingTop: =0.00
+            Visible: =varshowseed
+            Width: =1488
+            X: =160
+            Y: =70
+          Children:
+            - TextBoxSeed:
+                Control: Text@0.0.51
+                Properties:
+                  Align: ='TextCanvas.Align'.Center
+                  BorderStyle: =BorderStyle.Solid
+                  Font: =App.Theme.Font
+                  Height: =698
+                  Size: =18
+                  Text: ="Add Seed"
+                  VerticalAlign: =VerticalAlign.Top
+                  Weight: ='TextCanvas.Weight'.Semibold
+                  Width: =Parent.Width
+                  X: =0.00
+            - butResetSeed:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  BorderThickness: =0
+                  Color: =Color.White
+                  Fill: =RGBA(218, 40, 28, 1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =30
+                  HoverFill: =RGBA(118, 0, 0, 1)
+                  OnSelect: |-
+                    =ResetForm(FormSeed);
+                    Reset(tiProgenySeed);
+                    Set(varshowseed,false);
+                  PaddingBottom: =6.67
+                  PaddingLeft: =6.67
+                  PaddingRight: =7.36
+                  PaddingTop: =7.36
+                  Size: =14
+                  Text: ="Cancel"
+                  Width: =130
+                  X: =539
+                  Y: =475
+            - butSubmitSeed:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  BorderThickness: =0
+                  Color: =Color.White
+                  DisplayMode: =If(IsBlank(labghsmIDSeed.Text) || And(IsBlank(dcvSeedWtNew.Text),IsBlank(dcvAcidSeedWtNew.Text)) ,DisplayMode.Disabled, DisplayMode.Edit)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =30
+                  HoverFill: =RGBA(118, 0, 0, 1)
+                  OnSelect: |-
+                    =//Submits form update to TPN table
+                    Patch(
+                        'T_GHSeedInventory',
+                        Defaults('T_GHSeedInventory'),
+                        {
+                            Seed_Weight_Inventory: Value(dcvSeedWtNew.Text) * 1,
+                            Seed_Weight_Acid_Treated: Value(dcvAcidSeedWtNew.Text) * 1,
+                            Acid_Date: AcidDate.SelectedDate,
+                            Comments: dcvCommentsSeed.Text,
+                            Seed_Sown: false,
+                            Table_Num: 0,
+                            Modified_By: User().FullName,
+                            Modified_Date: Now(),
+                            Created_By: User().FullName,
+                            CreatedDateTime: Now(),
+                            ghsm_FK: Value(labghsmIDSeed.Text),
+                            Active: true
+                        }
+                    );
+                    //Error or Success notification of submission
+                    If(
+                        IsEmpty(Errors('T_GHSeedInventory')),
+                        Notify(
+                            "Success",
+                            NotificationType.Success
+                        );
+                        ,
+                        Notify(
+                            First(Errors('T_GHSeedInventory')).Message & "Error with Seed Form Submission",
+                            NotificationType.Error
+                        )
+                    );
+                    ResetForm(FormSeed);
+                    Reset(tiProgenySeed);
+                    SetFocus(tiProgenySeed);
+                    Refresh(vw_GHSeedDesk);
+                  PaddingBottom: =6.67
+                  PaddingLeft: =6.67
+                  PaddingRight: =7.36
+                  PaddingTop: =7.36
+                  Size: =14
+                  Text: ="Submit"
+                  Width: =130
+                  X: =819
+                  Y: =475
+            - labProgenySeed:
+                Control: Label@2.5.1
+                Properties:
+                  Align: =Align.Center
+                  Height: =25
+                  Size: =11
+                  Text: ="Progeny"
+                  X: =669
+                  Y: =45
+            - labSubmitConfirmSeed:
+                Control: Label@2.5.1
+                Properties:
+                  Align: =Align.Center
+                  Color: =RGBA(184, 0, 0, 1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =35
+                  Size: =18
+                  Text: ="This Progeny has already been modified today.  Are you sure you want to submit this?"
+                  Visible: =If(IsToday(LookUp(T_GHSeedInventory,ghsm_FK=Value(labghsmIDSeed.Text),Modified_Date)),true,false)
+                  Width: =1000
+                  X: =232
+                  Y: =400
+            - labghsmIDSeed:
+                Control: Label@2.5.1
+                Properties:
+                  Height: =30
+                  Size: =11
+                  Text: =LookUp('M_GHSeedlingMaster',PROGENY=tiProgenySeed.Value).GHSeedlingMaster_ID
+                  Width: =226
+                  X: =631
+                  Y: =108
+            - Rectangle1:
+                Control: Rectangle@2.3.0
+                Properties:
+                  BorderThickness: =3
+                  Fill: =RGBA(0,0,0,0)
+                  Height: =78
+                  Width: =1350
+                  X: =57
+                  Y: =138
+            - labSeedWeights:
+                Control: Label@2.5.1
+                Properties:
+                  Align: =Align.Right
+                  FontWeight: =FontWeight.Bold
+                  Size: =16
+                  Text: ="Seed Weights:"
+                  Width: =180
+                  X: =57
+                  Y: =159
+            - labAcidSeedWeights:
+                Control: Label@2.5.1
+                Properties:
+                  Align: =Align.Right
+                  FontWeight: =FontWeight.Bold
+                  Size: =16
+                  Text: ="Acid Seed Weights:"
+                  Width: =210
+                  X: =57
+                  Y: =238
+            - Rectangle1_2:
+                Control: Rectangle@2.3.0
+                Properties:
+                  BorderThickness: =3
+                  Fill: =RGBA(0,0,0,0)
+                  Height: =78
+                  Width: =1350
+                  X: =57
+                  Y: =221
+            - FormSeed:
+                Control: Form@2.4.4
+                Variant: Classic
+                Layout: Vertical
+                Properties:
+                  DataSource: =T_GHSeedInventory
+                  DefaultMode: =FormMode.New
+                  Height: =301
+                  NumberOfColumns: =4
+                  Width: =1119
+                  X: =277
+                  Y: =129
+                Children:
+                  - DataCard1:
+                      Control: TypedDataCard@1.0.7
+                      Variant: BlankCard
+                      Properties:
+                        Height: =85
+                        Width: =837
+                        X: =0
+                        Y: =0
+                  - Seed_Weight_Inventory_DataCard1:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicNumberEdit
+                      Properties:
+                        DataField: ="Seed_Weight_Inventory"
+                        Default: =ThisItem.Seed_Weight_Inventory
+                        DisplayName: =DataSourceInfo([@T_GHSeedInventory],DataSourceInfo.DisplayName,Seed_Weight_Inventory)
+                        Required: =false
+                        Update: =Value(dcvSeedWtNew.Text)
+                        Width: =279
+                        X: =3
+                        Y: =0
+                      Children:
+                        - DataCardKey130:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =34
+                              Size: =11
+                              Text: ="New Seed Weight"
+                              Width: =Parent.Width - 60
+                              Wrap: =false
+                              X: =30
+                              Y: =10
+                        - dcvSeedWtNew:
+                            Control: Classic/TextInput@2.3.2
+                            MetadataKey: FieldValue
+                            Properties:
+                              BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                              Default: =Parent.Default
+                              DelayOutput: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Format: =TextFormat.Number
+                              Height: =30
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =11
+                              Tooltip: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =DataCardKey130.Y + DataCardKey130.Height + 5
+                        - ErrorMessage105:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =14
+                              Text: =Parent.Error
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =dcvSeedWtNew.Y + dcvSeedWtNew.Height
+                        - StarVisible126:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey130.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey130.Y
+                  - DataCard2:
+                      Control: TypedDataCard@1.0.7
+                      Variant: BlankCard
+                      Properties:
+                        Height: =85
+                        Width: =837
+                        X: =0
+                        Y: =1
+                  - Seed_Weight_Acid_Treated_DataCard1:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicNumberEdit
+                      Properties:
+                        DataField: ="Seed_Weight_Acid_Treated"
+                        Default: =ThisItem.Seed_Weight_Acid_Treated
+                        DisplayName: =DataSourceInfo([@T_GHSeedInventory],DataSourceInfo.DisplayName,Seed_Weight_Acid_Treated)
+                        Required: =false
+                        Update: =Value(dcvAcidSeedWtNew.Text)
+                        Width: =279
+                        X: =3
+                        Y: =1
+                      Children:
+                        - DataCardKey129:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =34
+                              Size: =11
+                              Text: ="New Acid Seed Weight"
+                              Width: =Parent.Width - 60
+                              Wrap: =false
+                              X: =30
+                              Y: =10
+                        - dcvAcidSeedWtNew:
+                            Control: Classic/TextInput@2.3.2
+                            MetadataKey: FieldValue
+                            Properties:
+                              BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                              Default: =Parent.Default
+                              DelayOutput: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Format: =TextFormat.Number
+                              Height: =30
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =11
+                              Tooltip: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =DataCardKey129.Y + DataCardKey129.Height + 5
+                        - ErrorMessage104:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =14
+                              Text: =Parent.Error
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =dcvAcidSeedWtNew.Y + dcvAcidSeedWtNew.Height
+                        - StarVisible125:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey129.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey129.Y
+                  - Comments_DataCard2:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicTextualEdit
+                      Properties:
+                        DataField: ="Comments"
+                        Default: =ThisItem.Comments
+                        DisplayName: =DataSourceInfo([@T_GHSeedInventory],DataSourceInfo.DisplayName,Comments)
+                        MaxLength: =DataSourceInfo([@T_GHSeedInventory], DataSourceInfo.MaxLength, Comments)
+                        Required: =false
+                        Update: =dcvCommentsSeed.Text
+                        Width: =558
+                        X: =0
+                        Y: =2
+                      Children:
+                        - DataCardKey118:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =34
+                              Size: =11
+                              Text: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              Wrap: =false
+                              X: =30
+                              Y: =10
+                        - dcvCommentsSeed:
+                            Control: Classic/TextInput@2.3.2
+                            MetadataKey: FieldValue
+                            Properties:
+                              BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                              Default: =Parent.Default
+                              DelayOutput: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Height: =30
+                              MaxLength: =Parent.MaxLength
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =11
+                              Tooltip: =Parent.DisplayName
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =DataCardKey118.Y + DataCardKey118.Height + 5
+                        - ErrorMessage102:
+                            Control: Label@2.5.1
+                            MetadataKey: ErrorMessage
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =RGBA(168, 0, 0, 1)
+                              FontWeight: =FontWeight.Semibold
+                              Height: =10
+                              Live: =Live.Assertive
+                              PaddingBottom: =0
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =14
+                              Text: =Parent.Error
+                              Visible: =Parent.DisplayMode=DisplayMode.Edit
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =dcvCommentsSeed.Y + dcvCommentsSeed.Height
+                        - StarVisible114:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldRequired
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Color: =App.Theme.Colors.Darker30
+                              Height: =DataCardKey118.Height
+                              Text: ="*"
+                              Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                              Width: =30
+                              Wrap: =false
+                              Y: =DataCardKey118.Y
+                  - Modified_By_DataCard5:
+                      Control: TypedDataCard@1.0.7
+                      Variant: ClassicTextualView
+                      Properties:
+                        DataField: ="Modified_By"
+                        Default: =ThisItem.Modified_By
+                        DisplayName: =DataSourceInfo([@T_GHSeedInventory],DataSourceInfo.DisplayName,Modified_By)
+                        Required: =false
+                        Width: =279
+                        X: =2
+                        Y: =2
+                      Children:
+                        - DataCardKey132:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldName
+                            Properties:
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 1)
+                              Height: =34
+                              Size: =11
+                              Text: ="Employee"
+                              Width: =Parent.Width - 60
+                              Wrap: =false
+                              X: =30
+                              Y: =10
+                        - DataCardValue7:
+                            Control: Label@2.5.1
+                            MetadataKey: FieldValue
+                            Properties:
+                              AutoHeight: =true
+                              DisplayMode: =Parent.DisplayMode
+                              Height: =30
+                              PaddingLeft: =0
+                              PaddingRight: =0
+                              PaddingTop: =0
+                              Size: =11
+                              Text: =User().FullName
+                              Width: =Parent.Width - 60
+                              X: =30
+                              Y: =DataCardKey132.Y + DataCardKey132.Height + 5
+            - Label10:
+                Control: Label@2.5.1
+                Properties:
+                  Height: =30
+                  Size: =11
+                  Text: ="ID:"
+                  Width: =30
+                  X: =599
+                  Y: =108
+            - AcidDate:
+                Control: Classic/DatePicker@2.6.0
+                Properties:
+                  DefaultDate: =If((Value(dcvAcidSeedWtNew.Text) * 1)>0,Now(),Blank())
+                  DisplayMode: =DisplayMode.View
+                  Fill: =RGBA(0, 0, 0, 0)
+                  Height: =31
+                  InputTextPlaceholder: =//If(IsBlank(Self.SelectedDate), Text(Date(2001,12,31), Self.Format, Self.Language))
+                  Width: =226
+                  X: =1140
+                  Y: =340
+            - galSeedWts:
+                Control: Gallery@2.15.0
+                Variant: Vertical
+                Properties:
+                  Height: =188
+                  Items: |+
+                    =Filter(vw_GHSeedDesk,GHSeedlingMaster_ID=Value(labghsmIDSeed.Text))
+                  TemplateSize: =175
+                  Width: =813
+                  X: =295
+                  Y: =126
+                Children:
+                  - labseedreq:
+                      Control: Label@2.5.1
+                      Properties:
+                        Height: =36
+                        OnSelect: =Select(Parent)
+                        Size: =11
+                        Text: =ThisItem.SEED_WEIGHT_REQUIRED
+                        Y: =40
+                  - labseedwt:
+                      Control: Label@2.5.1
+                      Properties:
+                        Height: =36
+                        OnSelect: =Select(Parent)
+                        Size: =11
+                        Text: =ThisItem.Seed_Weight_Inventory
+                        X: =288
+                        Y: =40
+                  - labseedtogo:
+                      Control: Label@2.5.1
+                      Properties:
+                        Height: =36
+                        OnSelect: =Select(Parent)
+                        Size: =11
+                        Text: =ThisItem.Seed_Weight_Variance
+                        X: =577
+                        Y: =40
+                  - labseedacidreq:
+                      Control: Label@2.5.1
+                      Properties:
+                        Height: =36
+                        OnSelect: =Select(Parent)
+                        Size: =11
+                        Text: =ThisItem.SEED_WEIGHT_REQUIRED
+                        Y: =126
+                  - labseedacidwt:
+                      Control: Label@2.5.1
+                      Properties:
+                        Height: =36
+                        OnSelect: =Select(Parent)
+                        Size: =11
+                        Text: =ThisItem.Seed_Weight_Acid_Treated
+                        X: =288
+                        Y: =126
+                  - labseedacidtogo:
+                      Control: Label@2.5.1
+                      Properties:
+                        Height: =36
+                        OnSelect: =Select(Parent)
+                        Size: =11
+                        Text: =ThisItem.Seed_Acid_Weight_Variance
+                        X: =577
+                        Y: =126
+            - Label17:
+                Control: Label@2.5.1
+                Properties:
+                  Size: =11
+                  Text: ="Acid Date"
+                  X: =1140
+                  Y: =300
+            - Label16_6:
+                Control: Label@2.5.1
+                Properties:
+                  Height: =36
+                  OnSelect: =
+                  Size: =11
+                  Text: ="Seed Weight Required"
+                  Width: =220
+                  X: =295
+                  Y: =138
+            - Label16_7:
+                Control: Label@2.5.1
+                Properties:
+                  Height: =36
+                  OnSelect: =
+                  Size: =11
+                  Text: ="Previous Seed Weight"
+                  Width: =220
+                  X: =583
+                  Y: =138
+            - Label16_8:
+                Control: Label@2.5.1
+                Properties:
+                  Height: =36
+                  OnSelect: =
+                  Size: =11
+                  Text: ="Seed Weight To Go"
+                  Width: =220
+                  X: =872
+                  Y: =138
+            - Label16_9:
+                Control: Label@2.5.1
+                Properties:
+                  Height: =36
+                  OnSelect: =
+                  Size: =11
+                  Text: ="Acid Seed Weight Required"
+                  Width: =220
+                  X: =295
+                  Y: =224
+            - Label16_10:
+                Control: Label@2.5.1
+                Properties:
+                  Height: =36
+                  OnSelect: =
+                  Size: =11
+                  Text: ="Previous Acid Seed Weight"
+                  Width: =220
+                  X: =583
+                  Y: =224
+            - Label16_11:
+                Control: Label@2.5.1
+                Properties:
+                  Height: =36
+                  OnSelect: =
+                  Size: =11
+                  Text: ="Acid Seed Weight To Go"
+                  Width: =220
+                  X: =872
+                  Y: =224
+            - tiProgenySeed:
+                Control: TextInput@0.0.54
+                Properties:
+                  BorderColor: =RGBA(0, 0, 0, 1)
+                  BorderStyle: =BorderStyle.Solid
+                  BorderThickness: =2
+                  FontSize: =13
+                  Height: =30
+                  OnChange: =SetFocus(dcvSeedWtNew);
+                  TriggerOutput: ='TextInputCanvas.TriggerOutput'.Delayed
+                  Width: =226
+                  X: =631
+                  Y: =78
+      - butAddSeed:
+          Control: Classic/Button@2.2.0
+          Properties:
+            Color: =RGBA(252,218,35,1)
+            Fill: =RGBA(72,119,60,1)
+            FontWeight: =FontWeight.Bold
+            Height: =25
+            OnSelect: |-
+              =Set(varshowseed,true);
+              SetFocus(tiProgenySeed);
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            Size: =11
+            Text: ="Add Seed"
+            Width: =120
+            X: =175
+      - conMenu_8:
+          Control: GroupContainer@1.5.0
+          Variant: ManualLayout
+          Properties:
+            Height: =325
+            Visible: =varshowmenu
+            Width: =159
+            Y: =26
+          Children:
+            - butReports_18:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenReports,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Reports"
+                  Y: =300
+            - butEmployees_18:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  DisplayMode: =If(tgAdminLevel.Value,DisplayMode.Edit,DisplayMode.Disabled)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenEmployees,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Employees"
+                  Y: =275
+            - butDeadlines_21:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenDeadlines,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Deadlines"
+                  Y: =250
+            - butRatios_18:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenRatios,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Ratios"
+                  Y: =225
+            - butLTT6:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenLabsTeamsTrays,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Reference Tables"
+                  Y: =200
+            - butShip6:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenShip,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Ship"
+                  Y: =175
+            - butScreen_18:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenScreenDiscard,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Screen & Discards"
+                  Y: =150
+            - butTransplant_18:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenTransplantAdj,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Transplant"
+                  Y: =125
+            - butSeed_18:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenSeedList,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Seed"
+                  Y: =100
+            - butFruit_18:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenFruitList,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Fruit"
+                  Y: =75
+            - butPollination_18:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenPollinationList,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Pollination"
+                  Y: =50
+            - butCrossingList_19:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenCrossingListShort,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Crossing List"
+                  Y: =25
+            - butHome_15:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: |-
+                    =Navigate(ScreenHome,ScreenTransition.UnCoverRight);
+                    Set(varshowmenu,false)
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Size: =11
+                  Text: ="Home"
+      - butShowSeedInfo:
+          Control: Classic/Button@2.2.0
+          Properties:
+            Color: =RGBA(252,218,35,1)
+            Fill: =RGBA(72,119,60,1)
+            FontWeight: =FontWeight.Bold
+            Height: =25
+            OnSelect: =Set(varseedinfoshow,true);
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            Size: =11
+            Text: ="?"
+            Width: =25
+            X: =1623
+      - Container2:
+          Control: GroupContainer@1.5.0
+          Variant: ManualLayout
+          Properties:
+            Fill: =RGBA(252,218,35,1)
+            Height: =613
+            Visible: =varseedinfoshow
+            Width: =1375
+            X: =216
+            Y: =84
+          Children:
+            - Label11:
+                Control: Label@2.5.1
+                Properties:
+                  Height: =37
+                  Text: ="Acid Treat All? = True if Seed Weight To Bank = 0"
+                  Width: =1135
+                  X: =32
+                  Y: =170
+            - Label11_1:
+                Control: Label@2.5.1
+                Properties:
+                  FontWeight: =FontWeight.Bold
+                  Size: =18
+                  Text: ="Calculations for Columns"
+                  Width: =970
+                  X: =32
+                  Y: =6
+            - Label11_2:
+                Control: Label@2.5.1
+                Properties:
+                  Text: ="Seed Weight To Sow = If((Seed_Weight_Inventory - Seed_Sow_Buffer_Grams) <= SEED_WEIGHT_REQUIRED,Seed_Weight_Inventory,Seed_Weight_Required)"
+                  Width: =1263
+                  X: =32
+                  Y: =50
+            - Label11_3:
+                Control: Label@2.5.1
+                Properties:
+                  Text: ="Seed Weight To Bank = If(Seed_Weight_To_Sow = Seed_Weight_Inventory,0,Seed_Weight_Inventory - Seed_Weight_To_Sow)"
+                  Width: =1263
+                  X: =32
+                  Y: =90
+            - Label11_4:
+                Control: Label@2.5.1
+                Properties:
+                  Text: ="Seed Sow To Go = If(Seed_Weight_To_Sow = Seed_Weight_Inventory,Seed_Weight_Inventory - Seed_Weight_Sown,Seed_Weight_To_Sow - Seed_Weight_Sown)"
+                  Width: =1263
+                  X: =32
+                  Y: =130
+            - Label11_5:
+                Control: Label@2.5.1
+                Properties:
+                  Height: =100
+                  Text: |-
+                    ="Seed Ready For Acid? = True if 90%+ of fruit has been collected OR if 90%+ of seed required has been collected OR if both today is the acid deadline and there is more than 0 amount of seed collected.  Calculation: If(([Total_Fruit_Collected]/([Pollination_Qty]-[Unsuccessful_Qty])from [T_GHPollinationDaily] summed by GHSMID)>0.89 || (([Seed_Weight_Inventory] from [T_GHSeedInventory] summed by GHSMID)/([SEED_WEIGHT_REQUIRED]fromMGHSM))>0.89 || And([Seed_Acid_Deadline]=Today()by GHSMID, ([Seed_Weight_Inventory]-[Seed_Weight_Acid_Treated] from [T_GHSeedInventory] summed by GHSMID)>0))"
+                  Width: =1263
+                  X: =32
+                  Y: =207
+            - butCloseInfoSeed:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(252,218,35,1)
+                  Fill: =RGBA(72,119,60,1)
+                  FontWeight: =FontWeight.Bold
+                  Height: =25
+                  OnSelect: =Set(varseedinfoshow,false);
+                  PaddingBottom: =0
+                  PaddingLeft: =0
+                  PaddingRight: =0
+                  PaddingTop: =0
+                  Size: =11
+                  Text: ="Close"
+                  Width: =120
+                  X: =603
+                  Y: =373

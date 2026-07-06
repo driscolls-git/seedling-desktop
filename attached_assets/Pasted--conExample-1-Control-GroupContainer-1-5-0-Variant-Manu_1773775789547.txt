@@ -1,0 +1,384 @@
+- conExample_1:
+    Control: GroupContainer@1.5.0
+    Variant: ManualLayout
+    Properties:
+      BorderThickness: =2
+      DropShadow: =DropShadow.Semibold
+      Fill: =RGBA(218, 40, 28, .3)
+      Height: =140
+      Width: =1488
+      Y: =445
+    Children:
+      - labShipQty_1:
+          Control: Text@0.0.51
+          Properties:
+            Align: ='TextCanvas.Align'.Center
+            FontColor: =RGBA(0, 0, 0, 1)
+            Height: =35
+            Size: =12
+            Text: ="Fruit Collect Deadline"
+            VerticalAlign: =VerticalAlign.Middle
+            Width: =102
+            X: =436
+            Y: =16
+      - labDiscardPercent_1:
+          Control: Text@0.0.51
+          Properties:
+            Align: ='TextCanvas.Align'.Center
+            FontColor: =RGBA(0, 0, 0, 1)
+            Height: =35
+            Size: =12
+            Text: ="Seed Acid Start"
+            VerticalAlign: =VerticalAlign.Middle
+            Width: =102
+            X: =538
+            Y: =16
+      - labPlateQty_1:
+          Control: Text@0.0.51
+          Properties:
+            Align: ='TextCanvas.Align'.Center
+            FontColor: =RGBA(0, 0, 0, 1)
+            Height: =35
+            Size: =12
+            Text: ="Seed Acid Deadline"
+            VerticalAlign: =VerticalAlign.Middle
+            Width: =102
+            X: =640
+            Y: =16
+      - labSpinyDiscard_1:
+          Control: Text@0.0.51
+          Properties:
+            Align: ='TextCanvas.Align'.Center
+            FontColor: =RGBA(0, 0, 0, 1)
+            Height: =35
+            Size: =12
+            Text: ="Seed Sow Deadline"
+            VerticalAlign: =VerticalAlign.Middle
+            Width: =102
+            X: =844
+            Y: =16
+      - labTransplantQty_1:
+          Control: Text@0.0.51
+          Properties:
+            Align: ='TextCanvas.Align'.Center
+            FontColor: =RGBA(0, 0, 0, 1)
+            Height: =35
+            Size: =12
+            Text: ="Seed Sow Start"
+            VerticalAlign: =VerticalAlign.Middle
+            Width: =102
+            X: =742
+            Y: =16
+      - labSeedReq_1:
+          Control: Text@0.0.51
+          Properties:
+            Align: ='TextCanvas.Align'.Center
+            FontColor: =RGBA(0, 0, 0, 1)
+            Height: =35
+            Size: =12
+            Text: ="Transplant Start"
+            VerticalAlign: =VerticalAlign.Middle
+            Width: =102
+            X: =946
+            Y: =16
+      - labFruitReq_1:
+          Control: Text@0.0.51
+          Properties:
+            Align: ='TextCanvas.Align'.Center
+            FontColor: =RGBA(0, 0, 0, 1)
+            Height: =35
+            Size: =12
+            Text: ="Transplant Deadline"
+            VerticalAlign: =VerticalAlign.Middle
+            Width: =102
+            X: =1048
+            Y: =16
+      - labPollinationsReq_1:
+          Control: Text@0.0.51
+          Properties:
+            Align: ='TextCanvas.Align'.Center
+            FontColor: =RGBA(0, 0, 0, 1)
+            Height: =35
+            Size: =12
+            Text: ="Marker Screen Start"
+            VerticalAlign: =VerticalAlign.Middle
+            Width: =102
+            X: =1150
+            Y: =16
+      - labPollenReq_1:
+          Control: Text@0.0.51
+          Properties:
+            Align: ='TextCanvas.Align'.Center
+            FontColor: =RGBA(0, 0, 0, 1)
+            Height: =35
+            Size: =12
+            Text: ="Marker Screen Deadline"
+            VerticalAlign: =VerticalAlign.Middle
+            Width: =102
+            X: =1252
+            Y: =16
+      - labParent1Req_1:
+          Control: Text@0.0.51
+          Properties:
+            Align: ='TextCanvas.Align'.Center
+            FontColor: =RGBA(0, 0, 0, 1)
+            Height: =35
+            Size: =12
+            Text: ="Marker Results Deadline"
+            VerticalAlign: =VerticalAlign.Middle
+            Width: =102
+            X: =1354
+            Y: =16
+      - labParent2Req_1:
+          Control: Text@0.0.51
+          Properties:
+            Align: ='TextCanvas.Align'.Center
+            FontColor: =RGBA(0, 0, 0, 1)
+            Height: =35
+            Size: =12
+            Text: ="Field Plant Date"
+            VerticalAlign: =VerticalAlign.Middle
+            Width: =100
+            X: =610
+            Y: =94
+      - DatePickerCanvas1:
+          Control: DatePicker@0.0.46
+          Properties:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            BorderThickness: =2
+            Format: ='DatePickerCanvas.Format'.Short
+            SelectedDate: =Now()
+            Width: =125
+            X: =722
+            Y: =97
+      - DatePickerCanvas1_1:
+          Control: DatePicker@0.0.46
+          Properties:
+            Appearance: ='DatePickerCanvas.Appearance'.Outline
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            BorderThickness: =2
+            DisplayMode: =DisplayMode.View
+            Format: ='DatePickerCanvas.Format'.Short
+            SelectedDate: =DateAdd((DatePickerCanvas1.SelectedDate),dcvMarkerResultsDead.Text*7,TimeUnit.Days)
+            Width: =100
+            X: =1354
+            Y: =51
+      - DatePickerCanvas1_2:
+          Control: DatePicker@0.0.46
+          Properties:
+            Appearance: ='DatePickerCanvas.Appearance'.Outline
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            BorderThickness: =2
+            DisplayMode: =DisplayMode.View
+            Format: ='DatePickerCanvas.Format'.Short
+            SelectedDate: =DateAdd((DatePickerCanvas1.SelectedDate),dcvScreenDead.Text*7,TimeUnit.Days)
+            Width: =100
+            X: =1252
+            Y: =51
+      - labShipQty_2:
+          Control: Text@0.0.51
+          Properties:
+            Align: ='TextCanvas.Align'.Center
+            FontColor: =RGBA(0, 0, 0, 1)
+            Height: =35
+            Size: =12
+            Text: ="Fruit Collect Start"
+            VerticalAlign: =VerticalAlign.Middle
+            Width: =102
+            X: =334
+            Y: =16
+      - labShipQty_3:
+          Control: Text@0.0.51
+          Properties:
+            Align: ='TextCanvas.Align'.Center
+            FontColor: =RGBA(0, 0, 0, 1)
+            Height: =35
+            Size: =12
+            Text: ="Pollination Deadline"
+            VerticalAlign: =VerticalAlign.Middle
+            Width: =102
+            X: =232
+            Y: =16
+      - labShipQty_4:
+          Control: Text@0.0.51
+          Properties:
+            Align: ='TextCanvas.Align'.Center
+            FontColor: =RGBA(0, 0, 0, 1)
+            Height: =35
+            Size: =12
+            Text: ="Pollination Start"
+            VerticalAlign: =VerticalAlign.Middle
+            Width: =102
+            X: =130
+            Y: =16
+      - labShipQty_5:
+          Control: Text@0.0.51
+          Properties:
+            Align: ='TextCanvas.Align'.Center
+            FontColor: =RGBA(0, 0, 0, 1)
+            Height: =35
+            Size: =12
+            Text: ="Crossing File Deadline"
+            VerticalAlign: =VerticalAlign.Middle
+            Width: =102
+            X: =28
+            Y: =16
+      - DatePickerCanvas1_3:
+          Control: DatePicker@0.0.46
+          Properties:
+            Appearance: ='DatePickerCanvas.Appearance'.Outline
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            BorderThickness: =2
+            DisplayMode: =DisplayMode.View
+            Format: ='DatePickerCanvas.Format'.Short
+            SelectedDate: =DateAdd((DatePickerCanvas1.SelectedDate),dcvScreenStart.Text*7,TimeUnit.Days)
+            Width: =100
+            X: =1150
+            Y: =51
+      - DatePickerCanvas1_4:
+          Control: DatePicker@0.0.46
+          Properties:
+            Appearance: ='DatePickerCanvas.Appearance'.Outline
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            BorderThickness: =2
+            DisplayMode: =DisplayMode.View
+            Format: ='DatePickerCanvas.Format'.Short
+            SelectedDate: =DateAdd((DatePickerCanvas1.SelectedDate),dcvTransDead.Text*7,TimeUnit.Days)
+            Width: =100
+            X: =1048
+            Y: =51
+      - DatePickerCanvas1_5:
+          Control: DatePicker@0.0.46
+          Properties:
+            Appearance: ='DatePickerCanvas.Appearance'.Outline
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            BorderThickness: =2
+            DisplayMode: =DisplayMode.View
+            Format: ='DatePickerCanvas.Format'.Short
+            SelectedDate: =DateAdd((DatePickerCanvas1.SelectedDate),dcvTransStart.Text*7,TimeUnit.Days)
+            Width: =100
+            X: =946
+            Y: =51
+      - DatePickerCanvas1_6:
+          Control: DatePicker@0.0.46
+          Properties:
+            Appearance: ='DatePickerCanvas.Appearance'.Outline
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            BorderThickness: =2
+            DisplayMode: =DisplayMode.View
+            Format: ='DatePickerCanvas.Format'.Short
+            SelectedDate: =DateAdd((DatePickerCanvas1.SelectedDate),dcvSowDead.Text*7,TimeUnit.Days)
+            Width: =100
+            X: =844
+            Y: =51
+      - DatePickerCanvas1_7:
+          Control: DatePicker@0.0.46
+          Properties:
+            Appearance: ='DatePickerCanvas.Appearance'.Outline
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            BorderThickness: =2
+            DisplayMode: =DisplayMode.View
+            Format: ='DatePickerCanvas.Format'.Short
+            SelectedDate: =DateAdd((DatePickerCanvas1.SelectedDate),dcvSowStart.Text*7,TimeUnit.Days)
+            Width: =100
+            X: =742
+            Y: =51
+      - DatePickerCanvas1_8:
+          Control: DatePicker@0.0.46
+          Properties:
+            Appearance: ='DatePickerCanvas.Appearance'.Outline
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            BorderThickness: =2
+            DisplayMode: =DisplayMode.View
+            Format: ='DatePickerCanvas.Format'.Short
+            SelectedDate: =DateAdd((DatePickerCanvas1.SelectedDate),dcvAcidDead.Text*7,TimeUnit.Days)
+            Width: =100
+            X: =640
+            Y: =51
+      - DatePickerCanvas1_9:
+          Control: DatePicker@0.0.46
+          Properties:
+            Appearance: ='DatePickerCanvas.Appearance'.Outline
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            BorderThickness: =2
+            DisplayMode: =DisplayMode.View
+            Format: ='DatePickerCanvas.Format'.Short
+            SelectedDate: =DateAdd((DatePickerCanvas1.SelectedDate),dcvAcidStart.Text*7,TimeUnit.Days)
+            Width: =100
+            X: =538
+            Y: =51
+      - DatePickerCanvas1_10:
+          Control: DatePicker@0.0.46
+          Properties:
+            Appearance: ='DatePickerCanvas.Appearance'.Outline
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            BorderThickness: =2
+            DisplayMode: =DisplayMode.View
+            Format: ='DatePickerCanvas.Format'.Short
+            SelectedDate: =DateAdd((DatePickerCanvas1.SelectedDate),dcvFruitDead.Text*7,TimeUnit.Days)
+            Width: =100
+            X: =436
+            Y: =51
+      - DatePickerCanvas1_11:
+          Control: DatePicker@0.0.46
+          Properties:
+            Appearance: ='DatePickerCanvas.Appearance'.Outline
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            BorderThickness: =2
+            DisplayMode: =DisplayMode.View
+            Format: ='DatePickerCanvas.Format'.Short
+            SelectedDate: =DateAdd((DatePickerCanvas1.SelectedDate),dcvFruitStart.Text*7,TimeUnit.Days)
+            Width: =100
+            X: =334
+            Y: =51
+      - DatePickerCanvas1_12:
+          Control: DatePicker@0.0.46
+          Properties:
+            Appearance: ='DatePickerCanvas.Appearance'.Outline
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            BorderThickness: =2
+            DisplayMode: =DisplayMode.View
+            Format: ='DatePickerCanvas.Format'.Short
+            SelectedDate: =DateAdd((DatePickerCanvas1.SelectedDate),dcvPollinationDead.Text*7,TimeUnit.Days)
+            Width: =100
+            X: =232
+            Y: =51
+      - DatePickerCanvas1_13:
+          Control: DatePicker@0.0.46
+          Properties:
+            Appearance: ='DatePickerCanvas.Appearance'.Outline
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            BorderThickness: =2
+            DisplayMode: =DisplayMode.View
+            Format: ='DatePickerCanvas.Format'.Short
+            SelectedDate: =DateAdd((DatePickerCanvas1.SelectedDate),dcvPollinationStart.Text*7,TimeUnit.Days)
+            Width: =100
+            X: =130
+            Y: =51
+      - DatePickerCanvas1_14:
+          Control: DatePicker@0.0.46
+          Properties:
+            Appearance: ='DatePickerCanvas.Appearance'.Outline
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            BorderThickness: =2
+            DisplayMode: =DisplayMode.View
+            Format: ='DatePickerCanvas.Format'.Short
+            SelectedDate: =DateAdd((DatePickerCanvas1.SelectedDate),dcvCrossingDead.Text*7,TimeUnit.Days)
+            Width: =100
+            X: =28
+            Y: =51

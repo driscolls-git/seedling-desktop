@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "JyinYV7cb0ZdekqfnAAjS"
+uri = "file://Seedling_Desktop_User_Manual.md"
+type = "text"
+title = "Seedling Desktop User Manual"

@@ -1,0 +1,4649 @@
+openapi: 3.1.0
+info:
+  title: Api
+  version: 0.1.0
+  description: Seedling Desktop API
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: auth
+    description: Authentication
+  - name: berries
+    description: Berry types
+  - name: teams
+    description: Greenhouse teams
+  - name: programs
+    description: Source breeding programs
+  - name: locations
+    description: Locations / ranches
+  - name: ratios
+    description: Propagation ratios
+  - name: trays
+    description: Tray sizes
+  - name: labs
+    description: Testing labs
+  - name: transplantInstructions
+    description: Transplant instructions
+  - name: employees
+    description: Employees
+  - name: parents
+    description: Parent inventory
+  - name: crosses
+    description: Crosses master
+  - name: pollen
+    description: Pollen tracking
+  - name: selections
+    description: Selections reference
+  - name: markers
+    description: Markers
+  - name: deadlines
+    description: Deadlines
+  - name: dashboard
+    description: Dashboard analytics
+  - name: screening
+    description: Screening & discards (by plate and by progeny)
+  - name: shipping
+    description: Destination shipping
+
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /auth/login:
+    post:
+      operationId: login
+      tags: [auth]
+      summary: Employee login with 4-digit code
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+        "401":
+          description: Invalid credentials
+
+  /auth/me:
+    get:
+      operationId: getMe
+      tags: [auth]
+      summary: Get current user info
+      responses:
+        "200":
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Employee"
+        "401":
+          description: Not authenticated
+
+  /berries:
+    get:
+      operationId: listBerries
+      tags: [berries]
+      summary: List all berry types
+      responses:
+        "200":
+          description: Berry list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Berry"
+
+  /teams:
+    get:
+      operationId: listTeams
+      tags: [teams]
+      summary: List all teams
+      parameters:
+        - name: active
+          in: query
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Team list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Team"
+    post:
+      operationId: createTeam
+      tags: [teams]
+      summary: Create a team
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TeamInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Team"
+
+  /teams/{id}:
+    put:
+      operationId: updateTeam
+      tags: [teams]
+      summary: Update a team
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TeamInput"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Team"
+    delete:
+      operationId: deleteTeam
+      tags: [teams]
+      summary: Inactivate a team
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Inactivated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Team"
+
+  /programs:
+    get:
+      operationId: listPrograms
+      tags: [programs]
+      summary: List breeding programs
+      parameters:
+        - name: berryId
+          in: query
+          schema:
+            type: integer
+        - name: active
+          in: query
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Program list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Program"
+    post:
+      operationId: createProgram
+      tags: [programs]
+      summary: Create a program
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProgramInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Program"
+
+  /programs/{id}:
+    put:
+      operationId: updateProgram
+      tags: [programs]
+      summary: Update a program
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProgramInput"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Program"
+    delete:
+      operationId: deleteProgram
+      tags: [programs]
+      summary: Delete a program
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /locations:
+    get:
+      operationId: listLocations
+      tags: [locations]
+      summary: List locations
+      parameters:
+        - name: active
+          in: query
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Location list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Location"
+    post:
+      operationId: createLocation
+      tags: [locations]
+      summary: Create a location
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LocationInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Location"
+
+  /locations/{id}:
+    put:
+      operationId: updateLocation
+      tags: [locations]
+      summary: Update a location
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LocationInput"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Location"
+    delete:
+      operationId: deleteLocation
+      tags: [locations]
+      summary: Delete a location
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /ratios:
+    get:
+      operationId: listRatios
+      tags: [ratios]
+      summary: List propagation ratios
+      parameters:
+        - name: berryId
+          in: query
+          schema:
+            type: integer
+        - name: programId
+          in: query
+          schema:
+            type: integer
+        - name: teamId
+          in: query
+          schema:
+            type: integer
+        - name: active
+          in: query
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Ratios list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Ratio"
+    post:
+      operationId: createRatio
+      tags: [ratios]
+      summary: Create a ratio
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RatioInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ratio"
+
+  /ratios/{id}:
+    put:
+      operationId: updateRatio
+      tags: [ratios]
+      summary: Update a ratio
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RatioInput"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ratio"
+    delete:
+      operationId: deleteRatio
+      tags: [ratios]
+      summary: Delete a ratio
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /trays:
+    get:
+      operationId: listTrays
+      tags: [trays]
+      summary: List tray sizes
+      parameters:
+        - name: active
+          in: query
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Tray list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Tray"
+    post:
+      operationId: createTray
+      tags: [trays]
+      summary: Create a tray size
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TrayInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tray"
+
+  /trays/{id}:
+    put:
+      operationId: updateTray
+      tags: [trays]
+      summary: Update a tray
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TrayInput"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tray"
+    delete:
+      operationId: deleteTray
+      tags: [trays]
+      summary: Inactivate a tray
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Inactivated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tray"
+
+  /labs:
+    get:
+      operationId: listLabs
+      tags: [labs]
+      summary: List labs
+      parameters:
+        - name: active
+          in: query
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Lab list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Lab"
+    post:
+      operationId: createLab
+      tags: [labs]
+      summary: Create a lab
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LabInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Lab"
+
+  /labs/{id}:
+    put:
+      operationId: updateLab
+      tags: [labs]
+      summary: Update a lab
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LabInput"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Lab"
+    delete:
+      operationId: deleteLab
+      tags: [labs]
+      summary: Inactivate a lab
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Inactivated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Lab"
+
+  /transplant-instructions:
+    get:
+      operationId: listTransplantInstructions
+      tags: [transplantInstructions]
+      summary: List transplant instructions
+      responses:
+        "200":
+          description: Instructions list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TransplantInstruction"
+    post:
+      operationId: createTransplantInstruction
+      tags: [transplantInstructions]
+      summary: Create a transplant instruction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TransplantInstructionInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TransplantInstruction"
+
+  /transplant-instructions/{id}:
+    put:
+      operationId: updateTransplantInstruction
+      tags: [transplantInstructions]
+      summary: Update a transplant instruction
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TransplantInstructionInput"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TransplantInstruction"
+    delete:
+      operationId: deleteTransplantInstruction
+      tags: [transplantInstructions]
+      summary: Delete a transplant instruction
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /employees:
+    get:
+      operationId: listEmployees
+      tags: [employees]
+      summary: List employees
+      parameters:
+        - name: active
+          in: query
+          schema:
+            type: boolean
+        - name: teamId
+          in: query
+          schema:
+            type: integer
+        - name: name
+          in: query
+          schema:
+            type: string
+        - name: userLevelFk
+          in: query
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Employee list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Employee"
+    post:
+      operationId: createEmployee
+      tags: [employees]
+      summary: Create an employee
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EmployeeInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Employee"
+
+  /employees/{id}:
+    put:
+      operationId: updateEmployee
+      tags: [employees]
+      summary: Update an employee
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EmployeeInput"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Employee"
+    delete:
+      operationId: deleteEmployee
+      tags: [employees]
+      summary: Inactivate an employee
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Inactivated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Employee"
+
+  /parents:
+    get:
+      operationId: listParents
+      tags: [parents]
+      summary: List parent inventory
+      parameters:
+        - name: berryId
+          in: query
+          schema:
+            type: integer
+        - name: teamId
+          in: query
+          schema:
+            type: integer
+        - name: pollinationYear
+          in: query
+          schema:
+            type: integer
+        - name: spCrosses
+          in: query
+          schema:
+            type: boolean
+        - name: selection
+          in: query
+          schema:
+            type: string
+        - name: active
+          in: query
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Parent list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Parent"
+    post:
+      operationId: createParent
+      tags: [parents]
+      summary: Create a parent record
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ParentInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Parent"
+
+  /parents/{id}:
+    get:
+      operationId: getParent
+      tags: [parents]
+      summary: Get a parent by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Parent
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Parent"
+    put:
+      operationId: updateParent
+      tags: [parents]
+      summary: Update a parent
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ParentInput"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Parent"
+    delete:
+      operationId: deleteParent
+      tags: [parents]
+      summary: Delete a parent
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /parents/validate:
+    get:
+      operationId: validateParent
+      tags: [parents]
+      summary: Validate a parent selection exists
+      parameters:
+        - name: selection
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: berryId
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: teamId
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Validation result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ParentValidation"
+
+  /crosses:
+    get:
+      operationId: listCrosses
+      tags: [crosses]
+      summary: List crosses with filters
+      parameters:
+        - name: berryId
+          in: query
+          schema:
+            type: integer
+        - name: teamId
+          in: query
+          schema:
+            type: integer
+        - name: pollinationYear
+          in: query
+          schema:
+            type: integer
+        - name: spCrosses
+          in: query
+          schema:
+            type: boolean
+        - name: progeny
+          in: query
+          schema:
+            type: string
+        - name: parent
+          in: query
+          schema:
+            type: string
+        - name: programId
+          in: query
+          schema:
+            type: integer
+        - name: destinationId
+          in: query
+          schema:
+            type: integer
+        - name: active
+          in: query
+          schema:
+            type: boolean
+        - name: fumigated
+          in: query
+          schema:
+            type: boolean
+        - name: fruitToGo
+          in: query
+          schema:
+            type: boolean
+        - name: pollinationToGo
+          in: query
+          schema:
+            type: boolean
+        - name: seedSowToGo
+          in: query
+          schema:
+            type: boolean
+        - name: sowSeed
+          in: query
+          schema:
+            type: boolean
+        - name: acidInDateRange
+          in: query
+          schema:
+            type: boolean
+        - name: availablePlants
+          in: query
+          schema:
+            type: boolean
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+        - name: sortBy
+          in: query
+          schema:
+            type: string
+        - name: sortDir
+          in: query
+          schema:
+            type: string
+            enum: [asc, desc]
+      responses:
+        "200":
+          description: Crosses list with pagination
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CrossesListResponse"
+    post:
+      operationId: createCross
+      tags: [crosses]
+      summary: Create a cross
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CrossInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cross"
+
+  /crosses/totals:
+    get:
+      operationId: getCrossesTotals
+      tags: [crosses]
+      summary: Get totals for crosses (sums and averages)
+      parameters:
+        - name: berryId
+          in: query
+          schema:
+            type: integer
+        - name: teamId
+          in: query
+          schema:
+            type: integer
+        - name: pollinationYear
+          in: query
+          schema:
+            type: integer
+        - name: spCrosses
+          in: query
+          schema:
+            type: boolean
+        - name: progeny
+          in: query
+          schema:
+            type: string
+        - name: parent
+          in: query
+          schema:
+            type: string
+        - name: programId
+          in: query
+          schema:
+            type: integer
+        - name: destinationId
+          in: query
+          schema:
+            type: integer
+        - name: active
+          in: query
+          schema:
+            type: boolean
+        - name: fumigated
+          in: query
+          schema:
+            type: boolean
+        - name: fruitToGo
+          in: query
+          schema:
+            type: boolean
+        - name: pollinationToGo
+          in: query
+          schema:
+            type: boolean
+        - name: seedSowToGo
+          in: query
+          schema:
+            type: boolean
+        - name: sowSeed
+          in: query
+          schema:
+            type: boolean
+        - name: acidInDateRange
+          in: query
+          schema:
+            type: boolean
+        - name: availablePlants
+          in: query
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Totals
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CrossesTotals"
+
+  /crosses/batch:
+    patch:
+      operationId: batchUpdateCrosses
+      tags: [crosses]
+      summary: Batch update inline-editable fields
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BatchCrossUpdate"
+      responses:
+        "200":
+          description: Updated count
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  updatedCount:
+                    type: integer
+                required:
+                  - updatedCount
+
+  /crosses/{id}:
+    get:
+      operationId: getCross
+      tags: [crosses]
+      summary: Get a cross by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Cross
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cross"
+    put:
+      operationId: updateCross
+      tags: [crosses]
+      summary: Update a cross
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CrossInput"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cross"
+    delete:
+      operationId: deleteCross
+      tags: [crosses]
+      summary: Deactivate a cross
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deactivated
+
+  /fruit:
+    get:
+      operationId: listFruit
+      tags: [fruit]
+      summary: List fruit data from vw_GH_FruitDesk
+      parameters:
+        - name: berryId
+          in: query
+          schema:
+            type: integer
+        - name: teamId
+          in: query
+          schema:
+            type: integer
+        - name: pollinationYear
+          in: query
+          schema:
+            type: integer
+        - name: spCrosses
+          in: query
+          schema:
+            type: boolean
+        - name: progeny
+          in: query
+          schema:
+            type: string
+        - name: parent
+          in: query
+          schema:
+            type: string
+        - name: programId
+          in: query
+          schema:
+            type: integer
+        - name: active
+          in: query
+          schema:
+            type: boolean
+        - name: fruitToGo
+          in: query
+          schema:
+            type: boolean
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+        - name: sortBy
+          in: query
+          schema:
+            type: string
+        - name: sortDir
+          in: query
+          schema:
+            type: string
+            enum: [asc, desc]
+      responses:
+        "200":
+          description: Fruit list with pagination
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FruitListResponse"
+
+  /fruit/totals:
+    get:
+      operationId: getFruitTotals
+      tags: [fruit]
+      summary: Get totals for fruit list
+      parameters:
+        - name: berryId
+          in: query
+          schema:
+            type: integer
+        - name: teamId
+          in: query
+          schema:
+            type: integer
+        - name: pollinationYear
+          in: query
+          schema:
+            type: integer
+        - name: spCrosses
+          in: query
+          schema:
+            type: boolean
+        - name: progeny
+          in: query
+          schema:
+            type: string
+        - name: parent
+          in: query
+          schema:
+            type: string
+        - name: programId
+          in: query
+          schema:
+            type: integer
+        - name: active
+          in: query
+          schema:
+            type: boolean
+        - name: fruitToGo
+          in: query
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Fruit totals
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FruitTotals"
+
+  /pollination:
+    get:
+      operationId: listPollination
+      tags: [pollination]
+      summary: List pollination data from vw_GH_PollinationDesk
+      parameters:
+        - name: berryId
+          in: query
+          schema:
+            type: integer
+        - name: teamId
+          in: query
+          schema:
+            type: integer
+        - name: pollinationYear
+          in: query
+          schema:
+            type: integer
+        - name: spCrosses
+          in: query
+          schema:
+            type: boolean
+        - name: progeny
+          in: query
+          schema:
+            type: string
+        - name: parent
+          in: query
+          schema:
+            type: string
+        - name: programId
+          in: query
+          schema:
+            type: integer
+        - name: active
+          in: query
+          schema:
+            type: boolean
+        - name: pollinationToGo
+          in: query
+          schema:
+            type: boolean
+        - name: emasculationToGo
+          in: query
+          schema:
+            type: boolean
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+        - name: sortBy
+          in: query
+          schema:
+            type: string
+        - name: sortDir
+          in: query
+          schema:
+            type: string
+            enum: [asc, desc]
+      responses:
+        "200":
+          description: Pollination list with pagination
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PollinationListResponse"
+
+  /pollination/totals:
+    get:
+      operationId: getPollinationTotals
+      tags: [pollination]
+      summary: Get totals for pollination list
+      parameters:
+        - name: berryId
+          in: query
+          schema:
+            type: integer
+        - name: teamId
+          in: query
+          schema:
+            type: integer
+        - name: pollinationYear
+          in: query
+          schema:
+            type: integer
+        - name: spCrosses
+          in: query
+          schema:
+            type: boolean
+        - name: progeny
+          in: query
+          schema:
+            type: string
+        - name: parent
+          in: query
+          schema:
+            type: string
+        - name: programId
+          in: query
+          schema:
+            type: integer
+        - name: active
+          in: query
+          schema:
+            type: boolean
+        - name: pollinationToGo
+          in: query
+          schema:
+            type: boolean
+        - name: emasculationToGo
+          in: query
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Pollination totals
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PollinationTotals"
+
+  /seed:
+    get:
+      operationId: listSeed
+      tags: [seed]
+      summary: List seed data from vw_GHSeedDesk
+      parameters:
+        - name: berryId
+          in: query
+          schema:
+            type: integer
+        - name: teamId
+          in: query
+          schema:
+            type: integer
+        - name: pollinationYear
+          in: query
+          schema:
+            type: integer
+        - name: spCrosses
+          in: query
+          schema:
+            type: boolean
+        - name: progeny
+          in: query
+          schema:
+            type: string
+        - name: programId
+          in: query
+          schema:
+            type: integer
+        - name: active
+          in: query
+          schema:
+            type: boolean
+        - name: seedSowToGo
+          in: query
+          schema:
+            type: boolean
+        - name: sowSeed
+          in: query
+          schema:
+            type: boolean
+        - name: acidInDateRange
+          in: query
+          schema:
+            type: boolean
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+        - name: sortBy
+          in: query
+          schema:
+            type: string
+        - name: sortDir
+          in: query
+          schema:
+            type: string
+            enum: [asc, desc]
+      responses:
+        "200":
+          description: Seed list with pagination
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SeedListResponse"
+
+  /seed/totals:
+    get:
+      operationId: getSeedTotals
+      tags: [seed]
+      summary: Get totals for seed list
+      parameters:
+        - name: berryId
+          in: query
+          schema:
+            type: integer
+        - name: teamId
+          in: query
+          schema:
+            type: integer
+        - name: pollinationYear
+          in: query
+          schema:
+            type: integer
+        - name: spCrosses
+          in: query
+          schema:
+            type: boolean
+        - name: progeny
+          in: query
+          schema:
+            type: string
+        - name: programId
+          in: query
+          schema:
+            type: integer
+        - name: active
+          in: query
+          schema:
+            type: boolean
+        - name: seedSowToGo
+          in: query
+          schema:
+            type: boolean
+        - name: sowSeed
+          in: query
+          schema:
+            type: boolean
+        - name: acidInDateRange
+          in: query
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Seed totals
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SeedTotals"
+
+  /transplant:
+    get:
+      operationId: listTransplant
+      tags: [transplant]
+      summary: List transplant data from vw_GH_TransplantDesk
+      parameters:
+        - name: berryId
+          in: query
+          schema:
+            type: integer
+        - name: teamId
+          in: query
+          schema:
+            type: integer
+        - name: pollinationYear
+          in: query
+          schema:
+            type: integer
+        - name: spCrosses
+          in: query
+          schema:
+            type: boolean
+        - name: progeny
+          in: query
+          schema:
+            type: string
+        - name: programId
+          in: query
+          schema:
+            type: integer
+        - name: destinationId
+          in: query
+          schema:
+            type: integer
+        - name: active
+          in: query
+          schema:
+            type: boolean
+        - name: availablePlants
+          in: query
+          schema:
+            type: boolean
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+        - name: sortBy
+          in: query
+          schema:
+            type: string
+        - name: sortDir
+          in: query
+          schema:
+            type: string
+            enum: [asc, desc]
+      responses:
+        "200":
+          description: Transplant list with pagination
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TransplantListResponse"
+
+  /transplant/totals:
+    get:
+      operationId: getTransplantTotals
+      tags: [transplant]
+      summary: Get totals for transplant list
+      parameters:
+        - name: berryId
+          in: query
+          schema:
+            type: integer
+        - name: teamId
+          in: query
+          schema:
+            type: integer
+        - name: pollinationYear
+          in: query
+          schema:
+            type: integer
+        - name: spCrosses
+          in: query
+          schema:
+            type: boolean
+        - name: progeny
+          in: query
+          schema:
+            type: string
+        - name: programId
+          in: query
+          schema:
+            type: integer
+        - name: destinationId
+          in: query
+          schema:
+            type: integer
+        - name: active
+          in: query
+          schema:
+            type: boolean
+        - name: availablePlants
+          in: query
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Transplant totals
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TransplantTotals"
+
+  /transplant/batch:
+    patch:
+      operationId: batchUpdateTransplant
+      tags: [transplant]
+      summary: Batch update transplant adjustments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BatchTransplantUpdate"
+      responses:
+        "200":
+          description: Update count
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  updatedCount:
+                    type: integer
+
+  /pollen:
+    get:
+      operationId: listPollen
+      tags: [pollen]
+      summary: List pollen tracking records
+      parameters:
+        - name: berryId
+          in: query
+          schema:
+            type: integer
+        - name: teamId
+          in: query
+          schema:
+            type: integer
+        - name: pollinationYear
+          in: query
+          schema:
+            type: integer
+        - name: spCrosses
+          in: query
+          schema:
+            type: boolean
+        - name: selection
+          in: query
+          schema:
+            type: string
+        - name: pollenToGo
+          in: query
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Pollen list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Pollen"
+
+  /selections:
+    get:
+      operationId: listSelections
+      tags: [selections]
+      summary: List selections
+      parameters:
+        - name: berry
+          in: query
+          schema:
+            type: string
+        - name: berryId
+          in: query
+          schema:
+            type: integer
+        - name: pollinationYear
+          in: query
+          schema:
+            type: integer
+        - name: teamId
+          in: query
+          schema:
+            type: integer
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: active
+          in: query
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Selection list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Selection"
+
+  /markers:
+    get:
+      operationId: listMarkers
+      tags: [markers]
+      summary: List markers
+      parameters:
+        - name: active
+          in: query
+          schema:
+            type: boolean
+        - name: berryId
+          in: query
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Marker list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Marker"
+    post:
+      operationId: createMarker
+      tags: [markers]
+      summary: Create a marker
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MarkerInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Marker"
+
+  /markers/{id}:
+    put:
+      operationId: updateMarker
+      tags: [markers]
+      summary: Update a marker
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MarkerInput"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Marker"
+    delete:
+      operationId: deleteMarker
+      tags: [markers]
+      summary: Inactivate a marker
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Inactivated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Marker"
+
+  /marker-budgets:
+    get:
+      operationId: listMarkerBudgets
+      tags: [marker-budgets]
+      summary: List marker budgets
+      parameters:
+        - name: berryId
+          in: query
+          schema:
+            type: integer
+        - name: teamId
+          in: query
+          schema:
+            type: integer
+        - name: pollinationYear
+          in: query
+          schema:
+            type: integer
+        - name: programId
+          in: query
+          schema:
+            type: integer
+        - name: labId
+          in: query
+          schema:
+            type: integer
+        - name: active
+          in: query
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Marker budget list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MarkerBudget"
+    post:
+      operationId: createMarkerBudget
+      tags: [marker-budgets]
+      summary: Create a marker budget
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MarkerBudgetInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MarkerBudget"
+
+  /marker-budgets/{id}:
+    put:
+      operationId: updateMarkerBudget
+      tags: [marker-budgets]
+      summary: Update a marker budget
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MarkerBudgetInput"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MarkerBudget"
+    delete:
+      operationId: deleteMarkerBudget
+      tags: [marker-budgets]
+      summary: Delete a marker budget
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MarkerBudget"
+
+  /genotype-screens:
+    get:
+      operationId: listGenotypeScreens
+      tags: [genotype-screens]
+      summary: List genotype screens
+      responses:
+        "200":
+          description: Genotype screen list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GenotypeScreen"
+
+  /lab-prices:
+    get:
+      operationId: listLabPrices
+      tags: [lab-prices]
+      summary: List lab prices
+      parameters:
+        - name: berryId
+          in: query
+          schema:
+            type: integer
+        - name: genotypeScreenId
+          in: query
+          schema:
+            type: integer
+        - name: labId
+          in: query
+          schema:
+            type: integer
+        - name: year
+          in: query
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Lab price list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LabPrice"
+    post:
+      operationId: createLabPrice
+      tags: [lab-prices]
+      summary: Create a lab price
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LabPriceInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LabPrice"
+
+  /lab-prices/{id}:
+    put:
+      operationId: updateLabPrice
+      tags: [lab-prices]
+      summary: Update a lab price
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LabPriceInput"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LabPrice"
+    delete:
+      operationId: deleteLabPrice
+      tags: [lab-prices]
+      summary: Delete a lab price
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LabPrice"
+
+  /deadlines:
+    get:
+      operationId: listDeadlines
+      tags: [deadlines]
+      summary: List deadlines
+      parameters:
+        - name: berryId
+          in: query
+          schema:
+            type: integer
+        - name: teamId
+          in: query
+          schema:
+            type: integer
+        - name: destinationId
+          in: query
+          schema:
+            type: integer
+        - name: programId
+          in: query
+          schema:
+            type: integer
+        - name: active
+          in: query
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Deadline list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Deadline"
+    post:
+      operationId: createDeadline
+      tags: [deadlines]
+      summary: Create a deadline
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeadlineInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Deadline"
+
+  /deadlines/{id}:
+    put:
+      operationId: updateDeadline
+      tags: [deadlines]
+      summary: Update a deadline
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeadlineInput"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Deadline"
+    delete:
+      operationId: deleteDeadline
+      tags: [deadlines]
+      summary: Inactivate a deadline
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Inactivated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Deadline"
+
+  /dashboard/summary:
+    get:
+      operationId: getDashboardSummary
+      tags: [dashboard]
+      summary: Get dashboard summary stats
+      parameters:
+        - name: berryId
+          in: query
+          schema:
+            type: integer
+        - name: teamId
+          in: query
+          schema:
+            type: integer
+        - name: pollinationYear
+          in: query
+          schema:
+            type: integer
+        - name: spCrosses
+          in: query
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Dashboard summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardSummary"
+
+  /screening/plates:
+    get:
+      operationId: listScreeningPlates
+      tags: [screening]
+      summary: List screening data by plate
+      parameters:
+        - name: berryId
+          in: query
+          schema:
+            type: integer
+        - name: teamId
+          in: query
+          schema:
+            type: integer
+        - name: pollinationYear
+          in: query
+          schema:
+            type: integer
+        - name: progeny
+          in: query
+          schema:
+            type: string
+        - name: program
+          in: query
+          schema:
+            type: string
+        - name: testingLab
+          in: query
+          schema:
+            type: string
+        - name: plateIndex
+          in: query
+          schema:
+            type: integer
+        - name: screening
+          in: query
+          schema:
+            type: boolean
+        - name: sorted
+          in: query
+          schema:
+            type: boolean
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of screening plates
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ScreeningPlate"
+                  total:
+                    type: integer
+                  page:
+                    type: integer
+                  pageSize:
+                    type: integer
+                  totalPages:
+                    type: integer
+
+  /screening/plates/totals:
+    get:
+      operationId: getScreeningPlateTotals
+      tags: [screening]
+      summary: Get screening plate totals
+      parameters:
+        - name: berryId
+          in: query
+          schema:
+            type: integer
+        - name: teamId
+          in: query
+          schema:
+            type: integer
+        - name: pollinationYear
+          in: query
+          schema:
+            type: integer
+        - name: progeny
+          in: query
+          schema:
+            type: string
+        - name: program
+          in: query
+          schema:
+            type: string
+        - name: testingLab
+          in: query
+          schema:
+            type: string
+        - name: plateIndex
+          in: query
+          schema:
+            type: integer
+        - name: screening
+          in: query
+          schema:
+            type: boolean
+        - name: sorted
+          in: query
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Screening plate totals
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScreeningPlateTotals"
+
+  /screening/progeny:
+    get:
+      operationId: listScreeningProgeny
+      tags: [screening]
+      summary: List screening data by progeny
+      parameters:
+        - name: berryId
+          in: query
+          schema:
+            type: integer
+        - name: teamId
+          in: query
+          schema:
+            type: integer
+        - name: pollinationYear
+          in: query
+          schema:
+            type: integer
+        - name: progeny
+          in: query
+          schema:
+            type: string
+        - name: program
+          in: query
+          schema:
+            type: string
+        - name: spCrosses
+          in: query
+          schema:
+            type: boolean
+        - name: screening
+          in: query
+          schema:
+            type: boolean
+        - name: sorted
+          in: query
+          schema:
+            type: boolean
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of screening progeny
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ScreeningProgeny"
+                  total:
+                    type: integer
+                  page:
+                    type: integer
+                  pageSize:
+                    type: integer
+                  totalPages:
+                    type: integer
+
+  /screening/progeny/totals:
+    get:
+      operationId: getScreeningProgenyTotals
+      tags: [screening]
+      summary: Get screening progeny totals
+      parameters:
+        - name: berryId
+          in: query
+          schema:
+            type: integer
+        - name: teamId
+          in: query
+          schema:
+            type: integer
+        - name: pollinationYear
+          in: query
+          schema:
+            type: integer
+        - name: progeny
+          in: query
+          schema:
+            type: string
+        - name: program
+          in: query
+          schema:
+            type: string
+        - name: spCrosses
+          in: query
+          schema:
+            type: boolean
+        - name: screening
+          in: query
+          schema:
+            type: boolean
+        - name: sorted
+          in: query
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Screening progeny totals
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScreeningProgenyTotals"
+
+  /screening/labs:
+    get:
+      operationId: listScreeningLabs
+      tags: [screening]
+      summary: List distinct testing labs in screening data
+      responses:
+        "200":
+          description: List of lab names
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+
+  /shipping:
+    get:
+      operationId: listShipping
+      tags: [shipping]
+      summary: List shipping records
+      parameters:
+        - name: berryId
+          in: query
+          schema: { type: integer }
+        - name: teamId
+          in: query
+          schema: { type: integer }
+        - name: pollinationYear
+          in: query
+          schema: { type: integer }
+        - name: progeny
+          in: query
+          schema: { type: string }
+        - name: program
+          in: query
+          schema: { type: string }
+        - name: destination
+          in: query
+          schema: { type: string }
+        - name: shipped
+          in: query
+          schema: { type: string, enum: ["true", "false"] }
+        - name: page
+          in: query
+          schema: { type: integer }
+        - name: pageSize
+          in: query
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Paginated shipping list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ShippingRecord"
+                  total:
+                    type: integer
+                  page:
+                    type: integer
+                  pageSize:
+                    type: integer
+                  totalPages:
+                    type: integer
+
+  /shipping/totals:
+    get:
+      operationId: getShippingTotals
+      tags: [shipping]
+      summary: Get shipping totals
+      parameters:
+        - name: berryId
+          in: query
+          schema: { type: integer }
+        - name: teamId
+          in: query
+          schema: { type: integer }
+        - name: pollinationYear
+          in: query
+          schema: { type: integer }
+        - name: progeny
+          in: query
+          schema: { type: string }
+        - name: program
+          in: query
+          schema: { type: string }
+        - name: destination
+          in: query
+          schema: { type: string }
+        - name: shipped
+          in: query
+          schema: { type: string, enum: ["true", "false"] }
+      responses:
+        "200":
+          description: Shipping totals
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ShippingTotals"
+
+  /shipping/destinations:
+    get:
+      operationId: listShippingDestinations
+      tags: [shipping]
+      summary: List distinct shipping destinations
+      responses:
+        "200":
+          description: List of destination names
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+
+  /shipping/allocation:
+    get:
+      operationId: listSortGroupAllocation
+      tags: [shipping]
+      summary: List per-progeny Sort Group totals with D1/D2 destinations and persisted splits
+      parameters:
+        - name: berryId
+          in: query
+          schema:
+            type: integer
+        - name: teamId
+          in: query
+          schema:
+            type: integer
+        - name: pollinationYear
+          in: query
+          schema:
+            type: integer
+        - name: progeny
+          in: query
+          schema:
+            type: string
+        - name: program
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Sort Group Allocation rows
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/SortGroupAllocationRow"
+                required:
+                  - data
+    patch:
+      operationId: saveSortGroupAllocation
+      tags: [shipping]
+      summary: Upsert per-destination Sort Group splits for one or more progenies
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - updates
+              properties:
+                updates:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/SortGroupAllocationUpdate"
+      responses:
+        "200":
+          description: Number of upserted side-rows (D1 + D2 per progeny)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  updatedCount:
+                    type: integer
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+
+    LoginRequest:
+      type: object
+      properties:
+        employeeId:
+          type: integer
+        employeeNum:
+          type: integer
+      required:
+        - employeeId
+        - employeeNum
+
+    LoginResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        employee:
+          $ref: "#/components/schemas/Employee"
+        token:
+          type: string
+      required:
+        - success
+
+    Berry:
+      type: object
+      properties:
+        id:
+          type: integer
+        berryType:
+          type: string
+        berryCode:
+          type: string
+      required:
+        - id
+        - berryType
+        - berryCode
+
+    Team:
+      type: object
+      properties:
+        id:
+          type: integer
+        teamName:
+          type: string
+        active:
+          type: boolean
+        modifiedDate:
+          type: string
+          nullable: true
+        modifiedBy:
+          type: string
+          nullable: true
+      required:
+        - id
+        - teamName
+        - active
+
+    TeamInput:
+      type: object
+      properties:
+        teamName:
+          type: string
+        active:
+          type: boolean
+      required:
+        - teamName
+
+    Program:
+      type: object
+      properties:
+        id:
+          type: integer
+        berryType:
+          type: integer
+        srcBreedingProgram:
+          type: string
+        active:
+          type: boolean
+      required:
+        - id
+        - berryType
+        - srcBreedingProgram
+        - active
+
+    ProgramInput:
+      type: object
+      properties:
+        berryType:
+          type: integer
+        srcBreedingProgram:
+          type: string
+        active:
+          type: boolean
+      required:
+        - berryType
+        - srcBreedingProgram
+
+    Location:
+      type: object
+      properties:
+        id:
+          type: integer
+        locationName:
+          type: string
+        locationCode:
+          type: string
+        active:
+          type: boolean
+      required:
+        - id
+        - locationName
+        - locationCode
+        - active
+
+    LocationInput:
+      type: object
+      properties:
+        locationName:
+          type: string
+        locationCode:
+          type: string
+        active:
+          type: boolean
+      required:
+        - locationName
+        - locationCode
+
+    Ratio:
+      type: object
+      properties:
+        id:
+          type: integer
+        berryId:
+          type: integer
+        programId:
+          type: integer
+        teamId:
+          type: integer
+        teamName:
+          type: string
+          nullable: true
+        berryType:
+          type: string
+          nullable: true
+        srcBreedingProgram:
+          type: string
+          nullable: true
+        femaleFlowersPerMaleFlower:
+          type: number
+        pollinationSuccessPercentage:
+          type: number
+        pollinationStdDev:
+          type: number
+        gramsSeedPerFruit:
+          type: number
+        gramsSeedPerFruitStdDev:
+          type: number
+        seedsPerGramOfSeed:
+          type: number
+        seedNumPerGramStdDev:
+          type: number
+        avgSeedGerminationPercentage:
+          type: number
+        seedGerminationStdDev:
+          type: number
+        seedlingTransplantSuccessPercentage:
+          type: number
+        bufferPercentOfStdDev:
+          type: number
+        avgFlowersPerParent:
+          type: number
+        flowersPerParentStdDev:
+          type: number
+        seedSowBufferGrams:
+          type: number
+        germCalc:
+          type: number
+        seedGramCalc:
+          type: number
+        gramsSeedPerFruitCalc:
+          type: number
+        flowersPerParentCalc:
+          type: number
+        pollinationSuccessCalc:
+          type: number
+        seedWeightShippingCalc:
+          type: number
+        active:
+          type: boolean
+        comments:
+          type: string
+        modifiedDate:
+          type: string
+          nullable: true
+        modifiedBy:
+          type: string
+          nullable: true
+      required:
+        - id
+        - berryId
+        - programId
+        - teamId
+
+    RatioInput:
+      type: object
+      properties:
+        berryId:
+          type: integer
+        programId:
+          type: integer
+        teamId:
+          type: integer
+        femaleFlowersPerMaleFlower:
+          type: number
+        pollinationSuccessPercentage:
+          type: number
+        pollinationStdDev:
+          type: number
+        gramsSeedPerFruit:
+          type: number
+        gramsSeedPerFruitStdDev:
+          type: number
+        seedsPerGramOfSeed:
+          type: number
+        seedNumPerGramStdDev:
+          type: number
+        avgSeedGerminationPercentage:
+          type: number
+        seedGerminationStdDev:
+          type: number
+        seedlingTransplantSuccessPercentage:
+          type: number
+        bufferPercentOfStdDev:
+          type: number
+        avgFlowersPerParent:
+          type: number
+        flowersPerParentStdDev:
+          type: number
+        seedSowBufferGrams:
+          type: number
+        active:
+          type: boolean
+        comments:
+          type: string
+      required:
+        - berryId
+        - programId
+        - teamId
+
+    Tray:
+      type: object
+      properties:
+        id:
+          type: integer
+        traySize:
+          type: integer
+        m2PerTray:
+          type: number
+        active:
+          type: boolean
+        modifiedDate:
+          type: string
+          nullable: true
+        modifiedBy:
+          type: string
+          nullable: true
+      required:
+        - id
+        - traySize
+        - m2PerTray
+        - active
+
+    TrayInput:
+      type: object
+      properties:
+        traySize:
+          type: integer
+        m2PerTray:
+          type: number
+        active:
+          type: boolean
+      required:
+        - traySize
+        - m2PerTray
+
+    Lab:
+      type: object
+      properties:
+        id:
+          type: integer
+        labName:
+          type: string
+        plateSampleNum:
+          type: integer
+        active:
+          type: boolean
+        modifiedDate:
+          type: string
+          nullable: true
+        modifiedBy:
+          type: string
+          nullable: true
+      required:
+        - id
+        - labName
+        - active
+
+    LabInput:
+      type: object
+      properties:
+        labName:
+          type: string
+        plateSampleNum:
+          type: integer
+        active:
+          type: boolean
+      required:
+        - labName
+
+    TransplantInstruction:
+      type: object
+      properties:
+        id:
+          type: integer
+        transplantInstruct:
+          type: string
+      required:
+        - id
+        - transplantInstruct
+
+    TransplantInstructionInput:
+      type: object
+      properties:
+        transplantInstruct:
+          type: string
+      required:
+        - transplantInstruct
+
+    Employee:
+      type: object
+      properties:
+        id:
+          type: integer
+        ghEmployee:
+          type: string
+        employeeNum:
+          type: integer
+        teamId:
+          type: integer
+        teamName:
+          type: string
+        active:
+          type: boolean
+        userLevelFk:
+          type: integer
+        email:
+          type: string
+        modifiedDate:
+          type: string
+        modifiedBy:
+          type: string
+      required:
+        - id
+        - ghEmployee
+        - employeeNum
+
+    EmployeeInput:
+      type: object
+      properties:
+        ghEmployee:
+          type: string
+        employeeNum:
+          type: integer
+        teamId:
+          type: integer
+        active:
+          type: boolean
+        userLevelFk:
+          type: integer
+        email:
+          type: string
+      required:
+        - ghEmployee
+        - employeeNum
+
+    Parent:
+      type: object
+      properties:
+        id:
+          type: integer
+        selection:
+          type: string
+        l1fc:
+          type: string
+        l1:
+          type: number
+        l2fc:
+          type: string
+        l2:
+          type: number
+        l3fc:
+          type: string
+        l3:
+          type: number
+        l4fc:
+          type: string
+        l4:
+          type: number
+        totalParents:
+          type: number
+        flowersRequiredForPollen:
+          type: number
+        totalFlowersCollected:
+          type: number
+        flowersForPollenUsed:
+          type: number
+        badPollen:
+          type: number
+        flowersForPollenAvail:
+          type: number
+        flowersForPollenVariance:
+          type: number
+        pollinationYear:
+          type: integer
+        comments:
+          type: string
+        active:
+          type: boolean
+        berryId:
+          type: integer
+        berryName:
+          type: string
+        teamId:
+          type: integer
+        teamName:
+          type: string
+        spCrosses:
+          type: boolean
+        firstYrParent:
+          type: boolean
+      required:
+        - id
+        - selection
+
+    ParentInput:
+      type: object
+      properties:
+        selection:
+          type: string
+        l1fc:
+          type: string
+        l1:
+          type: number
+        l2fc:
+          type: string
+        l2:
+          type: number
+        l3fc:
+          type: string
+        l3:
+          type: number
+        l4fc:
+          type: string
+        l4:
+          type: number
+        totalParents:
+          type: number
+        pollinationYear:
+          type: integer
+        comments:
+          type: string
+        active:
+          type: boolean
+        berryId:
+          type: integer
+        teamId:
+          type: integer
+        spCrosses:
+          type: boolean
+        firstYrParent:
+          type: boolean
+      required:
+        - selection
+        - berryId
+        - teamId
+
+    ParentValidation:
+      type: object
+      properties:
+        valid:
+          type: boolean
+        parentId:
+          type: integer
+        message:
+          type: string
+      required:
+        - valid
+
+    Cross:
+      type: object
+      properties:
+        id:
+          type: integer
+        progeny:
+          type: string
+        parent1:
+          type: string
+        parent2:
+          type: string
+        destination1:
+          type: string
+        d1Program:
+          type: string
+        d1ProgramId:
+          type: integer
+        d1SeedlingShipRequest:
+          type: number
+        breederRequestedShipDest1Adjustments:
+          type: number
+        destination2:
+          type: string
+        d2Program:
+          type: string
+        d2ProgramId:
+          type: integer
+        d2SeedlingShipRequest:
+          type: number
+        breederRequestedShipDest2Adjustments:
+          type: number
+        breederAdjustmentDate:
+          type: string
+        suggestedLowShipQtyAdj:
+          type: number
+        suggestedHighShipQtyAdj:
+          type: number
+        totalSeedlingShipRequestCalc:
+          type: number
+        shipTotalActual:
+          type: number
+        d1FieldPlantDate:
+          type: string
+        d2FieldPlantDate:
+          type: string
+        requestedFieldPlantYear:
+          type: integer
+        estimatedPlantsToShip:
+          type: number
+        seedWtToSeedlingShip:
+          type: number
+        expectedDiscardPercentage:
+          type: number
+        spinelessDiscardPercentage:
+          type: number
+        transplantInstructions:
+          type: string
+        transplantsRequired:
+          type: number
+        plantNumTransplanted:
+          type: number
+        extraTransplants:
+          type: number
+        traySize:
+          type: integer
+        traysRequestedCalc:
+          type: number
+        screening:
+          type: boolean
+        sortByMarkerGroup:
+          type: boolean
+        testingLab1:
+          type: string
+        testingLab2:
+          type: string
+        totalMarker:
+          type: integer
+        marker1:
+          type: string
+        marker2:
+          type: string
+        marker3:
+          type: string
+        marker4:
+          type: string
+        marker5:
+          type: string
+        marker6:
+          type: string
+        spCrosses:
+          type: boolean
+        pollinationYear:
+          type: integer
+        p1TotalParentsRequired:
+          type: number
+        p1TotalParents:
+          type: number
+        p1L1:
+          type: number
+        p1L1fc:
+          type: string
+        p1L2:
+          type: number
+        p1L2fc:
+          type: string
+        p1L3:
+          type: number
+        p1L3fc:
+          type: string
+        p1L4:
+          type: number
+        p1L4fc:
+          type: string
+        p2TotalParentsRequired:
+          type: number
+        p2TotalParents:
+          type: number
+        p2L1:
+          type: number
+        p2L1fc:
+          type: string
+        p2L2:
+          type: number
+        p2L2fc:
+          type: string
+        p2L3:
+          type: number
+        p2L3fc:
+          type: string
+        p2L4:
+          type: number
+        p2L4fc:
+          type: string
+        bulkParent3:
+          type: string
+        reciprocalAllowed:
+          type: boolean
+        sowSeed:
+          type: boolean
+        seedWeightRequired:
+          type: number
+        seedWeightInventory:
+          type: number
+        totalSeedWeightSown:
+          type: number
+        fruitRequired:
+          type: number
+        totalFruitCollected:
+          type: number
+        flowersToPollinateRequired:
+          type: number
+        successfulPollinations:
+          type: number
+        flowersRequiredForPollen:
+          type: number
+        reciprocalDone:
+          type: boolean
+        totalFlowersCollected:
+          type: number
+        goodFlowersCollected:
+          type: number
+        newLabels:
+          type: boolean
+        breederComments:
+          type: string
+        ghTeamComments:
+          type: string
+        fumigated:
+          type: boolean
+        berry:
+          type: string
+        berryId:
+          type: integer
+        teamName:
+          type: string
+        crossDesignedBy:
+          type: string
+        teamId:
+          type: integer
+        active:
+          type: boolean
+        parentMatch:
+          type: boolean
+        seedWtFlagBit:
+          type: boolean
+        estimatedPlantsFlagBit:
+          type: boolean
+        p1FlagBit:
+          type: boolean
+        p2FlagBit:
+          type: boolean
+        seedWeightAcidTreated:
+          type: number
+        seedWeightVariance:
+          type: number
+        seedAcidWeightVariance:
+          type: number
+        acidTreatAll:
+          type: boolean
+        seedReadyForAcid:
+          type: boolean
+        acidInDateRange:
+          type: boolean
+        acidStartDate:
+          type: string
+        acidDeadlineDate:
+          type: string
+        seedWeightToSow:
+          type: number
+        seedWeightToBank:
+          type: number
+        seedSowToGo:
+          type: number
+        plantNumTransAlAzar:
+          type: number
+        plantNumTransSpineless:
+          type: number
+        plantNumTransSpiny:
+          type: number
+      required:
+        - id
+        - progeny
+
+    CrossInput:
+      type: object
+      properties:
+        progeny:
+          type: string
+        parent1:
+          type: string
+        parent2:
+          type: string
+        destination1:
+          type: string
+        d1ProgramId:
+          type: integer
+        d1SeedlingShipRequest:
+          type: number
+        breederRequestedShipDest1Adjustments:
+          type: number
+        destination2:
+          type: string
+        d2ProgramId:
+          type: integer
+        d2SeedlingShipRequest:
+          type: number
+        breederRequestedShipDest2Adjustments:
+          type: number
+        d1FieldPlantDate:
+          type: string
+        d2FieldPlantDate:
+          type: string
+        requestedFieldPlantYear:
+          type: integer
+        expectedDiscardPercentage:
+          type: number
+        spinelessDiscardPercentage:
+          type: number
+        transplantInstructions:
+          type: string
+        traySize:
+          type: integer
+        screening:
+          type: boolean
+        sortByMarkerGroup:
+          type: boolean
+        testingLab1:
+          type: string
+        testingLab2:
+          type: string
+        totalMarker:
+          type: integer
+        marker1:
+          type: string
+        marker2:
+          type: string
+        marker3:
+          type: string
+        marker4:
+          type: string
+        marker5:
+          type: string
+        marker6:
+          type: string
+        spCrosses:
+          type: boolean
+        pollinationYear:
+          type: integer
+        bulkParent3:
+          type: string
+        reciprocalAllowed:
+          type: boolean
+        sowSeed:
+          type: boolean
+        fumigated:
+          type: boolean
+        breederComments:
+          type: string
+        ghTeamComments:
+          type: string
+        crossDesignedBy:
+          type: string
+        berryId:
+          type: integer
+        teamId:
+          type: integer
+        active:
+          type: boolean
+      required:
+        - progeny
+        - pollinationYear
+
+    CrossesListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Cross"
+        total:
+          type: integer
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        totalPages:
+          type: integer
+      required:
+        - data
+        - total
+        - page
+        - pageSize
+        - totalPages
+
+    CrossesTotals:
+      type: object
+      properties:
+        rowCount:
+          type: integer
+        d1ShipRequest:
+          type: number
+        d1ShipAdj:
+          type: number
+        d2ShipRequest:
+          type: number
+        d2ShipAdj:
+          type: number
+        totalShipRequest:
+          type: number
+        estimatedPlantsToShip:
+          type: number
+        seedWtToSeedlingShip:
+          type: number
+        transplantsRequired:
+          type: number
+        extraTransplants:
+          type: number
+        seedWtSown:
+          type: number
+        seedRequired:
+          type: number
+        seedInventory:
+          type: number
+        flowersToPollinateRequired:
+          type: number
+        successfulPollinations:
+          type: number
+        p1TotalParents:
+          type: number
+        p1ParentsRequired:
+          type: number
+        p2TotalParents:
+          type: number
+        p2ParentsRequired:
+          type: number
+        avgExpectedDiscard:
+          type: number
+        reciprocalDone:
+          type: number
+        fruitRequired:
+          type: number
+        totalFruitCollected:
+          type: number
+        fruitToGo:
+          type: number
+      required:
+        - rowCount
+
+    FruitRow:
+      type: object
+      properties:
+        id:
+          type: integer
+        progeny:
+          type: string
+        parent1:
+          type: string
+        parent2:
+          type: string
+        d1Program:
+          type: string
+        reciprocalDone:
+          type: integer
+        fruitRequired:
+          type: integer
+        totalFruitCollected:
+          type: integer
+        fruitToGo:
+          type: integer
+      required:
+        - id
+
+    FruitListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/FruitRow"
+        total:
+          type: integer
+        page:
+          type: integer
+        pageSize:
+          type: integer
+      required:
+        - data
+        - total
+        - page
+        - pageSize
+
+    FruitTotals:
+      type: object
+      properties:
+        reciprocalDone:
+          type: number
+        fruitRequired:
+          type: number
+        totalFruitCollected:
+          type: number
+        fruitToGo:
+          type: number
+
+    PollinationRow:
+      type: object
+      properties:
+        id:
+          type: integer
+        progeny:
+          type: string
+        parent1:
+          type: string
+        parent2:
+          type: string
+        bulkParent3:
+          type: string
+        d1Program:
+          type: string
+        reciprocalDone:
+          type: integer
+        flowersRequiredForPollen:
+          type: integer
+        totalFlowersCollected:
+          type: integer
+        goodFlowersCollected:
+          type: integer
+        flowersToPollinateRequired:
+          type: integer
+        successfulPollinations:
+          type: integer
+        pollinateToGo:
+          type: integer
+        emasculationToGo:
+          type: integer
+      required:
+        - id
+
+    PollinationListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/PollinationRow"
+        total:
+          type: integer
+        page:
+          type: integer
+        pageSize:
+          type: integer
+      required:
+        - data
+        - total
+        - page
+        - pageSize
+
+    PollinationTotals:
+      type: object
+      properties:
+        reciprocalDone:
+          type: number
+        flowersRequiredForPollen:
+          type: number
+        totalFlowersCollected:
+          type: number
+        goodFlowersCollected:
+          type: number
+        flowersToPollinateRequired:
+          type: number
+        successfulPollinations:
+          type: number
+        pollinateToGo:
+          type: number
+        emasculationToGo:
+          type: number
+
+    SeedRow:
+      type: object
+      properties:
+        id:
+          type: integer
+        progeny:
+          type: string
+        d1Program:
+          type: string
+        d2Program:
+          type: string
+        seedWeightRequired:
+          type: number
+        seedWeightInventory:
+          type: number
+        seedWeightVariance:
+          type: number
+        acidTreatAll:
+          type: boolean
+        seedReadyForAcid:
+          type: boolean
+        acidInDateRange:
+          type: boolean
+        acidStartDate:
+          type: string
+        acidDeadlineDate:
+          type: string
+        seedWeightAcidTreated:
+          type: number
+        seedAcidWeightVariance:
+          type: number
+        sowSeed:
+          type: boolean
+        seedWeightToSow:
+          type: number
+        seedWeightToBank:
+          type: number
+        totalSeedWeightSown:
+          type: number
+        seedSowToGo:
+          type: number
+        totalFruitCollected:
+          type: integer
+        commentsFruit:
+          type: string
+      required:
+        - id
+
+    SeedListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/SeedRow"
+        total:
+          type: integer
+        page:
+          type: integer
+        pageSize:
+          type: integer
+      required:
+        - data
+        - total
+        - page
+        - pageSize
+
+    SeedTotals:
+      type: object
+      properties:
+        seedWeightRequired:
+          type: number
+        seedWeightInventory:
+          type: number
+        seedWeightVariance:
+          type: number
+        seedWeightAcidTreated:
+          type: number
+        seedAcidWeightVariance:
+          type: number
+        seedWeightToSow:
+          type: number
+        seedWeightToBank:
+          type: number
+        totalSeedWeightSown:
+          type: number
+        sowSeed:
+          type: number
+        seedSowToGo:
+          type: number
+
+    TransplantRow:
+      type: object
+      properties:
+        id:
+          type: integer
+        progeny:
+          type: string
+        parent1:
+          type: string
+        parent2:
+          type: string
+        d1Program:
+          type: string
+        d2Program:
+          type: string
+        destination1:
+          type: string
+        destination2:
+          type: string
+        transplantInstructions:
+          type: string
+        transplantsRequired:
+          type: number
+        plantNumTransplanted:
+          type: number
+        extraTransplants:
+          type: number
+        d1TransplantAdjustment:
+          type: integer
+          nullable: true
+        d2TransplantAdjustment:
+          type: integer
+          nullable: true
+        expectedDiscardPercentage:
+          type: number
+        totalSeedlingShipRequestCalc:
+          type: number
+        d1SeedlingShipRequest:
+          type: number
+        d2SeedlingShipRequest:
+          type: number
+        breederRequestedShipDest1Adjustments:
+          type: number
+        breederRequestedShipDest2Adjustments:
+          type: number
+        breederAdjustmentDate:
+          type: string
+        plantNumTransAlAzar:
+          type: number
+        plantNumTransSpineless:
+          type: number
+        plantNumTransSpiny:
+          type: number
+      required:
+        - id
+
+    TransplantListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/TransplantRow"
+        total:
+          type: integer
+        page:
+          type: integer
+        pageSize:
+          type: integer
+      required:
+        - data
+        - total
+        - page
+        - pageSize
+
+    TransplantTotals:
+      type: object
+      properties:
+        transplantsRequired:
+          type: number
+        plantNumTransplanted:
+          type: number
+        extraTransplants:
+          type: number
+        d1TransplantAdjustment:
+          type: number
+        d2TransplantAdjustment:
+          type: number
+        expectedDiscardPercentage:
+          type: number
+        totalSeedlingShipRequestCalc:
+          type: number
+        d1SeedlingShipRequest:
+          type: number
+        d2SeedlingShipRequest:
+          type: number
+        breederRequestedShipDest1Adjustments:
+          type: number
+        breederRequestedShipDest2Adjustments:
+          type: number
+        plantNumTransAlAzar:
+          type: number
+        plantNumTransSpineless:
+          type: number
+        plantNumTransSpiny:
+          type: number
+
+    BatchTransplantUpdate:
+      type: object
+      properties:
+        updates:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              d1TransplantAdjustment:
+                type: integer
+                nullable: true
+              d2TransplantAdjustment:
+                type: integer
+                nullable: true
+            required:
+              - id
+      required:
+        - updates
+
+    BatchCrossUpdate:
+      type: object
+      properties:
+        updates:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              destination1:
+                type: string
+              destination2:
+                type: string
+              breederRequestedShipDest1Adjustments:
+                type: number
+              breederRequestedShipDest2Adjustments:
+                type: number
+              expectedDiscardPercentage:
+                type: number
+              spinelessDiscardPercentage:
+                type: number
+              breederComments:
+                type: string
+              ghTeamComments:
+                type: string
+              reciprocalDone:
+                type: integer
+              totalFruitCollected:
+                type: number
+            required:
+              - id
+      required:
+        - updates
+
+    Pollen:
+      type: object
+      properties:
+        id:
+          type: integer
+        selection:
+          type: string
+        berry:
+          type: string
+        teamName:
+          type: string
+        l1fc:
+          type: string
+        l1:
+          type: number
+        l2fc:
+          type: string
+        l2:
+          type: number
+        l3fc:
+          type: string
+        l3:
+          type: number
+        l4fc:
+          type: string
+        l4:
+          type: number
+        totalParents:
+          type: number
+        totalFlowersRequiredForPollen:
+          type: number
+        totalFlowersCollected:
+          type: number
+        flowersForPollenUsed:
+          type: number
+        badPollen:
+          type: number
+        flowersForPollenAvail:
+          type: number
+        flowersForPollenVariance:
+          type: number
+        pollinationYear:
+          type: integer
+        comments:
+          type: string
+        parent:
+          type: string
+        parent1Required:
+          type: number
+        parent2Required:
+          type: number
+        totalParentsRequired:
+          type: number
+        parentVariance:
+          type: number
+        spCrosses:
+          type: boolean
+      required:
+        - id
+        - selection
+
+    Selection:
+      type: object
+      properties:
+        id:
+          type: integer
+        selection:
+          type: string
+        varietyName:
+          type: string
+        berry:
+          type: string
+        sourceBreedingProgram:
+          type: string
+        floweringType:
+          type: string
+        active:
+          type: boolean
+      required:
+        - id
+        - selection
+
+    Marker:
+      type: object
+      properties:
+        id:
+          type: integer
+        berryId:
+          type: integer
+        berryType:
+          type: string
+        preferredLabId:
+          type: integer
+        preferredLabName:
+          type: string
+        traitMarker:
+          type: string
+        markerAliasDriscolls:
+          type: string
+        markerAliasCorteva:
+          type: string
+        cortevaLabStatus:
+          type: string
+        lgcLabStatus:
+          type: string
+        active:
+          type: boolean
+      required:
+        - id
+        - traitMarker
+
+    MarkerInput:
+      type: object
+      properties:
+        berryId:
+          type: integer
+        preferredLabId:
+          type: integer
+        traitMarker:
+          type: string
+        markerAliasDriscolls:
+          type: string
+        markerAliasCorteva:
+          type: string
+        cortevaLabStatus:
+          type: string
+        lgcLabStatus:
+          type: string
+        active:
+          type: boolean
+      required:
+        - traitMarker
+
+    Deadline:
+      type: object
+      properties:
+        id:
+          type: integer
+        berryId:
+          type: integer
+        berryType:
+          type: string
+        teamId:
+          type: integer
+        teamName:
+          type: string
+        destinationId:
+          type: integer
+        destination:
+          type: string
+        programId:
+          type: integer
+        srcBreedingProgram:
+          type: string
+        crossingFileDeadline:
+          type: integer
+          nullable: true
+        pollinationStart:
+          type: integer
+          nullable: true
+        pollinationDeadline:
+          type: integer
+          nullable: true
+        fruitCollectStart:
+          type: integer
+          nullable: true
+        fruitCollectDeadline:
+          type: integer
+          nullable: true
+        seedAcidStart:
+          type: integer
+          nullable: true
+        seedAcidDeadline:
+          type: integer
+          nullable: true
+        seedSowStart:
+          type: integer
+          nullable: true
+        seedSowDeadline:
+          type: integer
+          nullable: true
+        transplantStart:
+          type: integer
+          nullable: true
+        transplantDeadline:
+          type: integer
+          nullable: true
+        markerScreenStart:
+          type: integer
+          nullable: true
+        markerScreenDeadline:
+          type: integer
+          nullable: true
+        markerResultsDeadline:
+          type: integer
+          nullable: true
+        comments:
+          type: string
+          nullable: true
+        modifiedDate:
+          type: string
+          nullable: true
+        modifiedBy:
+          type: string
+          nullable: true
+        active:
+          type: boolean
+      required:
+        - id
+
+    DeadlineInput:
+      type: object
+      properties:
+        berryId:
+          type: integer
+        teamId:
+          type: integer
+        destinationId:
+          type: integer
+        programId:
+          type: integer
+        crossingFileDeadline:
+          type: integer
+          nullable: true
+        pollinationStart:
+          type: integer
+          nullable: true
+        pollinationDeadline:
+          type: integer
+          nullable: true
+        fruitCollectStart:
+          type: integer
+          nullable: true
+        fruitCollectDeadline:
+          type: integer
+          nullable: true
+        seedAcidStart:
+          type: integer
+          nullable: true
+        seedAcidDeadline:
+          type: integer
+          nullable: true
+        seedSowStart:
+          type: integer
+          nullable: true
+        seedSowDeadline:
+          type: integer
+          nullable: true
+        transplantStart:
+          type: integer
+          nullable: true
+        transplantDeadline:
+          type: integer
+          nullable: true
+        markerScreenStart:
+          type: integer
+          nullable: true
+        markerScreenDeadline:
+          type: integer
+          nullable: true
+        markerResultsDeadline:
+          type: integer
+          nullable: true
+        comments:
+          type: string
+          nullable: true
+        active:
+          type: boolean
+      required:
+        - berryId
+        - teamId
+        - destinationId
+
+    DashboardSummary:
+      type: object
+      properties:
+        totalActiveCrosses:
+          type: integer
+        crossesByBerry:
+          type: array
+          items:
+            type: object
+            properties:
+              berry:
+                type: string
+              count:
+                type: integer
+            required:
+              - berry
+              - count
+        crossesByStage:
+          type: array
+          items:
+            type: object
+            properties:
+              stage:
+                type: string
+              count:
+                type: integer
+            required:
+              - stage
+              - count
+        totalShipRequest:
+          type: number
+        totalTransplantsRequired:
+          type: number
+        totalSeedRequired:
+          type: number
+        totalPollinationsRequired:
+          type: number
+        pollinationProgress:
+          type: number
+        seedProgress:
+          type: number
+        transplantProgress:
+          type: number
+        shipProgress:
+          type: number
+      required:
+        - totalActiveCrosses
+        - crossesByBerry
+        - crossesByStage
+
+    ScreeningPlate:
+      type: object
+      properties:
+        id:
+          type: integer
+        plateIndex:
+          type: integer
+        progeny:
+          type: string
+        testingLab:
+          type: string
+          nullable: true
+        samplesRequired:
+          type: integer
+          nullable: true
+        samplesCollected:
+          type: integer
+          nullable: true
+        sampleCollectionDate:
+          type: string
+          nullable: true
+        totalKeepRequest:
+          type: integer
+          nullable: true
+        totalKeepActual:
+          type: integer
+          nullable: true
+        totalDiscardsActual:
+          type: integer
+          nullable: true
+        discardDate:
+          type: string
+          nullable: true
+        sorted:
+          type: boolean
+        sortGroup1:
+          type: integer
+          nullable: true
+        sortGroup2:
+          type: integer
+          nullable: true
+        sortGroup3:
+          type: integer
+          nullable: true
+        sortGroup4:
+          type: integer
+          nullable: true
+        sortGroup5:
+          type: integer
+          nullable: true
+        screening:
+          type: boolean
+        berry:
+          type: string
+          nullable: true
+        berryId:
+          type: integer
+          nullable: true
+        teamName:
+          type: string
+          nullable: true
+        teamId:
+          type: integer
+          nullable: true
+        d1Program:
+          type: string
+          nullable: true
+        pollinationYear:
+          type: integer
+          nullable: true
+      required:
+        - id
+        - progeny
+
+    ScreeningPlateTotals:
+      type: object
+      properties:
+        rowCount:
+          type: integer
+        samplesRequired:
+          type: number
+        samplesCollected:
+          type: number
+        totalKeepRequest:
+          type: number
+        totalKeepActual:
+          type: number
+        totalDiscardsActual:
+          type: number
+        sortGroup1:
+          type: number
+        sortGroup2:
+          type: number
+        sortGroup3:
+          type: number
+        sortGroup4:
+          type: number
+        sortGroup5:
+          type: number
+
+    ScreeningProgeny:
+      type: object
+      properties:
+        id:
+          type: integer
+        progeny:
+          type: string
+        d1Program:
+          type: string
+          nullable: true
+        d2Program:
+          type: string
+          nullable: true
+        totalPlatesRequired:
+          type: integer
+          nullable: true
+        platesCollected:
+          type: integer
+          nullable: true
+        sampleRequired:
+          type: integer
+          nullable: true
+        samplesCollected:
+          type: integer
+          nullable: true
+        keepRequest:
+          type: integer
+          nullable: true
+        keepActual:
+          type: integer
+          nullable: true
+        totalDiscardsActual:
+          type: integer
+          nullable: true
+        sorted:
+          type: boolean
+        sortGroup1:
+          type: integer
+          nullable: true
+        sortGroup2:
+          type: integer
+          nullable: true
+        sortGroup3:
+          type: integer
+          nullable: true
+        sortGroup4:
+          type: integer
+          nullable: true
+        sortGroup5:
+          type: integer
+          nullable: true
+        testingLab1:
+          type: string
+          nullable: true
+        testingLab2:
+          type: string
+          nullable: true
+        screening:
+          type: boolean
+        berry:
+          type: string
+          nullable: true
+        berryId:
+          type: integer
+          nullable: true
+        teamName:
+          type: string
+          nullable: true
+        teamId:
+          type: integer
+          nullable: true
+        pollinationYear:
+          type: integer
+          nullable: true
+      required:
+        - id
+        - progeny
+
+    ScreeningProgenyTotals:
+      type: object
+      properties:
+        rowCount:
+          type: integer
+        sampleRequired:
+          type: number
+        samplesCollected:
+          type: number
+        keepRequest:
+          type: number
+        keepActual:
+          type: number
+        totalDiscardsActual:
+          type: number
+        sortGroup1:
+          type: number
+        sortGroup2:
+          type: number
+        sortGroup3:
+          type: number
+        sortGroup4:
+          type: number
+        sortGroup5:
+          type: number
+
+    ShippingRecord:
+      type: object
+      properties:
+        id:
+          type: integer
+        progeny:
+          type: string
+        destination:
+          type: string
+        program:
+          type: string
+        shipRequest:
+          type: integer
+        sortGroup1:
+          type: integer
+        sortGroup2:
+          type: integer
+        sortGroup3:
+          type: integer
+        sortGroup4:
+          type: integer
+        sortGroup5:
+          type: integer
+        totalShipPlan:
+          type: integer
+        shipTotalActual:
+          type: integer
+        firstTrayBox:
+          type: string
+        lastTrayBox:
+          type: string
+        rackPallet:
+          type: string
+        extrasNotShipped:
+          type: integer
+        comments:
+          type: string
+        shipCreatedDate:
+          type: string
+        shipped:
+          type: boolean
+        berry:
+          type: string
+        berryId:
+          type: integer
+        teamName:
+          type: string
+        teamId:
+          type: integer
+        pollinationYear:
+          type: integer
+
+    MarkerBudget:
+      type: object
+      properties:
+        id:
+          type: integer
+        markerSampleAllocationTotal:
+          type: number
+        markerCostAllocationTotal:
+          type: number
+        pollinationYear:
+          type: integer
+        berryId:
+          type: integer
+        berryType:
+          type: string
+        programId:
+          type: integer
+        srcBreedingProgram:
+          type: string
+        ghLabId:
+          type: integer
+        ghLabName:
+          type: string
+        ghTeamId:
+          type: integer
+        ghTeamName:
+          type: string
+        active:
+          type: boolean
+      required:
+        - id
+
+    MarkerBudgetInput:
+      type: object
+      properties:
+        markerSampleAllocationTotal:
+          type: number
+        markerCostAllocationTotal:
+          type: number
+        pollinationYear:
+          type: integer
+        berryId:
+          type: integer
+        programId:
+          type: integer
+        ghLabId:
+          type: integer
+        ghTeamId:
+          type: integer
+      required:
+        - markerSampleAllocationTotal
+        - markerCostAllocationTotal
+        - pollinationYear
+        - berryId
+        - programId
+        - ghLabId
+        - ghTeamId
+
+    GenotypeScreen:
+      type: object
+      properties:
+        id:
+          type: integer
+        genotypingScreen:
+          type: string
+      required:
+        - id
+        - genotypingScreen
+
+    LabPrice:
+      type: object
+      properties:
+        id:
+          type: integer
+        samplePrice:
+          type: number
+        year:
+          type: integer
+        berryId:
+          type: integer
+        berry:
+          type: string
+        genotypeScreenId:
+          type: integer
+        genotypingScreen:
+          type: string
+        ghLabId:
+          type: integer
+        lab:
+          type: string
+      required:
+        - id
+
+    LabPriceInput:
+      type: object
+      properties:
+        samplePrice:
+          type: number
+        year:
+          type: integer
+        berryId:
+          type: integer
+        genotypeScreenId:
+          type: integer
+        ghLabId:
+          type: integer
+      required:
+        - samplePrice
+        - year
+        - berryId
+        - genotypeScreenId
+        - ghLabId
+
+    ShippingTotals:
+      type: object
+      properties:
+        rowCount:
+          type: integer
+        shipRequest:
+          type: number
+        sortGroup1:
+          type: number
+        sortGroup2:
+          type: number
+        sortGroup3:
+          type: number
+        sortGroup4:
+          type: number
+        sortGroup5:
+          type: number
+        shipTotalActual:
+          type: number
+        extrasNotShipped:
+          type: number
+
+    SortGroupAllocationSplit:
+      type: object
+      description: The five Sort_Group_N values for one destination (D1 or D2).
+      properties:
+        sortGroup1: { type: integer }
+        sortGroup2: { type: integer }
+        sortGroup3: { type: integer }
+        sortGroup4: { type: integer }
+        sortGroup5: { type: integer }
+
+    SortGroupAllocationDestination:
+      type: object
+      description: D1 or D2 destination info + the persisted split values for that side.
+      properties:
+        destination:
+          type: string
+          nullable: true
+        program:
+          type: string
+          nullable: true
+        shipRequest:
+          type: number
+        sortGroup1: { type: integer }
+        sortGroup2: { type: integer }
+        sortGroup3: { type: integer }
+        sortGroup4: { type: integer }
+        sortGroup5: { type: integer }
+
+    SortGroupAllocationRow:
+      type: object
+      description: One row per eligible progeny, with source-of-truth totals and D1/D2 splits.
+      required:
+        - ghsmId
+      properties:
+        ghsmId:
+          type: integer
+          description: GHSeedlingMaster_ID — uniquely identifies the progeny.
+        progeny:
+          type: string
+          nullable: true
+        berry:
+          type: string
+          nullable: true
+        teamName:
+          type: string
+          nullable: true
+        pollinationYear:
+          type: integer
+          nullable: true
+        sortGroup1: { type: integer }
+        sortGroup2: { type: integer }
+        sortGroup3: { type: integer }
+        sortGroup4: { type: integer }
+        sortGroup5: { type: integer }
+        d1:
+          $ref: "#/components/schemas/SortGroupAllocationDestination"
+        d2:
+          $ref: "#/components/schemas/SortGroupAllocationDestination"
+
+    SortGroupAllocationUpdate:
+      type: object
+      description: One progeny's proposed D1/D2 split, sent in the PATCH body.
+      required:
+        - ghsmId
+        - d1
+        - d2
+      properties:
+        ghsmId:
+          type: integer
+        d1:
+          $ref: "#/components/schemas/SortGroupAllocationSplit"
+        d2:
+          $ref: "#/components/schemas/SortGroupAllocationSplit"

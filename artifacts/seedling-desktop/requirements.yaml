@@ -1,0 +1,19 @@
+packages:
+  "framer-motion": "For smooth page transitions and interactive animations"
+  "recharts": "For rendering the dashboard analytics charts"
+  "date-fns": "For formatting dates nicely"
+  "react-hook-form": "For robust form state management"
+  "@hookform/resolvers": "For Zod schema validation in forms"
+  "lucide-react": "For crisp, modern icons"
+  "clsx": "For conditional class names"
+  "tailwind-merge": "For merging tailwind classes safely"
+  "@workspace/api-client-react": "Workspace dependency for API hooks"
+
+images:
+  - path: "artifacts/seedling-desktop/public/images/auth-bg.png"
+    description: "Abstract soft gradient mesh in deep teal and slate blue, clean corporate greenhouse technology feel, very subtle lighting, 8k resolution, minimalist"
+    aspect_ratio: "16:9"
+
+notes:
+  - Assuming the API server is running on the same domain at /api
+  - The generated API client from @workspace/api-client-react is used directly
