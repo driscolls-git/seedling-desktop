@@ -4,9 +4,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "NODE_ENV=development tsx ./src/index.ts",
+    "dev": "NODE_ENV=development tsx --env-file-if-exists=.env ./src/index.ts",
     "build": "tsx ./build.ts",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "preview-trays": "tsx --env-file-if-exists=.env ./src/preview-trays.ts"
   },
   "dependencies": {
     "@types/compression": "^1.8.1",
@@ -27,6 +30,7 @@
     "@types/node": "catalog:",
     "@types/node-cron": "^3.0.11",
     "esbuild": "^0.27.3",
-    "tsx": "catalog:"
+    "tsx": "catalog:",
+    "vitest": "^4.1.10"
   }
 }
