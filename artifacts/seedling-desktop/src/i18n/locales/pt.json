@@ -197,7 +197,11 @@
       "description": "Acompanhar progresso e disponibilidade de transplante",
       "availablePlants": "Disponível > 0",
       "exportTrayCodes": "Exportar Códigos de Bandeja e Índices de Placa CSV",
-      "exportTrayCodesSuccess": "Códigos de bandeja exportados"
+      "exportTrayCodesSuccess": "Códigos de bandeja exportados",
+      "generateConfirm": "Isto irá gerar os códigos de bandeja e índices de placa para a baga, equipe e ano selecionados, e exportá-los para CSV. Continuar?",
+      "generateDisabledHint": "Requer acesso Admin3 e a seleção de uma baga, uma única equipe e um ano.",
+      "generateSuccess": "Códigos de bandeja gerados",
+      "generateSummary": "+{{inserts}} novas bandejas, {{qty}} aumentos de quantidade, {{backfills}} índices de placa preenchidos, {{cancelled}} canceladas."
     },
     "screenProgeny": {
       "title": "Avaliação por Progênie",

@@ -3,7 +3,6 @@ import { queryMany, queryOne, execute, withTransaction } from "@workspace/db";
 import { recalcSeedlingMaster } from "../services/recalc";
 import { requireBreeder, requireBreederOnly, type AuthenticatedRequest } from "../middleware/auth";
 import { BatchUpdateCrossesBody, CreateCrossBody, UpdateCrossBody } from "@workspace/api-zod";
-import { scheduleTrayPipeline } from "../services/tray-pipeline";
 
 const router: IRouter = Router();
 
@@ -704,7 +703,6 @@ router.patch("/crosses/batch", requireBreeder, async (req, res) => {
     });
 
     await recalcSeedlingMaster();
-    scheduleTrayPipeline();
     res.json({ updatedCount });
   } catch (error: unknown) {
     res.status(500).json({ message: error instanceof Error ? error.message : "Internal server error" });
@@ -837,7 +835,6 @@ router.post("/crosses", requireBreeder, async (req, res) => {
       });
     }
     await recalcSeedlingMaster();
-    scheduleTrayPipeline();
     res.status(201).json({ id: inserted!.id });
   } catch (error: unknown) {
     res.status(500).json({ message: error instanceof Error ? error.message : "Internal server error" });
@@ -941,7 +938,6 @@ router.put("/crosses/:id", requireBreeder, async (req, res) => {
       await syncProgenyMarkers(tx, id, markerIds, userName(req));
     });
     await recalcSeedlingMaster();
-    scheduleTrayPipeline();
     res.json({ id });
   } catch (error: unknown) {
     res.status(500).json({ message: error instanceof Error ? error.message : "Internal server error" });
@@ -958,7 +954,6 @@ router.delete("/crosses/:id", requireBreederOnly, async (req, res) => {
         WHERE GHSeedlingMaster_ID = @id`,
       { id: parseInt(String(req.params.id)), user: userName(req) },
     );
-    scheduleTrayPipeline();
     res.status(204).send();
   } catch (error: unknown) {
     res.status(500).json({ message: error instanceof Error ? error.message : "Internal server error" });

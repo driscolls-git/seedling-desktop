@@ -197,7 +197,11 @@
       "description": "تتبع تقدم وتوفر الزراعة",
       "availablePlants": "متاح > 0",
       "exportTrayCodes": "تصدير رموز الصواني وفهارس اللوحات CSV",
-      "exportTrayCodesSuccess": "تم تصدير رموز الصواني"
+      "exportTrayCodesSuccess": "تم تصدير رموز الصواني",
+      "generateConfirm": "سيؤدي هذا إلى إنشاء رموز الصواني وفهارس اللوحات للتوت والفريق والسنة المحددة، وتصديرها إلى CSV. هل تريد المتابعة؟",
+      "generateDisabledHint": "يتطلب صلاحية Admin3 واختيار توت وفريق واحد وسنة.",
+      "generateSuccess": "تم إنشاء رموز الصواني",
+      "generateSummary": "+{{inserts}} صواني جديدة، {{qty}} زيادات في الكمية، {{backfills}} فهارس لوحات مكملة، {{cancelled}} ملغاة."
     },
     "screenProgeny": {
       "title": "الفحص حسب النسل",

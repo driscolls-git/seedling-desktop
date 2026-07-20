@@ -197,7 +197,11 @@
       "description": "View transplant quantities, shipping requests, and breeder adjustments.",
       "availablePlants": "Available > 0",
       "exportTrayCodes": "Export Tray Codes and Plate Indexes CSV",
-      "exportTrayCodesSuccess": "Tray codes exported"
+      "exportTrayCodesSuccess": "Tray codes exported",
+      "generateConfirm": "This will generate tray codes and plate indexes for the selected berry, team and year, and export them to CSV. Continue?",
+      "generateDisabledHint": "Requires Admin3 access and a berry, a single team, and a year filter selected.",
+      "generateSuccess": "Tray codes generated",
+      "generateSummary": "+{{inserts}} new trays, {{qty}} qty top-ups, {{backfills}} plate back-fills, {{cancelled}} cancelled."
     },
     "screenProgeny": {
       "title": "Screen by Progeny",

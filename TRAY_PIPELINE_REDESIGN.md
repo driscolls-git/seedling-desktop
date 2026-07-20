@@ -100,9 +100,18 @@ Read existing rows for the affected years and skip any tray whose `(Unique_Tray_
 
 Insert only the delta rows (`Created_By = 'GHTrayPipeline'`). No UPDATE, no DELETE.
 
-## 6. Trigger (unchanged, now safer)
+## 6. Trigger (button-driven, deadline-gated) — updated 2026-07-20
 
-`scheduleTrayPipeline()` stays event-driven with the 10s debounce, fired from the same mutation sites (`crosses.ts`, `reference-tables.ts`, `transplant.ts`). Since the pipeline is now purely additive/idempotent, re-running it is always safe.
+The event-driven `scheduleTrayPipeline()` (10s debounce, fired from `crosses.ts` / `reference-tables.ts` / `transplant.ts`) has been **removed**. Generation is now triggered on demand from the Transplant page's **"Export Tray Codes and Plate Indexes CSV"** button, which generates rows and then exports them (with a confirmation dialog). The button is greyed out (UI-only) until the user is **Admin3 (`UserLevel_FK = 4`)** and a **berry**, a **single team**, and a **year** are all selected.
+
+`generateTrayCodesForSelection({ berryId, teamId, pollinationYear })` (in `tray-pipeline.ts`) is the entry point, backing `POST /api/transplant/generate-tray-codes`. It is scoped to the one selection (not a two-year, all-berry sweep) and applies the eligibility rules below.
+
+**Eligibility (per progeny, via `vw_GHSeedDesk`):**
+- Seed-acid deadline must have **passed** (`Acid_Deadline_Date <= now`); NULL/future → skipped. Applies to screened and non-screened alike.
+- Deadline passed + `Seed_Weight_Inventory > 0` → build/top-up tray codes.
+- Deadline passed + `Seed_Weight_Inventory = 0` → **cancel**: zero the six inputs to `TOTAL_SEEDLING_SHIP_REQUEST_Calc` (`D1/D2_SEEDLING_SHIP_REQUEST`, `Breeder_Requested_ShipDest1/2_Adjustments`, `D1/D2_Transplant_Adjustment`) and re-run the table-wide required-amount recalc once.
+
+**Non-screened tray math:** non-screened progenies are **not** capped by plate size — trays = `ceil(TRANSPLANTS_REQUIRED / TRAY_SIZE)`, sequential suffixes, NULL `Plate_Index`. Screened progenies keep the plate-capped math. New `Plate_Index` values are allocated in **ascending PROGENY** order, continuing from `MAX+1`.
 
 ## 7. Open decisions (MUST resolve before implementation)
 
@@ -110,7 +119,7 @@ Insert only the delta rows (`Created_By = 'GHTrayPipeline'`). No UPDATE, no DELE
 
 **A. Top-up of a partially-filled last tray on quantity increase.** When `TRANSPLANTS_REQUIRED` grows, the previously-last tray may have been partially full (e.g. 20/38). Options: (a) leave all existing rows untouched and route new plants only into brand-new trays — simplest and fully immutable, but the old last tray stays under-filled; (b) `UPDATE` only that tray's `Plant_Qty` (safe-ish, since `Plant_Qty` is not on the label). **Recommended: (a)** for a strict no-mutation guarantee. *Needs confirmation.*
 
-**B. Quantity decrease / cross deactivation.** Existing trays already have printed labels. **Recommended: leave them as-is** (orphaned but immutable) — no delete, no flag. *Needs confirmation.*
+**B. Quantity decrease.** **RESOLVED (2026-07-20): Plant_Qty now syncs in BOTH directions.** A decrease updates the matching existing trays *down*, and any existing tray the new computation no longer produces is set to **Plant_Qty = 0** (never NULL). The row, `Unique_Tray_Code`, and `Plate_Index` are still never deleted or renumbered. Safe because `Plant_Qty` is not printed on the physical label. Orphan-zeroing is scoped to the progenies actually processed in the run (`syncGhsmFks`), so trays of out-of-scope progenies are untouched.
 
 **C. Non-screened → later screened (back-fill Plate_Index).** A progeny may get a tray code with `Plate_Index = NULL`, then have screening turned on. Filling in a Plate_Index later is a `NULL → value` UPDATE — **only safe if no label was printed while it was non-screened.** → **Key workflow question: are labels ever exported before the screening decision is final?** If no, back-fill is safe. If yes, we need a different rule. *Needs answer.*
 
@@ -151,5 +160,5 @@ Refactor toward the repository interface the Python already defined (`TrayReposi
 
 - Running logic: `artifacts/api-server/src/services/tray-pipeline.ts`
 - Original Python (paste, git-tracked): `attached_assets/Pasted--Trays-pipeline-Purpose-Generate-new-Unique-Tray-Code-r_1774389701524.txt`
-- Triggers: `scheduleTrayPipeline()` called from `crosses.ts`, `reference-tables.ts`, `transplant.ts`
+- Trigger: `generateTrayCodesForSelection()` via `POST /api/transplant/generate-tray-codes`, from the Transplant page's Admin3-gated export button (no automatic triggers)
 - Target table: `dbo.T_GHTraysCreation`
