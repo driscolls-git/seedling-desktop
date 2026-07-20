@@ -2,7 +2,7 @@ import { Router, type IRouter } from "express";
 import { queryMany, queryOne, execute, withTransaction } from "@workspace/db";
 import { requireBreeder, type AuthenticatedRequest } from "../middleware/auth";
 import { recalcSeedlingMaster } from "../services/recalc";
-import { scheduleTrayPipeline } from "../services/tray-pipeline";
+import { generateTrayCodesForSelection } from "../services/tray-pipeline";
 
 const router: IRouter = Router();
 
@@ -214,6 +214,28 @@ router.get("/tray-codes", async (req, res) => {
   }
 });
 
+// ── POST /transplant/generate-tray-codes ──────────────────────────────
+// Button-triggered tray-code generation for a single Berry + Team + Year
+// selection (Admin3-gated in the UI). Generates/updates tray codes for
+// deadline-passed, seed-bearing progenies and cancels zero-seed ones. The
+// frontend calls the read-only GET /tray-codes afterward to download the CSV.
+router.post("/generate-tray-codes", async (req, res) => {
+  try {
+    const berryId = toIntOrNull(req.body?.berryId);
+    const teamId = toIntOrNull(req.body?.teamId);
+    const pollinationYear = toIntOrNull(req.body?.pollinationYear);
+    if (berryId == null || teamId == null || pollinationYear == null) {
+      res.status(400).json({ message: "berryId, teamId and pollinationYear are required" });
+      return;
+    }
+    const summary = await generateTrayCodesForSelection({ berryId, teamId, pollinationYear });
+    res.json(summary);
+  } catch (err) {
+    console.error("POST /api/transplant/generate-tray-codes error:", err);
+    res.status(500).json({ error: err instanceof Error ? err.message : "Internal server error" });
+  }
+});
+
 router.patch("/batch", requireBreeder, async (req, res) => {
   try {
     const { updates } = req.body ?? {};
@@ -243,9 +265,6 @@ router.patch("/batch", requireBreeder, async (req, res) => {
     // pick up the new D1/D2 adjustments (only rows past their deadline are skipped).
     if (updatedCount > 0) {
       await recalcSeedlingMaster();
-      // TRANSPLANTS_REQUIRED feeds the tray pipeline, so refresh trays whenever
-      // a transplant adjustment lands (10-second debounce coalesces bursts).
-      scheduleTrayPipeline();
     }
     res.json({ updatedCount });
   } catch (error: unknown) {

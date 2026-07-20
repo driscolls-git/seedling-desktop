@@ -8,6 +8,9 @@ interface AuthContextType {
   login: (employeeId: number, employeeNum: number) => Promise<void>;
   logout: () => void;
   isAdmin: boolean;
+  // Admin3 = the role literally named "Admin3" (UserLevel_FK === 4). Distinct
+  // from `isAdmin` (level 3-4) — gates the tray-code generation button.
+  isAdmin3: boolean;
   isBreeder: boolean;
   isMolecular: boolean;
   canAccessEmployees: boolean;
@@ -81,6 +84,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const userLevel = user?.userLevelFk || 0;
   const isAdmin = userLevel >= 3 && userLevel <= 4;
+  const isAdmin3 = userLevel === 4;
   const isBreeder = userLevel >= 2;
   const isMolecular = userLevel === 5;
   const canAccessEmployees = userLevel >= 3;
@@ -94,6 +98,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       login,
       logout,
       isAdmin,
+      isAdmin3,
       isBreeder,
       isMolecular,
       canAccessEmployees,

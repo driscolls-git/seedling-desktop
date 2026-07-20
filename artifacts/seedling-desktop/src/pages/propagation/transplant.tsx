@@ -23,7 +23,7 @@ import { useQueryClient } from '@tanstack/react-query';
 export default function TransplantList() {
   const { t } = useTranslation();
   const { filters } = useFilters();
-  const { isBreeder } = useAuth();
+  const { isBreeder, isAdmin3 } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -132,6 +132,55 @@ export default function TransplantList() {
       toast({
         title: t('common.networkError'),
         description: err instanceof Error ? err.message : 'Export failed',
+        variant: 'destructive',
+      });
+    } finally {
+      setExportingTrayCodes(false);
+    }
+  };
+
+  // Tray-code generation is Admin3-only and requires a specific berry, a single
+  // team (not "All Teams"), and a year to be selected — matching the scope the
+  // pipeline generates for. Gated in the UI only.
+  const canGenerate =
+    isAdmin3 &&
+    filters.berryId != null &&
+    filters.teamId != null &&
+    filters.pollinationYear != null;
+
+  // Button flow: generate tray codes for the selection (a DB write), then export
+  // the freshly created rows to CSV. Confirmed first since it mutates data.
+  const handleGenerateAndExport = async () => {
+    if (!canGenerate) return;
+    if (!window.confirm(t('propagation.transplant.generateConfirm'))) return;
+    setExportingTrayCodes(true);
+    try {
+      const summary = await customFetch<{
+        inserts: number; qtyUpdates: number; plateBackfills: number;
+        cancelled: number; shipZeros: number; sources: number;
+      }>('/api/transplant/generate-tray-codes', {
+        method: 'POST',
+        body: JSON.stringify({
+          berryId: filters.berryId,
+          teamId: filters.teamId,
+          pollinationYear: filters.pollinationYear,
+        }),
+      });
+      toast({
+        title: t('propagation.transplant.generateSuccess'),
+        description: t('propagation.transplant.generateSummary', {
+          inserts: summary.inserts,
+          qty: summary.qtyUpdates,
+          backfills: summary.plateBackfills,
+          cancelled: summary.cancelled,
+        }),
+      });
+      // Download the CSV reflecting the freshly generated rows.
+      await exportTrayCodesCSV();
+    } catch (err) {
+      toast({
+        title: t('common.networkError'),
+        description: err instanceof Error ? err.message : 'Generation failed',
         variant: 'destructive',
       });
     } finally {
@@ -306,8 +355,9 @@ export default function TransplantList() {
           <Button
             variant="outline"
             size="sm"
-            onClick={exportTrayCodesCSV}
-            disabled={exportingTrayCodes}
+            onClick={handleGenerateAndExport}
+            disabled={exportingTrayCodes || !canGenerate}
+            title={!canGenerate ? t('propagation.transplant.generateDisabledHint') : undefined}
             className="gap-2 rounded-lg ms-auto"
           >
             {exportingTrayCodes

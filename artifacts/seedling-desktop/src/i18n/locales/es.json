@@ -197,7 +197,11 @@
       "description": "Seguimiento del progreso y disponibilidad de trasplante",
       "availablePlants": "Disponible > 0",
       "exportTrayCodes": "Exportar Códigos de Bandeja e Índices de Placa CSV",
-      "exportTrayCodesSuccess": "Códigos de bandeja exportados"
+      "exportTrayCodesSuccess": "Códigos de bandeja exportados",
+      "generateConfirm": "Esto generará los códigos de bandeja e índices de placa para la baya, el equipo y el año seleccionados, y los exportará a CSV. ¿Continuar?",
+      "generateDisabledHint": "Requiere acceso Admin3 y seleccionar una baya, un solo equipo y un año.",
+      "generateSuccess": "Códigos de bandeja generados",
+      "generateSummary": "+{{inserts}} bandejas nuevas, {{qty}} aumentos de cantidad, {{backfills}} índices de placa completados, {{cancelled}} canceladas."
     },
     "screenProgeny": {
       "title": "Evaluación por Progenie",

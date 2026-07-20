@@ -15,7 +15,6 @@ import {
   CreateLabPriceBody, UpdateLabPriceBody,
 } from "@workspace/api-zod";
 import { requireAdmin, requireBreeder, requireMarkerEditor, type AuthenticatedRequest } from "../middleware/auth";
-import { scheduleTrayPipeline } from "../services/tray-pipeline";
 import { recalcSeedlingMaster } from "../services/recalc";
 
 const router: IRouter = Router();
@@ -320,7 +319,6 @@ router.post("/ratios", requireAdmin, async (req, res) => {
      VALUES (${values.join(", ")})`,
     params,
   );
-  scheduleTrayPipeline();
   // M_GHRatios is joined by usp_Update_GHSeedlingMaster_Calculations on
   // GHRatios_FK; a new/changed/deleted ratio can shift TRANSPLANTS_REQUIRED,
   // SEED_WEIGHT_REQUIRED, etc. on every cross that uses it.  Re-fire the proc.
@@ -349,14 +347,12 @@ router.put("/ratios/:id", requireAdmin, async (req, res) => {
       WHERE GHRatios_ID = @id`,
     params,
   );
-  scheduleTrayPipeline();
   await recalcSeedlingMaster();
   res.json({ id: row!.id, active: row!.active === true });
 });
 
 router.delete("/ratios/:id", requireAdmin, async (req, res) => {
   await execute(`DELETE FROM dbo.M_GHRatios WHERE GHRatios_ID = @id`, { id: parseInt(String(req.params.id)) });
-  scheduleTrayPipeline();
   await recalcSeedlingMaster();
   res.status(204).send();
 });
