@@ -3,6 +3,71 @@ import { queryMany, queryOne } from "@workspace/db";
 
 const router: IRouter = Router();
 
+// ── Shared enrichment SQL ──────────────────────────────────────────────────
+//
+// The two screening views expose only aggregate/dimension columns, so the
+// export-only fields (lab, barcode, collector, markers) are layered on here
+// rather than in the views.
+//
+// SQL Server 2016 / compat 130 → no STRING_AGG; multi-value fields use the
+// FOR XML PATH idiom.
+
+// One row per progeny with its markers pivoted into marker1..marker5.
+// The link table holds duplicates (e.g. "Pisco" twice on one progeny), so the
+// inner DISTINCT dedupes before ranking.  Max observed is 5 distinct markers.
+const MARKERS_CTE = `progeny_markers AS (
+    SELECT ghsm_FK,
+           MAX(CASE WHEN rn = 1 THEN markerName END) AS marker1,
+           MAX(CASE WHEN rn = 2 THEN markerName END) AS marker2,
+           MAX(CASE WHEN rn = 3 THEN markerName END) AS marker3,
+           MAX(CASE WHEN rn = 4 THEN markerName END) AS marker4,
+           MAX(CASE WHEN rn = 5 THEN markerName END) AS marker5
+    FROM (
+      SELECT ghsm_FK, markerName,
+             ROW_NUMBER() OVER (PARTITION BY ghsm_FK ORDER BY markerName) AS rn
+      FROM (
+        SELECT DISTINCT pm.ghsm_FK,
+               COALESCE(NULLIF(LTRIM(RTRIM(ml.Marker_Alias_Driscolls)), ''), ml.Trait_Marker) AS markerName
+        FROM dbo.T_GHProgenyMarkers pm
+        INNER JOIN dbo.M_GHMarkerLabs ml ON ml.GHMarkerLabs_ID = pm.Marker_ID
+      ) d
+      WHERE d.markerName IS NOT NULL
+    ) r
+    WHERE r.rn <= 5
+    GROUP BY ghsm_FK
+  )`;
+
+/**
+ * Distinct, "; "-joined Lab_Barcode values from active plate-collection rows.
+ * `innerWhere` correlates the subquery to the outer row (by plate or progeny).
+ * A plate re-collected later carries a second barcode, so this can be a list.
+ */
+function labBarcodeExpr(innerWhere: string): string {
+  return `STUFF((SELECT DISTINCT '; ' + LTRIM(RTRIM(pcb.Lab_Barcode))
+                   FROM dbo.T_GHPlateCollection pcb
+                   INNER JOIN dbo.T_GHTraysCreation tcb ON tcb.Tray_Creation_ID = pcb.Tray_Creation_ID
+                   WHERE pcb.Active = 1 AND ${innerWhere}
+                     AND LTRIM(RTRIM(ISNULL(pcb.Lab_Barcode, ''))) <> ''
+                   FOR XML PATH(''), TYPE).value('.', 'nvarchar(max)'), 1, 2, '')`;
+}
+
+/**
+ * Created By / Created Date come from the *earliest* active plate-collection
+ * row, so the two always describe the same event rather than being mixed from
+ * different collectors.
+ */
+function createdByApply(innerWhere: string): string {
+  return `OUTER APPLY (
+    SELECT TOP 1 pcc.Created_By AS createdBy, pcc.Created_DateTime AS createdDate
+    FROM dbo.T_GHPlateCollection pcc
+    INNER JOIN dbo.T_GHTraysCreation tcc ON tcc.Tray_Creation_ID = pcc.Tray_Creation_ID
+    WHERE pcc.Active = 1 AND ${innerWhere}
+    ORDER BY pcc.Created_DateTime, pcc.PlateCollection_ID
+  ) cr`;
+}
+
+const toIso = (v: unknown): string | null => (v instanceof Date ? v.toISOString() : null);
+
 // ── Plates view (no GHSeedlingMaster_ID → berry/team filter by name) ──
 
 function buildPlateFilters(query: Record<string, unknown>): { where: string; params: Record<string, unknown> } {
@@ -47,8 +112,13 @@ router.get("/screening/plates", async (req, res) => {
     const total = countRow?.total ?? 0;
 
     const rows = await queryMany<Record<string, unknown>>(
-      `SELECT v.Plate_Index AS id, v.Plate_Index AS plateIndex, v.Progeny AS progeny,
+      `WITH ${MARKERS_CTE}
+       SELECT v.Plate_Index AS id, v.Plate_Index AS plateIndex, v.Progeny AS progeny,
               v.Testing_Lab_1 AS testingLab,
+              lab.Lab_Name AS labName,
+              ${labBarcodeExpr("tcb.Plate_Index = v.Plate_Index")} AS labBarcode,
+              cr.createdBy, cr.createdDate,
+              mk.marker1, mk.marker2, mk.marker3, mk.marker4, mk.marker5,
               v.Samples_Required AS samplesRequired, v.Samples_Collected AS samplesCollected,
               v.Sample_Collection_Date AS sampleCollectionDate,
               v.Total_Keep_Request AS totalKeepRequest, v.Total_Keep_Actual AS totalKeepActual,
@@ -58,7 +128,18 @@ router.get("/screening/plates", async (req, res) => {
               v.Sort_Group4 AS sortGroup4, v.Sort_Group5 AS sortGroup5,
               v.Screening AS screening, v.Berry AS berry, v.Team_Name AS teamName,
               v.D1_Program AS d1Program, v.Pollination_Year AS pollinationYear
-       FROM dbo.vw_GH_MarkerPlateDesk v ${where}
+       FROM dbo.vw_GH_MarkerPlateDesk v
+       -- A plate index maps to exactly one progeny and one lab (verified: no
+       -- Plate_Index spans multiple ghsm_FK), so MIN() just picks that value.
+       OUTER APPLY (
+         SELECT MIN(tcp.ghsm_FK) AS ghsmId, MIN(tcp.Test_Lab_ID) AS testLabId
+         FROM dbo.T_GHTraysCreation tcp
+         WHERE tcp.Plate_Index = v.Plate_Index
+       ) pl
+       LEFT JOIN dbo.M_GHLabs lab ON lab.GHLab_ID = pl.testLabId
+       LEFT JOIN progeny_markers mk ON mk.ghsm_FK = pl.ghsmId
+       ${createdByApply("tcc.Plate_Index = v.Plate_Index")}
+       ${where}
        ORDER BY v.Plate_Index
        OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY`,
       { ...params, offset, pageSize },
@@ -67,8 +148,9 @@ router.get("/screening/plates", async (req, res) => {
       data: rows.map((r) => ({
         ...r,
         berryId: null, teamId: null,
-        sampleCollectionDate: r.sampleCollectionDate instanceof Date ? r.sampleCollectionDate.toISOString() : null,
-        discardDate: r.discardDate instanceof Date ? r.discardDate.toISOString() : null,
+        sampleCollectionDate: toIso(r.sampleCollectionDate),
+        discardDate: toIso(r.discardDate),
+        createdDate: toIso(r.createdDate),
         sorted: r.sorted === true,
         screening: r.screening === true,
       })),
@@ -142,8 +224,14 @@ router.get("/screening/progeny", async (req, res) => {
     const total = countRow?.total ?? 0;
 
     const rows = await queryMany<Record<string, unknown>>(
-      `SELECT v.GHSeedlingMaster_ID AS id, v.Progeny AS progeny,
+      `WITH ${MARKERS_CTE}
+       SELECT v.GHSeedlingMaster_ID AS id, v.Progeny AS progeny,
               v.D1_Program AS d1Program, v.D2_Program AS d2Program,
+              tr.labName,
+              ${labBarcodeExpr("tcb.ghsm_FK = v.GHSeedlingMaster_ID")} AS labBarcode,
+              tr.startingPlateIndex, tr.endingPlateIndex,
+              cr.createdBy, cr.createdDate,
+              mk.marker1, mk.marker2, mk.marker3, mk.marker4, mk.marker5,
               NULL AS totalPlatesRequired, NULL AS platesCollected,
               v.Sample_Required AS sampleRequired, v.Samples_Collected AS samplesCollected,
               v.Keep_Request AS keepRequest, v.Keep_Actual AS keepActual,
@@ -156,13 +244,33 @@ router.get("/screening/progeny", async (req, res) => {
               v.Berry AS berry, m.Berry_ID AS berryId,
               v.Team_Name AS teamName, m.Team_ID AS teamId,
               v.Pollination_Year AS pollinationYear
-       ${FROM} ${where}
+       ${FROM}
+       -- Plate-index range and destination lab(s) across all of this progeny's trays.
+       OUTER APPLY (
+         SELECT MIN(tcr.Plate_Index) AS startingPlateIndex,
+                MAX(tcr.Plate_Index) AS endingPlateIndex,
+                STUFF((SELECT DISTINCT '; ' + l2.Lab_Name
+                       FROM dbo.T_GHTraysCreation tcl
+                       INNER JOIN dbo.M_GHLabs l2 ON l2.GHLab_ID = tcl.Test_Lab_ID
+                       WHERE tcl.ghsm_FK = v.GHSeedlingMaster_ID
+                       FOR XML PATH(''), TYPE).value('.', 'nvarchar(max)'), 1, 2, '') AS labName
+         FROM dbo.T_GHTraysCreation tcr
+         WHERE tcr.ghsm_FK = v.GHSeedlingMaster_ID
+       ) tr
+       LEFT JOIN progeny_markers mk ON mk.ghsm_FK = v.GHSeedlingMaster_ID
+       ${createdByApply("pcc.ghsm_FK = v.GHSeedlingMaster_ID")}
+       ${where}
        ORDER BY v.Progeny
        OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY`,
       { ...params, offset, pageSize },
     );
     res.json({
-      data: rows.map((r) => ({ ...r, sorted: r.sorted === true, screening: r.screening === true })),
+      data: rows.map((r) => ({
+        ...r,
+        createdDate: toIso(r.createdDate),
+        sorted: r.sorted === true,
+        screening: r.screening === true,
+      })),
       total, page, pageSize, totalPages: Math.ceil(total / pageSize),
     });
   } catch (error: unknown) {

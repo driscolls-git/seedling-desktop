@@ -4195,6 +4195,39 @@ components:
         testingLab:
           type: string
           nullable: true
+        labName:
+          type: string
+          nullable: true
+          description: Destination lab for this plate's trays (M_GHLabs.Lab_Name).
+        labBarcode:
+          type: string
+          nullable: true
+          description: >-
+            Lab barcode(s) recorded at plate collection. Joined with "; " when a
+            plate was collected more than once and carries multiple barcodes.
+        createdBy:
+          type: string
+          nullable: true
+          description: Who recorded the earliest active plate-collection row.
+        createdDate:
+          type: string
+          nullable: true
+          description: When that earliest plate-collection row was recorded.
+        marker1:
+          type: string
+          nullable: true
+        marker2:
+          type: string
+          nullable: true
+        marker3:
+          type: string
+          nullable: true
+        marker4:
+          type: string
+          nullable: true
+        marker5:
+          type: string
+          nullable: true
         samplesRequired:
           type: integer
           nullable: true
@@ -4294,6 +4327,49 @@ components:
           type: string
           nullable: true
         d2Program:
+          type: string
+          nullable: true
+        labName:
+          type: string
+          nullable: true
+          description: >-
+            Destination lab(s) across this progeny's trays (M_GHLabs.Lab_Name),
+            joined with "; " when the trays span more than one lab.
+        labBarcode:
+          type: string
+          nullable: true
+          description: >-
+            Distinct lab barcode(s) recorded at plate collection for this
+            progeny, joined with "; ".
+        startingPlateIndex:
+          type: integer
+          nullable: true
+          description: Lowest Plate_Index across this progeny's trays.
+        endingPlateIndex:
+          type: integer
+          nullable: true
+          description: Highest Plate_Index across this progeny's trays.
+        createdBy:
+          type: string
+          nullable: true
+          description: Who recorded the earliest active plate-collection row.
+        createdDate:
+          type: string
+          nullable: true
+          description: When that earliest plate-collection row was recorded.
+        marker1:
+          type: string
+          nullable: true
+        marker2:
+          type: string
+          nullable: true
+        marker3:
+          type: string
+          nullable: true
+        marker4:
+          type: string
+          nullable: true
+        marker5:
           type: string
           nullable: true
         totalPlatesRequired:

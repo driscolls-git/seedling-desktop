@@ -54,10 +54,31 @@ export default function ScreenByProgenyList() {
 
   const rows = useMemo(() => progenyData?.data || [], [progenyData]);
 
+  const formatDate = (d: string | null | undefined) => {
+    if (!d) return '';
+    try {
+      return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    } catch { return ''; }
+  };
+
   const columns: ColumnDef<ScreeningProgeny>[] = [
     { key: 'progeny', header: 'Progeny', sticky: true, width: 'w-32' },
     { key: 'd1Program', header: 'D1 Program', width: 'w-28' },
     { key: 'd2Program', header: 'D2 Program', width: 'w-28' },
+    { key: 'labName', header: 'Lab Name', width: 'w-28' },
+    { key: 'labBarcode', header: 'Lab Bar Code', width: 'w-32' },
+    { key: 'startingPlateIndex', header: 'Starting Plate Index', isNumeric: true, width: 'w-24' },
+    { key: 'endingPlateIndex', header: 'Ending Plate Index', isNumeric: true, width: 'w-24' },
+    { key: 'createdBy', header: 'Created By', width: 'w-32' },
+    {
+      key: 'createdDate', header: 'Created Date', width: 'w-28',
+      render: (r) => formatDate(r.createdDate),
+    },
+    { key: 'marker1', header: 'Marker 1', width: 'w-24' },
+    { key: 'marker2', header: 'Marker 2', width: 'w-24' },
+    { key: 'marker3', header: 'Marker 3', width: 'w-24' },
+    { key: 'marker4', header: 'Marker 4', width: 'w-24' },
+    { key: 'marker5', header: 'Marker 5', width: 'w-24' },
     {
       key: 'totalPlatesRequired', header: 'Total Plates Req', isNumeric: true, width: 'w-24',
       render: (r) => formatNumber(r.totalPlatesRequired),
