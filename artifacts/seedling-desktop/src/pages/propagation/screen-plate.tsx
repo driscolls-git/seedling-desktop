@@ -73,6 +73,18 @@ export default function ScreenByPlateList() {
     { key: 'plateIndex', header: 'Plate Index #', sticky: true, width: 'w-24', isNumeric: true },
     { key: 'progeny', header: 'Progeny', width: 'w-28' },
     { key: 'testingLab', header: 'Testing Lab', width: 'w-24' },
+    { key: 'labName', header: 'Lab Name', width: 'w-28' },
+    { key: 'labBarcode', header: 'Lab Bar Code', width: 'w-32' },
+    { key: 'createdBy', header: 'Created By', width: 'w-32' },
+    {
+      key: 'createdDate', header: 'Created Date', width: 'w-28',
+      render: (r) => formatDate(r.createdDate),
+    },
+    { key: 'marker1', header: 'Marker 1', width: 'w-24' },
+    { key: 'marker2', header: 'Marker 2', width: 'w-24' },
+    { key: 'marker3', header: 'Marker 3', width: 'w-24' },
+    { key: 'marker4', header: 'Marker 4', width: 'w-24' },
+    { key: 'marker5', header: 'Marker 5', width: 'w-24' },
     {
       key: 'samplesRequired', header: 'Samples Req', isNumeric: true, width: 'w-24',
       render: (r) => formatNumber(r.samplesRequired),

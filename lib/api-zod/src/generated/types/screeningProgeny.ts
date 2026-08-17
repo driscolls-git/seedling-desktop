@@ -11,6 +11,23 @@ export interface ScreeningProgeny {
   progeny: string;
   d1Program?: string | null;
   d2Program?: string | null;
+  /** Destination lab(s) across this progeny's trays (M_GHLabs.Lab_Name), joined with "; " when the trays span more than one lab. */
+  labName?: string | null;
+  /** Distinct lab barcode(s) recorded at plate collection for this progeny, joined with "; ". */
+  labBarcode?: string | null;
+  /** Lowest Plate_Index across this progeny's trays. */
+  startingPlateIndex?: number | null;
+  /** Highest Plate_Index across this progeny's trays. */
+  endingPlateIndex?: number | null;
+  /** Who recorded the earliest active plate-collection row. */
+  createdBy?: string | null;
+  /** When that earliest plate-collection row was recorded. */
+  createdDate?: string | null;
+  marker1?: string | null;
+  marker2?: string | null;
+  marker3?: string | null;
+  marker4?: string | null;
+  marker5?: string | null;
   totalPlatesRequired?: number | null;
   platesCollected?: number | null;
   sampleRequired?: number | null;
