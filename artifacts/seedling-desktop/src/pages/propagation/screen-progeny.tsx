@@ -65,7 +65,6 @@ export default function ScreenByProgenyList() {
     { key: 'progeny', header: 'Progeny', sticky: true, width: 'w-32' },
     { key: 'd1Program', header: 'D1 Program', width: 'w-28' },
     { key: 'd2Program', header: 'D2 Program', width: 'w-28' },
-    { key: 'labName', header: 'Lab Name', width: 'w-28' },
     { key: 'labBarcode', header: 'Lab Bar Code', width: 'w-32' },
     { key: 'startingPlateIndex', header: 'Starting Plate Index', isNumeric: true, width: 'w-24' },
     { key: 'endingPlateIndex', header: 'Ending Plate Index', isNumeric: true, width: 'w-24' },

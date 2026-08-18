@@ -73,7 +73,6 @@ export default function ScreenByPlateList() {
     { key: 'plateIndex', header: 'Plate Index #', sticky: true, width: 'w-24', isNumeric: true },
     { key: 'progeny', header: 'Progeny', width: 'w-28' },
     { key: 'testingLab', header: 'Testing Lab', width: 'w-24' },
-    { key: 'labName', header: 'Lab Name', width: 'w-28' },
     { key: 'labBarcode', header: 'Lab Bar Code', width: 'w-32' },
     { key: 'createdBy', header: 'Created By', width: 'w-32' },
     {

@@ -115,7 +115,6 @@ router.get("/screening/plates", async (req, res) => {
       `WITH ${MARKERS_CTE}
        SELECT v.Plate_Index AS id, v.Plate_Index AS plateIndex, v.Progeny AS progeny,
               v.Testing_Lab_1 AS testingLab,
-              lab.Lab_Name AS labName,
               ${labBarcodeExpr("tcb.Plate_Index = v.Plate_Index")} AS labBarcode,
               cr.createdBy, cr.createdDate,
               mk.marker1, mk.marker2, mk.marker3, mk.marker4, mk.marker5,
@@ -129,14 +128,13 @@ router.get("/screening/plates", async (req, res) => {
               v.Screening AS screening, v.Berry AS berry, v.Team_Name AS teamName,
               v.D1_Program AS d1Program, v.Pollination_Year AS pollinationYear
        FROM dbo.vw_GH_MarkerPlateDesk v
-       -- A plate index maps to exactly one progeny and one lab (verified: no
-       -- Plate_Index spans multiple ghsm_FK), so MIN() just picks that value.
+       -- A plate index maps to exactly one progeny (verified: no Plate_Index
+       -- spans multiple ghsm_FK), so MIN() just picks that value.
        OUTER APPLY (
-         SELECT MIN(tcp.ghsm_FK) AS ghsmId, MIN(tcp.Test_Lab_ID) AS testLabId
+         SELECT MIN(tcp.ghsm_FK) AS ghsmId
          FROM dbo.T_GHTraysCreation tcp
          WHERE tcp.Plate_Index = v.Plate_Index
        ) pl
-       LEFT JOIN dbo.M_GHLabs lab ON lab.GHLab_ID = pl.testLabId
        LEFT JOIN progeny_markers mk ON mk.ghsm_FK = pl.ghsmId
        ${createdByApply("tcc.Plate_Index = v.Plate_Index")}
        ${where}
@@ -227,12 +225,11 @@ router.get("/screening/progeny", async (req, res) => {
       `WITH ${MARKERS_CTE}
        SELECT v.GHSeedlingMaster_ID AS id, v.Progeny AS progeny,
               v.D1_Program AS d1Program, v.D2_Program AS d2Program,
-              tr.labName,
               ${labBarcodeExpr("tcb.ghsm_FK = v.GHSeedlingMaster_ID")} AS labBarcode,
               tr.startingPlateIndex, tr.endingPlateIndex,
               cr.createdBy, cr.createdDate,
               mk.marker1, mk.marker2, mk.marker3, mk.marker4, mk.marker5,
-              NULL AS totalPlatesRequired, NULL AS platesCollected,
+              tr.totalPlatesRequired, v.Plates_Collected AS platesCollected,
               v.Sample_Required AS sampleRequired, v.Samples_Collected AS samplesCollected,
               v.Keep_Request AS keepRequest, v.Keep_Actual AS keepActual,
               v.Total_Discards_Actual AS totalDiscardsActual,
@@ -245,17 +242,16 @@ router.get("/screening/progeny", async (req, res) => {
               v.Team_Name AS teamName, m.Team_ID AS teamId,
               v.Pollination_Year AS pollinationYear
        ${FROM}
-       -- Plate-index range and destination lab(s) across all of this progeny's trays.
+       -- Plate-index range and plate count across this progeny's trays.
+       -- Plates required is the number of distinct plates its trays occupy;
+       -- it reads 0 until the tray pipeline has generated them.
        OUTER APPLY (
          SELECT MIN(tcr.Plate_Index) AS startingPlateIndex,
                 MAX(tcr.Plate_Index) AS endingPlateIndex,
-                STUFF((SELECT DISTINCT '; ' + l2.Lab_Name
-                       FROM dbo.T_GHTraysCreation tcl
-                       INNER JOIN dbo.M_GHLabs l2 ON l2.GHLab_ID = tcl.Test_Lab_ID
-                       WHERE tcl.ghsm_FK = v.GHSeedlingMaster_ID
-                       FOR XML PATH(''), TYPE).value('.', 'nvarchar(max)'), 1, 2, '') AS labName
+                COUNT(DISTINCT tcr.Plate_Index) AS totalPlatesRequired
          FROM dbo.T_GHTraysCreation tcr
          WHERE tcr.ghsm_FK = v.GHSeedlingMaster_ID
+           AND tcr.Plate_Index IS NOT NULL
        ) tr
        LEFT JOIN progeny_markers mk ON mk.ghsm_FK = v.GHSeedlingMaster_ID
        ${createdByApply("pcc.ghsm_FK = v.GHSeedlingMaster_ID")}
