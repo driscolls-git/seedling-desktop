@@ -11,8 +11,6 @@ export interface ScreeningProgeny {
   progeny: string;
   d1Program?: string | null;
   d2Program?: string | null;
-  /** Destination lab(s) across this progeny's trays (M_GHLabs.Lab_Name), joined with "; " when the trays span more than one lab. */
-  labName?: string | null;
   /** Distinct lab barcode(s) recorded at plate collection for this progeny, joined with "; ". */
   labBarcode?: string | null;
   /** Lowest Plate_Index across this progeny's trays. */

@@ -11,8 +11,6 @@ export interface ScreeningPlate {
   plateIndex?: number;
   progeny: string;
   testingLab?: string | null;
-  /** Destination lab for this plate's trays (M_GHLabs.Lab_Name). */
-  labName?: string | null;
   /** Lab barcode(s) recorded at plate collection. Joined with "; " when a plate was collected more than once and carries multiple barcodes. */
   labBarcode?: string | null;
   /** Who recorded the earliest active plate-collection row. */

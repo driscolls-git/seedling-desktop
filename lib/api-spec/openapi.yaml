@@ -4195,10 +4195,6 @@ components:
         testingLab:
           type: string
           nullable: true
-        labName:
-          type: string
-          nullable: true
-          description: Destination lab for this plate's trays (M_GHLabs.Lab_Name).
         labBarcode:
           type: string
           nullable: true
@@ -4329,12 +4325,6 @@ components:
         d2Program:
           type: string
           nullable: true
-        labName:
-          type: string
-          nullable: true
-          description: >-
-            Destination lab(s) across this progeny's trays (M_GHLabs.Lab_Name),
-            joined with "; " when the trays span more than one lab.
         labBarcode:
           type: string
           nullable: true
