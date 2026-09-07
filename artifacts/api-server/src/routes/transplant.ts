@@ -2,7 +2,8 @@ import { Router, type IRouter } from "express";
 import { queryMany, queryOne, execute, withTransaction } from "@workspace/db";
 import { requireBreeder, type AuthenticatedRequest } from "../middleware/auth";
 import { recalcSeedlingMaster } from "../services/recalc";
-import { generateTrayCodesForSelection } from "../services/tray-pipeline";
+import { generateTrayCodesForSelection, previewTrayPipeline } from "../services/tray-pipeline";
+import { plateLabelExpr } from "../lib/plate-label";
 
 const router: IRouter = Router();
 
@@ -128,11 +129,19 @@ function toIntOrNull(v: unknown): number | null | undefined {
   return Number.isInteger(n) ? n : undefined;
 }
 
+/** Parse a comma-separated id list (or a real array) into ints. */
+function toIdList(v: unknown): number[] {
+  if (v == null) return [];
+  const parts = Array.isArray(v) ? v : String(v).split(",");
+  return parts.map((s) => parseInt(String(s).trim())).filter((n) => !isNaN(n));
+}
+
 // ── GET /transplant/tray-codes ────────────────────────────────────────
 // Rows from vw_GH_UniqueTrayCode for the Transplant page's "Export Tray
 // Codes and Plate Indexes CSV" button. Filter set mirrors the Transplant
 // gallery: global (berryId, teamId, pollinationYear, spCrosses) + local
-// (programId, destinationId).
+// (programId, destinationId, progeny, availablePlants) — the same set the
+// generate step runs on, so the CSV can never show rows the gallery hides.
 //
 // The view exposes NAME columns (Berry, Team_Name, Program, Destination)
 // but the frontend sends IDs — so each ID filter maps via a subquery.
@@ -172,12 +181,31 @@ router.get("/tray-codes", async (req, res) => {
         where.push(`v.Destination IN (SELECT LocationName FROM TPN.dbo.M_Locations WHERE Location_ID IN (${placeholders.join(",")}))`);
       }
     }
+    if (req.query.progeny) {
+      where.push("v.PROGENY LIKE @progeny");
+      params.progeny = `%${String(req.query.progeny)}%`;
+    }
+    // Available Plants > 0. vw_GH_UniqueTrayCode exposes neither
+    // Extra_Transplants nor GHSeedlingMaster_ID, so correlate back through the
+    // master on progeny + berry + year (the view's Berry is a name, hence the
+    // M_BerryID lookup).
+    if (req.query.availablePlants === "true") {
+      where.push(`EXISTS (
+             SELECT 1
+               FROM dbo.vw_GH_TransplantDesk td
+               INNER JOIN dbo.M_GHSeedlingMaster m2 ON m2.GHSeedlingMaster_ID = td.GHSeedlingMaster_ID
+              WHERE m2.PROGENY = v.PROGENY
+                AND m2.Pollination_Year = v.Pollination_Year
+                AND m2.Berry_ID = (SELECT PK_BerryID FROM TPN.dbo.M_BerryID WHERE BerryType = v.Berry)
+                AND COALESCE(td.Extra_Transplants, 0) > 0)`);
+    }
 
     const rows = await queryMany<{
       uniqueTrayCode: string | null;
       plantQty: number | null;
       pollinationYear: number | null;
       plateIndex: number | null;
+      plateLabel: string | null;
       berry: string | null;
       progeny: string | null;
       program: string | null;
@@ -192,6 +220,7 @@ router.get("/tray-codes", async (req, res) => {
               v.Plant_Qty         AS plantQty,
               v.Pollination_Year  AS pollinationYear,
               v.Plate_Index       AS plateIndex,
+              ${plateLabelExpr("v.Plate_Index", "v.Berry")} AS plateLabel,
               v.Berry             AS berry,
               v.PROGENY           AS progeny,
               v.Program           AS program,
@@ -214,11 +243,65 @@ router.get("/tray-codes", async (req, res) => {
   }
 });
 
+/** Shared filter parsing for the generate + preview endpoints. */
+function trayFiltersFromBody(body: Record<string, unknown> | undefined) {
+  return {
+    spCrosses: body?.spCrosses === true || body?.spCrosses === "true",
+    progeny:
+      typeof body?.progeny === "string" && body.progeny.trim()
+        ? String(body.progeny).trim()
+        : undefined,
+    programIds: toIdList(body?.programId),
+    destinationIds: toIdList(body?.destinationId),
+    availablePlantsOnly:
+      body?.availablePlants === true || body?.availablePlants === "true",
+  };
+}
+
+// ── POST /transplant/preview-tray-codes ───────────────────────────────
+// Read-only dry run of the same plan the generate endpoint would apply.
+// Writes NOTHING. Backs the confirmation dialog so the user is told how many
+// trays will be created and — importantly — how many crosses will be
+// CANCELLED (zero-seed progenies have their ship-request columns zeroed),
+// before they commit to it.
+router.post("/preview-tray-codes", async (req, res) => {
+  try {
+    const berryId = toIntOrNull(req.body?.berryId);
+    const teamId = toIntOrNull(req.body?.teamId);
+    const pollinationYear = toIntOrNull(req.body?.pollinationYear);
+    if (berryId == null || teamId == null || pollinationYear == null) {
+      res.status(400).json({ message: "berryId, teamId and pollinationYear are required" });
+      return;
+    }
+    const r = await previewTrayPipeline({
+      berryId,
+      teamId,
+      pollinationYear,
+      filters: trayFiltersFromBody(req.body),
+    });
+    res.json({
+      sources: r.sources,
+      built: r.built,
+      cancelled: r.cancelled,
+      inserts: r.plan.inserts.length,
+      qtyUpdates: r.plan.qtyUpdates.length,
+      plateBackfills: r.plan.plateBackfills.length,
+      shipZeros: r.plan.shipZeros.length,
+    });
+  } catch (err) {
+    console.error("POST /api/transplant/preview-tray-codes error:", err);
+    res.status(500).json({ error: err instanceof Error ? err.message : "Internal server error" });
+  }
+});
+
 // ── POST /transplant/generate-tray-codes ──────────────────────────────
 // Button-triggered tray-code generation for a single Berry + Team + Year
 // selection (Admin3-gated in the UI). Generates/updates tray codes for
 // deadline-passed, seed-bearing progenies and cancels zero-seed ones. The
 // frontend calls the read-only GET /tray-codes afterward to download the CSV.
+//
+// The run is narrowed by the same local filters the Transplant gallery and the
+// CSV export use, so it only touches rows the user currently has on screen.
 router.post("/generate-tray-codes", async (req, res) => {
   try {
     const berryId = toIntOrNull(req.body?.berryId);
@@ -228,7 +311,12 @@ router.post("/generate-tray-codes", async (req, res) => {
       res.status(400).json({ message: "berryId, teamId and pollinationYear are required" });
       return;
     }
-    const summary = await generateTrayCodesForSelection({ berryId, teamId, pollinationYear });
+    const summary = await generateTrayCodesForSelection({
+      berryId,
+      teamId,
+      pollinationYear,
+      filters: trayFiltersFromBody(req.body),
+    });
     res.json(summary);
   } catch (err) {
     console.error("POST /api/transplant/generate-tray-codes error:", err);

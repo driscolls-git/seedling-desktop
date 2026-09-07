@@ -201,7 +201,14 @@
       "generateConfirm": "This will generate tray codes and plate indexes for the selected berry, team and year, and export them to CSV. Continue?",
       "generateDisabledHint": "Requires Admin3 access and a berry, a single team, and a year filter selected.",
       "generateSuccess": "Tray codes generated",
-      "generateSummary": "+{{inserts}} new trays, {{qty}} qty top-ups, {{backfills}} plate back-fills, {{cancelled}} cancelled."
+      "generateSummary": "+{{inserts}} new trays, {{qty}} qty top-ups, {{backfills}} plate back-fills, {{cancelled}} cancelled.",
+      "exportTrayCodesEmpty": "No tray codes to export",
+      "exportTrayCodesEmptyHint": "No rows matched the current filters, so no file was downloaded.",
+      "generateNothingToDo": "Nothing to generate",
+      "generateNothingToDoHint": "{{sources}} cross(es) matched the filters, but none need tray codes created or updated.",
+      "generateConfirmIntro": "This will create {{inserts}} new tray code(s) and update the plant quantity on {{qty}} existing tray(s).",
+      "generateConfirmCancelWarning": "WARNING: {{cancelled}} cross(es) have no seed weight and will be CANCELLED. Their ship request and adjustment values will be set to 0 and their required amounts recalculated to 0. This cannot be undone.",
+      "generateConfirmTail": "Continue?"
     },
     "screenProgeny": {
       "title": "Screen by Progeny",

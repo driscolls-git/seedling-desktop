@@ -201,7 +201,14 @@
       "generateConfirm": "Isto irá gerar os códigos de bandeja e índices de placa para a baga, equipe e ano selecionados, e exportá-los para CSV. Continuar?",
       "generateDisabledHint": "Requer acesso Admin3 e a seleção de uma baga, uma única equipe e um ano.",
       "generateSuccess": "Códigos de bandeja gerados",
-      "generateSummary": "+{{inserts}} novas bandejas, {{qty}} aumentos de quantidade, {{backfills}} índices de placa preenchidos, {{cancelled}} canceladas."
+      "generateSummary": "+{{inserts}} novas bandejas, {{qty}} aumentos de quantidade, {{backfills}} índices de placa preenchidos, {{cancelled}} canceladas.",
+      "exportTrayCodesEmpty": "Nenhum código de bandeja para exportar",
+      "exportTrayCodesEmptyHint": "Nenhuma linha correspondeu aos filtros atuais, portanto nenhum arquivo foi baixado.",
+      "generateNothingToDo": "Nada a gerar",
+      "generateNothingToDoHint": "{{sources}} cruzamento(s) corresponderam aos filtros, mas nenhum precisa criar ou atualizar códigos de bandeja.",
+      "generateConfirmIntro": "Isto criará {{inserts}} novo(s) código(s) de bandeja e atualizará a quantidade de plantas em {{qty}} bandeja(s) existente(s).",
+      "generateConfirmCancelWarning": "AVISO: {{cancelled}} cruzamento(s) não têm peso de semente e serão CANCELADOS. Seus valores de solicitação de envio e ajustes serão definidos como 0 e as quantidades necessárias recalculadas para 0. Isso não pode ser desfeito.",
+      "generateConfirmTail": "Continuar?"
     },
     "screenProgeny": {
       "title": "Avaliação por Progênie",

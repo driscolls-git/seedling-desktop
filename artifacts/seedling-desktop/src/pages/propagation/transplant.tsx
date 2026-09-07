@@ -71,6 +71,8 @@ export default function TransplantList() {
   const exportTrayCodesCSV = async () => {
     setExportingTrayCodes(true);
     try {
+      // Must mirror `queryParams` (the gallery's filter set) exactly, or the
+      // CSV ends up containing rows the grid is hiding.
       const p = new URLSearchParams();
       if (filters.berryId != null)         p.set('berryId', String(filters.berryId));
       if (filters.teamId != null)          p.set('teamId', String(filters.teamId));
@@ -78,12 +80,24 @@ export default function TransplantList() {
       if (filters.spCrosses)               p.set('spCrosses', 'true');
       if (programIds.length)               p.set('programId', programIds.join(','));
       if (destinationIds.length)           p.set('destinationId', destinationIds.join(','));
+      if (debouncedProgeny)                p.set('progeny', debouncedProgeny);
+      if (availablePlantsOnly)             p.set('availablePlants', 'true');
 
       const body = await customFetch<{ data: Array<Record<string, unknown>> }>(
         `/api/transplant/tray-codes?${p.toString()}`,
         { method: 'GET' },
       );
       const rows = body.data || [];
+
+      // Nothing matched the current filters — tell the user why instead of
+      // handing them a CSV containing only a header row.
+      if (rows.length === 0) {
+        toast({
+          title: t('propagation.transplant.exportTrayCodesEmpty'),
+          description: t('propagation.transplant.exportTrayCodesEmptyHint'),
+        });
+        return;
+      }
 
       const headers = [
         'Top', 'Unique Tray Code', 'Plant Qty', 'Pollination Year', 'Plate Index',
@@ -100,7 +114,9 @@ export default function TransplantList() {
         esc(r.uniqueTrayCode),
         esc(r.plantQty),
         esc(r.pollinationYear),
-        esc(r.plateIndex),
+        // Printed label form (e.g. BU0322); falls back to the bare number if
+        // the berry code can't be resolved.
+        esc(r.plateLabel ?? r.plateIndex),
         esc(r.berry),
         esc(r.progeny),
         esc(r.program),
@@ -152,19 +168,67 @@ export default function TransplantList() {
   // the freshly created rows to CSV. Confirmed first since it mutates data.
   const handleGenerateAndExport = async () => {
     if (!canGenerate) return;
-    if (!window.confirm(t('propagation.transplant.generateConfirm'))) return;
+
+    // Same filter set for the dry run, the write and the export.
+    const filterBody = {
+      berryId: filters.berryId,
+      teamId: filters.teamId,
+      pollinationYear: filters.pollinationYear,
+      spCrosses: filters.spCrosses ? true : undefined,
+      progeny: debouncedProgeny || undefined,
+      programId: programIds.length ? programIds.join(',') : undefined,
+      destinationId: destinationIds.length ? destinationIds.join(',') : undefined,
+      availablePlants: availablePlantsOnly ? true : undefined,
+    };
+
     setExportingTrayCodes(true);
     try {
+      // Read-only dry run first, so the confirmation can state exactly what is
+      // about to happen — in particular how many crosses will be CANCELLED.
+      const preview = await customFetch<{
+        sources: number; built: number; cancelled: number;
+        inserts: number; qtyUpdates: number; plateBackfills: number;
+      }>('/api/transplant/preview-tray-codes', {
+        method: 'POST',
+        body: JSON.stringify(filterBody),
+      });
+
+      if (preview.inserts === 0 && preview.qtyUpdates === 0 && preview.cancelled === 0) {
+        toast({
+          title: t('propagation.transplant.generateNothingToDo'),
+          description: t('propagation.transplant.generateNothingToDoHint', {
+            sources: preview.sources,
+          }),
+        });
+        return;
+      }
+
+      const lines = [
+        t('propagation.transplant.generateConfirmIntro', {
+          inserts: preview.inserts,
+          qty: preview.qtyUpdates,
+        }),
+      ];
+      // The destructive part: zero-seed crosses get their ship-request columns
+      // zeroed and their required amounts recalculated to 0. Irreversible.
+      if (preview.cancelled > 0) {
+        lines.push(
+          t('propagation.transplant.generateConfirmCancelWarning', {
+            cancelled: preview.cancelled,
+          }),
+        );
+      }
+      lines.push(t('propagation.transplant.generateConfirmTail'));
+      if (!window.confirm(lines.join('\n\n'))) return;
+
       const summary = await customFetch<{
         inserts: number; qtyUpdates: number; plateBackfills: number;
         cancelled: number; shipZeros: number; sources: number;
       }>('/api/transplant/generate-tray-codes', {
         method: 'POST',
-        body: JSON.stringify({
-          berryId: filters.berryId,
-          teamId: filters.teamId,
-          pollinationYear: filters.pollinationYear,
-        }),
+        // Identical body to the dry run above, so what the user confirmed is
+        // exactly what gets applied.
+        body: JSON.stringify(filterBody),
       });
       toast({
         title: t('propagation.transplant.generateSuccess'),

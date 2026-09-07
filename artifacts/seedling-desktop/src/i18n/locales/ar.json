@@ -201,7 +201,14 @@
       "generateConfirm": "سيؤدي هذا إلى إنشاء رموز الصواني وفهارس اللوحات للتوت والفريق والسنة المحددة، وتصديرها إلى CSV. هل تريد المتابعة؟",
       "generateDisabledHint": "يتطلب صلاحية Admin3 واختيار توت وفريق واحد وسنة.",
       "generateSuccess": "تم إنشاء رموز الصواني",
-      "generateSummary": "+{{inserts}} صواني جديدة، {{qty}} زيادات في الكمية، {{backfills}} فهارس لوحات مكملة، {{cancelled}} ملغاة."
+      "generateSummary": "+{{inserts}} صواني جديدة، {{qty}} زيادات في الكمية، {{backfills}} فهارس لوحات مكملة، {{cancelled}} ملغاة.",
+      "exportTrayCodesEmpty": "لا توجد أكواد صواني للتصدير",
+      "exportTrayCodesEmptyHint": "لم تتطابق أي صفوف مع عوامل التصفية الحالية، لذلك لم يتم تنزيل أي ملف.",
+      "generateNothingToDo": "لا يوجد شيء لإنشائه",
+      "generateNothingToDoHint": "تطابق {{sources}} تهجين مع عوامل التصفية، لكن لا يحتاج أي منها إلى إنشاء أو تحديث أكواد الصواني.",
+      "generateConfirmIntro": "سيؤدي هذا إلى إنشاء {{inserts}} كود صينية جديد وتحديث كمية النباتات في {{qty}} صينية موجودة.",
+      "generateConfirmCancelWarning": "تحذير: {{cancelled}} تهجين ليس له وزن بذور وسيتم إلغاؤه. سيتم ضبط قيم طلب الشحن والتعديلات على 0 وإعادة حساب الكميات المطلوبة إلى 0. لا يمكن التراجع عن هذا.",
+      "generateConfirmTail": "متابعة؟"
     },
     "screenProgeny": {
       "title": "الفحص حسب النسل",

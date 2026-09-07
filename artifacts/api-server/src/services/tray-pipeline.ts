@@ -5,8 +5,11 @@ import { recalcSeedlingMaster } from "./recalc";
  * Trays pipeline — generates genotyping trays for crosses.
  *
  * Triggered on demand from the Transplant page's "Export Tray Codes and Plate
- * Indexes CSV" button (Admin3 only), scoped to a single selected
- * Berry + Team + Pollination_Year.  There are no automatic/event-driven runs.
+ * Indexes CSV" button (Admin3 only) — this is the ONLY trigger; there are no
+ * automatic/event-driven runs.  A run is scoped to the selected
+ * Berry + Team + Pollination_Year, further narrowed by whatever local filters
+ * the page currently has applied (SP Crosses, Progeny, Program, Destination,
+ * Available Plants > 0) so it processes exactly the rows the user can see.
  *
  * For every eligible cross in the selection, generate the set of trays needed
  * to lay its TRANSPLANTS_REQUIRED plants into trays of `TRAY_SIZE` plants:
@@ -18,13 +21,15 @@ import { recalcSeedlingMaster } from "./recalc";
  *     Plate_Index.
  *
  * Eligibility (per progeny, evaluated against the current time):
- *   - Seed-acid deadline must have PASSED (vw_GHSeedDesk.Acid_Deadline_Date <=
- *     now).  Until then the seed weight can still change, so we don't commit
- *     tray codes.  A NULL deadline is treated as "not passed" (skipped).
- *   - Deadline passed + Seed_Weight_Inventory > 0  → build/top-up tray codes.
- *   - Deadline passed + Seed_Weight_Inventory = 0  → no trays; the progeny is
- *     cancelled: its six ship-input columns are zeroed and the required-amount
- *     recalc is re-run so required amounts back-calculate to 0.
+ *   - Seed_Weight_Inventory > 0 → build/top-up tray codes.  The acid deadline
+ *     is NOT consulted here (removed 2026-08-31 at Evan's request): if the seed
+ *     is in hand, the tray codes are cut.
+ *   - Seed_Weight_Inventory = 0 AND the acid deadline has PASSED → no trays;
+ *     the progeny is cancelled: its six ship-input columns are zeroed and the
+ *     required-amount recalc is re-run so required amounts back-calculate to 0.
+ *   - Seed_Weight_Inventory = 0 and the deadline has NOT passed (or is NULL) →
+ *     left completely untouched.  A zero weight before the deadline means the
+ *     seed simply has not been collected yet.
  *
  * Tray-code math (deterministic; must never change — labels are printed from it):
  *   Screened:
@@ -68,6 +73,24 @@ import { recalcSeedlingMaster } from "./recalc";
 const CREATED_BY = "GHTrayPipeline";
 
 // ── Types ──────────────────────────────────────────────────────────────────
+
+/**
+ * Optional narrowing of the source set, mirroring the Transplant page's local
+ * filters so a run only touches what the user currently has on screen.  Berry +
+ * Team + Pollination_Year remain mandatory and are passed separately.
+ *
+ * Only filters the user actually set are applied; an unset filter is a no-op
+ * rather than an implicit restriction.  Note this narrows which progenies are
+ * BUILT — it deliberately does NOT narrow the existing-rows read that backs
+ * Plate_Index allocation (see EXISTING_SELECT).
+ */
+export interface TrayFilters {
+  spCrosses?: boolean;
+  progeny?: string;
+  programIds?: number[];
+  destinationIds?: number[];
+  availablePlantsOnly?: boolean;
+}
 
 export interface SourceRow {
   ghSeedlingMasterId: number;
@@ -231,11 +254,31 @@ function buildTraysForSource(s: SourceRow): PreTray[] {
   }));
 }
 
+/** True only when the acid deadline exists, parses, and is in the past. */
+function acidDeadlinePassed(s: SourceRow, now: Date): boolean {
+  const raw = s.acidDeadlineDate;
+  if (raw == null) return false;
+  const d = raw instanceof Date ? raw : new Date(raw);
+  if (Number.isNaN(d.getTime())) return false;
+  return d.getTime() <= now.getTime();
+}
+
 /**
- * Split the selection's source rows into the ones that should get tray codes
- * built (deadline passed, seed weight > 0) and the ones to cancel (deadline
- * passed, seed weight = 0).  Progenies whose seed-acid deadline has NOT passed
- * (or is NULL/unparseable) are dropped entirely — not yet eligible.
+ * Split the selection's source rows into the ones to BUILD tray codes for and
+ * the ones to CANCEL.
+ *
+ *   seed > 0                        → build, regardless of the acid deadline.
+ *   seed = 0 and deadline PASSED    → cancel (a genuine failed cross).
+ *   seed = 0 and deadline NOT passed→ skip, untouched.
+ *
+ * The build path no longer waits for the acid deadline (requested 2026-08-31):
+ * anything with seed in hand gets its tray codes immediately.
+ *
+ * The CANCEL path deliberately still requires the deadline to have passed.
+ * Before the deadline a seed weight of 0 just means "not collected/weighed
+ * yet", not "this cross failed".  Cancelling on that would zero the ship
+ * requests of thousands of perfectly healthy crosses, irreversibly — on the
+ * dev data that is 2,868 crosses versus the 303 that have genuinely failed.
  */
 function classifySources(
   sources: SourceRow[],
@@ -243,16 +286,13 @@ function classifySources(
 ): { toBuild: SourceRow[]; toCancel: SourceRow[] } {
   const toBuild: SourceRow[] = [];
   const toCancel: SourceRow[] = [];
-  const nowMs = now.getTime();
   for (const s of sources) {
-    const raw = s.acidDeadlineDate;
-    if (raw == null) continue;
-    const d = raw instanceof Date ? raw : new Date(raw);
-    if (Number.isNaN(d.getTime())) continue;
-    if (d.getTime() > nowMs) continue; // deadline not yet passed
     const seed = s.seedWeightInventory ?? 0;
-    if (seed > 0) toBuild.push(s);
-    else toCancel.push(s);
+    if (seed > 0) {
+      toBuild.push(s);
+      continue;
+    }
+    if (acidDeadlinePassed(s, now)) toCancel.push(s);
   }
   return { toBuild, toCancel };
 }
@@ -435,11 +475,15 @@ function planChanges(
 // ── Repository (database I/O seam) ────────────────────────────────────────────
 
 export interface TrayRepository {
-  /** Load eligible source crosses for the selected berry + team + year. */
+  /**
+   * Load eligible source crosses for the selected berry + team + year,
+   * optionally narrowed by the Transplant page's local filters.
+   */
   fetchSourceRows(
     berryId: number,
     teamId: number,
     pollinationYear: number,
+    filters?: TrayFilters,
   ): Promise<SourceRow[]>;
   /** Read the current target rows for the berry + year (used by the read-only preview). */
   fetchExisting(berryId: number, pollinationYear: number): Promise<ExistingTray[]>;
@@ -456,10 +500,71 @@ export interface TrayRepository {
   }): Promise<TrayPlan>;
 }
 
+/**
+ * Translate the optional Transplant-page filters into SQL predicates against
+ * `m` (M_GHSeedlingMaster) and, only when Available Plants is on, `td`
+ * (vw_GH_TransplantDesk).  Mirrors buildFilters() in routes/transplant.ts so a
+ * run covers exactly the rows the gallery is showing.
+ *
+ * Parameter names are prefixed `f…` so they cannot collide with the caller's
+ * @berry / @team / @py.
+ */
+function buildSourceFilters(filters: TrayFilters): {
+  join: string;
+  where: string;
+  params: Record<string, unknown>;
+} {
+  const where: string[] = [];
+  const params: Record<string, unknown> = {};
+  let join = "";
+
+  if (filters.spCrosses) where.push("m.SP_Crosses = 1");
+
+  if (filters.progeny) {
+    where.push("m.PROGENY LIKE @fprogeny");
+    params.fprogeny = `%${filters.progeny}%`;
+  }
+
+  const programIds = (filters.programIds ?? []).filter((n) => Number.isInteger(n));
+  if (programIds.length > 0) {
+    const clauses = programIds.map((pid, i) => {
+      params[`fprogram${i}`] = pid;
+      return `(m.D1_PROGRAM_FK = @fprogram${i} OR m.D2_PROGRAM_FK = @fprogram${i})`;
+    });
+    where.push(`(${clauses.join(" OR ")})`);
+  }
+
+  const destinationIds = (filters.destinationIds ?? []).filter((n) => Number.isInteger(n));
+  if (destinationIds.length > 0) {
+    const clauses = destinationIds.map((did, i) => {
+      params[`fdest${i}`] = did;
+      return `(m.DESTINATION1_FK = @fdest${i} OR m.DESTINATION2_FK = @fdest${i})`;
+    });
+    where.push(`(${clauses.join(" OR ")})`);
+  }
+
+  // Extra_Transplants lives only on vw_GH_TransplantDesk, so the join is added
+  // solely for this filter.  Joining unconditionally would silently restrict
+  // every run to progenies present in that view, which is a behaviour change
+  // nobody asked for.
+  if (filters.availablePlantsOnly) {
+    join = `
+         INNER JOIN dbo.vw_GH_TransplantDesk td ON td.GHSeedlingMaster_ID = m.GHSeedlingMaster_ID`;
+    where.push("COALESCE(td.Extra_Transplants, 0) > 0");
+  }
+
+  return { join, where: where.length ? ` AND ${where.join(" AND ")}` : "", params };
+}
+
 // Shared SELECT for the current target rows — used both inside apply()'s
 // transaction and by fetchExisting() for the read-only preview.  Plate_Index is
 // globally unique per (berry, year), so the diff reads the whole berry+year
 // (all teams) to get a correct MAX high-water mark.
+//
+// IMPORTANT: this read is deliberately NOT narrowed by team or by the
+// Transplant-page filters.  Narrowing it to match the filtered source set would
+// lower the high-water mark and start handing out Plate_Index values that are
+// already printed on physical labels elsewhere in the same berry + year.
 const EXISTING_SELECT = `SELECT Unique_Tray_Code AS uniqueTrayCode, ghsm_FK AS ghsmFk,
         Plant_Qty AS plantQty, Plate_Index AS plateIndex,
         Berry_ID AS berryId, Pollination_Year AS pollinationYear
@@ -471,7 +576,9 @@ class SqlTrayRepository implements TrayRepository {
     berryId: number,
     teamId: number,
     pollinationYear: number,
+    filters: TrayFilters = {},
   ): Promise<SourceRow[]> {
+    const f = buildSourceFilters(filters);
     return queryMany<SourceRow>(
       `SELECT m.GHSeedlingMaster_ID AS ghSeedlingMasterId,
               m.PROGENY AS progeny,
@@ -488,17 +595,17 @@ class SqlTrayRepository implements TrayRepository {
          FROM dbo.M_GHSeedlingMaster m
          INNER JOIN TPN.dbo.M_BerryID b ON b.PK_BerryID = m.Berry_ID
          LEFT JOIN dbo.M_GHLabs l ON l.GHLab_ID = m.Testing_Lab_1_FK
-         INNER JOIN dbo.vw_GHSeedDesk v ON v.GHSeedlingMaster_ID = m.GHSeedlingMaster_ID
+         INNER JOIN dbo.vw_GHSeedDesk v ON v.GHSeedlingMaster_ID = m.GHSeedlingMaster_ID${f.join}
         WHERE m.ACTIVE = 1
           AND m.Berry_ID = @berry
           AND m.Team_ID = @team
           AND m.Pollination_Year = @py
           AND m.TRAY_SIZE IS NOT NULL
-          AND m.TRANSPLANTS_REQUIRED IS NOT NULL`,
+          AND m.TRANSPLANTS_REQUIRED IS NOT NULL${f.where}`,
       // NOTE: no Testing_Lab_1_FK filter — non-screened progenies have no
       // testing lab, but still need tray codes (Test_Lab_ID NULL, plate size
       // defaults to 96 via the COALESCE above, Plate_Index stays NULL).
-      { berry: berryId, team: teamId, py: pollinationYear },
+      { berry: berryId, team: teamId, py: pollinationYear, ...f.params },
     );
   }
 
@@ -595,14 +702,19 @@ class SqlTrayRepository implements TrayRepository {
  * required-amount recalc so the zeroed ship quantities propagate.
  */
 export async function generateTrayCodesForSelection(
-  args: { berryId: number; teamId: number; pollinationYear: number },
+  args: {
+    berryId: number;
+    teamId: number;
+    pollinationYear: number;
+    filters?: TrayFilters;
+  },
   repo: TrayRepository = new SqlTrayRepository(),
   recalc: () => Promise<void> = recalcSeedlingMaster,
   now: Date = new Date(),
 ): Promise<TraySummary> {
-  const { berryId, teamId, pollinationYear } = args;
+  const { berryId, teamId, pollinationYear, filters = {} } = args;
 
-  const sources = await repo.fetchSourceRows(berryId, teamId, pollinationYear);
+  const sources = await repo.fetchSourceRows(berryId, teamId, pollinationYear, filters);
   const { toBuild, toCancel } = classifySources(sources, now);
 
   const allTrays: PreTray[] = [];
@@ -650,7 +762,12 @@ export async function generateTrayCodesForSelection(
  * inspected on demand before (or without) a real run.
  */
 export async function previewTrayPipeline(
-  args: { berryId: number; teamId: number; pollinationYear: number },
+  args: {
+    berryId: number;
+    teamId: number;
+    pollinationYear: number;
+    filters?: TrayFilters;
+  },
   repo: TrayRepository = new SqlTrayRepository(),
   now: Date = new Date(),
 ): Promise<{
@@ -661,9 +778,9 @@ export async function previewTrayPipeline(
   existingRows: number;
   plan: TrayPlan;
 }> {
-  const { berryId, teamId, pollinationYear } = args;
+  const { berryId, teamId, pollinationYear, filters = {} } = args;
 
-  const sources = await repo.fetchSourceRows(berryId, teamId, pollinationYear);
+  const sources = await repo.fetchSourceRows(berryId, teamId, pollinationYear, filters);
   const { toBuild, toCancel } = classifySources(sources, now);
   const allTrays: PreTray[] = [];
   for (const s of toBuild) allTrays.push(...buildTraysForSource(s));
@@ -688,5 +805,6 @@ export const _internals = {
   buildTraysForSource,
   classifySources,
   planChanges,
+  buildSourceFilters,
   SqlTrayRepository,
 };

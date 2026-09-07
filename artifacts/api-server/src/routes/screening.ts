@@ -1,5 +1,6 @@
 import { Router, type IRouter } from "express";
 import { queryMany, queryOne } from "@workspace/db";
+import { plateLabelExpr, parsePlateIndexInput } from "../lib/plate-label";
 
 const router: IRouter = Router();
 
@@ -91,7 +92,11 @@ function buildPlateFilters(query: Record<string, unknown>): { where: string; par
     }
   }
   if (query.testingLab) { where.push("v.Testing_Lab_1 LIKE @lab"); params.lab = `%${String(query.testingLab)}%`; }
-  if (query.plateIndex) { where.push("v.Plate_Index = @plate"); params.plate = parseInt(String(query.plateIndex)); }
+  if (query.plateIndex) {
+    // Accepts either the bare number or the printed label (e.g. 322 or BU0322).
+    const n = parsePlateIndexInput(query.plateIndex);
+    if (n != null) { where.push("v.Plate_Index = @plate"); params.plate = n; }
+  }
   if (query.screening === "true") where.push("v.Screening = 1");
   if (query.screening === "false") where.push("v.Screening = 0");
   if (query.sorted === "true") where.push("v.Sorted = 1");
@@ -113,7 +118,9 @@ router.get("/screening/plates", async (req, res) => {
 
     const rows = await queryMany<Record<string, unknown>>(
       `WITH ${MARKERS_CTE}
-       SELECT v.Plate_Index AS id, v.Plate_Index AS plateIndex, v.Progeny AS progeny,
+       SELECT v.Plate_Index AS id, v.Plate_Index AS plateIndex,
+              ${plateLabelExpr("v.Plate_Index", "v.Berry")} AS plateLabel,
+              v.Progeny AS progeny,
               v.Testing_Lab_1 AS testingLab,
               ${labBarcodeExpr("tcb.Plate_Index = v.Plate_Index")} AS labBarcode,
               cr.createdBy, cr.createdDate,
@@ -227,6 +234,8 @@ router.get("/screening/progeny", async (req, res) => {
               v.D1_Program AS d1Program, v.D2_Program AS d2Program,
               ${labBarcodeExpr("tcb.ghsm_FK = v.GHSeedlingMaster_ID")} AS labBarcode,
               tr.startingPlateIndex, tr.endingPlateIndex,
+              ${plateLabelExpr("tr.startingPlateIndex", "v.Berry")} AS startingPlateLabel,
+              ${plateLabelExpr("tr.endingPlateIndex", "v.Berry")} AS endingPlateLabel,
               cr.createdBy, cr.createdDate,
               mk.marker1, mk.marker2, mk.marker3, mk.marker4, mk.marker5,
               tr.totalPlatesRequired, v.Plates_Collected AS platesCollected,

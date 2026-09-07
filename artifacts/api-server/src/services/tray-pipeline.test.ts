@@ -190,7 +190,7 @@ describe("buildTraysForSource — non-screened uncapped math", () => {
   });
 });
 
-describe("classifySources — deadline + seed-weight gating", () => {
+describe("classifySources — seed-weight gating (deadline gates CANCEL only)", () => {
   it("builds when the deadline has passed and seed weight > 0", () => {
     const { toBuild, toCancel } = classifySources(
       [makeSource({ acidDeadlineDate: PASSED, seedWeightInventory: 12 })],
@@ -218,24 +218,52 @@ describe("classifySources — deadline + seed-weight gating", () => {
     expect(toCancel).toHaveLength(1);
   });
 
-  it("drops progenies whose deadline has NOT passed (neither build nor cancel)", () => {
+  // Deadline gate removed from the BUILD path on 2026-08-31: seed in hand is
+  // now sufficient, whatever the deadline says.
+  it("BUILDS when seed > 0 even though the deadline has NOT passed", () => {
     const { toBuild, toCancel } = classifySources(
-      [
-        makeSource({ acidDeadlineDate: FUTURE, seedWeightInventory: 12 }),
-        makeSource({ acidDeadlineDate: FUTURE, seedWeightInventory: 0 }),
-      ],
+      [makeSource({ acidDeadlineDate: FUTURE, seedWeightInventory: 12 })],
+      NOW,
+    );
+    expect(toBuild).toHaveLength(1);
+    expect(toCancel).toHaveLength(0);
+  });
+
+  it("BUILDS when seed > 0 and the deadline is NULL", () => {
+    const { toBuild, toCancel } = classifySources(
+      [makeSource({ acidDeadlineDate: null, seedWeightInventory: 12 })],
+      NOW,
+    );
+    expect(toBuild).toHaveLength(1);
+    expect(toCancel).toHaveLength(0);
+  });
+
+  // The cancel path KEEPS the deadline requirement. This is the guard that
+  // stops a pre-deadline zero (seed simply not collected yet) from being
+  // treated as a failed cross and irreversibly zeroed.
+  it("does NOT cancel a zero-seed cross whose deadline has not passed", () => {
+    const { toBuild, toCancel } = classifySources(
+      [makeSource({ acidDeadlineDate: FUTURE, seedWeightInventory: 0 })],
       NOW,
     );
     expect(toBuild).toHaveLength(0);
     expect(toCancel).toHaveLength(0);
   });
 
-  it("drops progenies with a NULL deadline", () => {
+  it("does NOT cancel a zero-seed cross whose deadline is NULL", () => {
     const { toBuild, toCancel } = classifySources(
-      [makeSource({ acidDeadlineDate: null, seedWeightInventory: 12 })],
+      [makeSource({ acidDeadlineDate: null, seedWeightInventory: 0 })],
       NOW,
     );
     expect(toBuild).toHaveLength(0);
+    expect(toCancel).toHaveLength(0);
+  });
+
+  it("does NOT cancel a zero-seed cross whose deadline is unparseable", () => {
+    const { toCancel } = classifySources(
+      [makeSource({ acidDeadlineDate: "not-a-date", seedWeightInventory: 0 })],
+      NOW,
+    );
     expect(toCancel).toHaveLength(0);
   });
 
@@ -385,8 +413,10 @@ class FakeTrayRepository implements TrayRepository {
   existing: ExistingTray[] = [];
   applyCalls = 0;
   lastPlan: TrayPlan | null = null;
+  lastFetchArgs: unknown[] | null = null;
 
-  async fetchSourceRows(): Promise<SourceRow[]> {
+  async fetchSourceRows(...args: unknown[]): Promise<SourceRow[]> {
+    this.lastFetchArgs = args;
     return this.sources;
   }
 
@@ -449,10 +479,22 @@ describe("generateTrayCodesForSelection — orchestration (fake repository)", ()
     expect(recalc).toHaveBeenCalledTimes(1);
   });
 
-  it("does nothing for a progeny whose deadline has not passed (no trays, no recalc)", async () => {
+  it("BUILDS a seed-bearing progeny whose deadline has not passed", async () => {
     const repo = new FakeTrayRepository();
     repo.sources = [
       makeSource({ ghSeedlingMasterId: 10, progeny: "1", acidDeadlineDate: FUTURE, seedWeightInventory: 50 }),
+    ];
+    const recalc = vi.fn(async () => {});
+    const summary = await generateTrayCodesForSelection(SEL, repo, recalc, NOW);
+    expect(summary.inserts).toBe(3);
+    expect(summary.cancelled).toBe(0);
+    expect(recalc).not.toHaveBeenCalled();
+  });
+
+  it("leaves a zero-seed pre-deadline progeny completely untouched (no ship-zero)", async () => {
+    const repo = new FakeTrayRepository();
+    repo.sources = [
+      makeSource({ ghSeedlingMasterId: 10, progeny: "1", acidDeadlineDate: FUTURE, seedWeightInventory: 0 }),
     ];
     const recalc = vi.fn(async () => {});
     const summary = await generateTrayCodesForSelection(SEL, repo, recalc, NOW);
@@ -491,6 +533,90 @@ describe("generateTrayCodesForSelection — orchestration (fake repository)", ()
     ];
     await generateTrayCodesForSelection(SEL, repo, vi.fn(async () => {}), NOW);
     expect(repo.lastPlan).toEqual({ inserts: [], qtyUpdates: [], plateBackfills: [], shipZeros: [] });
+  });
+});
+
+describe("buildSourceFilters — Transplant-page filter translation", () => {
+  const { buildSourceFilters } = _internals;
+
+  it("is a complete no-op when no filters are set", () => {
+    const f = buildSourceFilters({});
+    expect(f.join).toBe("");
+    expect(f.where).toBe("");
+    expect(f.params).toEqual({});
+  });
+
+  it("treats unset/empty filters as no-ops rather than restrictions", () => {
+    const f = buildSourceFilters({
+      spCrosses: false,
+      progeny: "",
+      programIds: [],
+      destinationIds: [],
+      availablePlantsOnly: false,
+    });
+    expect(f.where).toBe("");
+    expect(f.params).toEqual({});
+  });
+
+  it("filters SP Crosses and progeny (parameterised LIKE, not interpolated)", () => {
+    const f = buildSourceFilters({ spCrosses: true, progeny: "12'34" });
+    expect(f.where).toContain("m.SP_Crosses = 1");
+    expect(f.where).toContain("m.PROGENY LIKE @fprogeny");
+    expect(f.params).toEqual({ fprogeny: "%12'34%" });
+    expect(f.where).not.toContain("12'34"); // value never inlined into SQL
+  });
+
+  it("matches program and destination against BOTH D1 and D2 columns", () => {
+    const f = buildSourceFilters({ programIds: [5, 6], destinationIds: [9] });
+    expect(f.where).toContain("(m.D1_PROGRAM_FK = @fprogram0 OR m.D2_PROGRAM_FK = @fprogram0)");
+    expect(f.where).toContain("(m.D1_PROGRAM_FK = @fprogram1 OR m.D2_PROGRAM_FK = @fprogram1)");
+    expect(f.where).toContain("(m.DESTINATION1_FK = @fdest0 OR m.DESTINATION2_FK = @fdest0)");
+    expect(f.params).toEqual({ fprogram0: 5, fprogram1: 6, fdest0: 9 });
+  });
+
+  it("drops non-integer ids instead of emitting them as parameters", () => {
+    const f = buildSourceFilters({ programIds: [1, NaN, 2.5] as number[] });
+    expect(f.params).toEqual({ fprogram0: 1 });
+  });
+
+  it("joins vw_GH_TransplantDesk ONLY for the Available Plants filter", () => {
+    expect(buildSourceFilters({ spCrosses: true }).join).toBe("");
+    const f = buildSourceFilters({ availablePlantsOnly: true });
+    expect(f.join).toContain("dbo.vw_GH_TransplantDesk");
+    expect(f.where).toContain("COALESCE(td.Extra_Transplants, 0) > 0");
+  });
+
+  it("never emits a parameter name that could collide with @berry/@team/@py", () => {
+    const f = buildSourceFilters({ progeny: "x", programIds: [1], destinationIds: [2] });
+    for (const key of Object.keys(f.params)) {
+      expect(["berry", "team", "py"]).not.toContain(key);
+      expect(key.startsWith("f")).toBe(true);
+    }
+  });
+});
+
+describe("filter plumbing — selection reaches the repository", () => {
+  it("forwards the filters to fetchSourceRows alongside berry/team/year", async () => {
+    const repo = new FakeTrayRepository();
+    const filters = { spCrosses: true, progeny: "12", programIds: [3], availablePlantsOnly: true };
+    await generateTrayCodesForSelection({ ...SEL, filters }, repo, vi.fn(async () => {}), NOW);
+    expect(repo.lastFetchArgs).toEqual([1, 2, 2026, filters]);
+  });
+
+  it("defaults to an empty filter set when none is supplied", async () => {
+    const repo = new FakeTrayRepository();
+    await generateTrayCodesForSelection(SEL, repo, vi.fn(async () => {}), NOW);
+    expect(repo.lastFetchArgs).toEqual([1, 2, 2026, {}]);
+  });
+
+  it("still reads existing rows for the WHOLE berry+year, unnarrowed by filters", async () => {
+    // Guards the Plate_Index high-water mark: narrowing this read to the
+    // filtered set would re-issue indexes already printed on labels.
+    const repo = new FakeTrayRepository();
+    const seen: unknown[][] = [];
+    repo.fetchExisting = async (...args: unknown[]) => { seen.push(args); return repo.existing; };
+    await previewTrayPipeline({ ...SEL, filters: { progeny: "12", programIds: [3] } }, repo, NOW);
+    expect(seen).toEqual([[1, 2026]]); // berry + year only; no team, no filters
   });
 });
 
