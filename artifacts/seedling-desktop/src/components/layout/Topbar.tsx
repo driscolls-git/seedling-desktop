@@ -17,7 +17,22 @@ const berryIconMap: Record<string, string> = {
   STRAW: strawberryIcon,
 };
 
-const IS_TEST_ENVIRONMENT = true; // Set to false for production
+// Hostnames that are the real production site. Everything else (dev, staging,
+// localhost, direct-IP access) is treated as non-production and gets the
+// "Test Environment" badge.
+//
+// Deliberately a runtime check rather than a build-time flag: dev and prod are
+// served the SAME built bundle, so a compile-time constant would need two
+// separate builds and would drift. Deliberately an allow-list of production
+// hosts rather than a deny-list of test hosts, so an unrecognised hostname
+// errs toward showing the badge — wrongly labelling prod as test is
+// embarrassing, but wrongly labelling a test site as prod invites someone to
+// trust throwaway data.
+const PRODUCTION_HOSTS = ["drc.driscolls.com"];
+
+const IS_TEST_ENVIRONMENT =
+  typeof window === "undefined" ||
+  !PRODUCTION_HOSTS.includes(window.location.hostname.toLowerCase());
 
 export function Topbar() {
   const { t, i18n } = useTranslation();
