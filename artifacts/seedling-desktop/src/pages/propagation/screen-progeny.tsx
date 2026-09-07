@@ -66,8 +66,10 @@ export default function ScreenByProgenyList() {
     { key: 'd1Program', header: 'D1 Program', width: 'w-28' },
     { key: 'd2Program', header: 'D2 Program', width: 'w-28' },
     { key: 'labBarcode', header: 'Lab Bar Code', width: 'w-32' },
-    { key: 'startingPlateIndex', header: 'Starting Plate Index', isNumeric: true, width: 'w-24' },
-    { key: 'endingPlateIndex', header: 'Ending Plate Index', isNumeric: true, width: 'w-24' },
+    // Printed label form (e.g. BU0322). The underlying startingPlateIndex /
+    // endingPlateIndex remain numeric in the API for sorting and range logic.
+    { key: 'startingPlateLabel', header: 'Starting Plate Index', width: 'w-24' },
+    { key: 'endingPlateLabel', header: 'Ending Plate Index', width: 'w-24' },
     { key: 'createdBy', header: 'Created By', width: 'w-32' },
     {
       key: 'createdDate', header: 'Created Date', width: 'w-28',

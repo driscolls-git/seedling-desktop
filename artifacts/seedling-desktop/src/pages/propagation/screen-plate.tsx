@@ -24,7 +24,9 @@ export default function ScreenByPlateList() {
   const [progenySearch, setProgenySearch] = useState('');
   const [programIds, setProgramIds] = useState<number[]>([]);
   const [testingLab, setTestingLab] = useState('');
-  const [plateIndex, setPlateIndex] = useState<number | undefined>();
+  // Free text so the user can type either the bare number or the printed
+  // label (322 or BU0322); the API strips the prefix when filtering.
+  const [plateIndex, setPlateIndex] = useState<string | undefined>();
   const [screeningOnly, setScreeningOnly] = useState(true);
   const [sortedOnly, setSortedOnly] = useState(false);
   const debouncedProgeny = useDebounce(progenySearch);
@@ -70,7 +72,8 @@ export default function ScreenByPlateList() {
   };
 
   const columns: ColumnDef<ScreeningPlate>[] = [
-    { key: 'plateIndex', header: 'Plate Index #', sticky: true, width: 'w-24', isNumeric: true },
+    // Shows the printed label (e.g. BU0322); falls back to the raw number.
+    { key: 'plateLabel', header: 'Plate Index #', sticky: true, width: 'w-24' },
     { key: 'progeny', header: 'Progeny', width: 'w-28' },
     { key: 'testingLab', header: 'Testing Lab', width: 'w-24' },
     { key: 'labBarcode', header: 'Lab Bar Code', width: 'w-32' },
@@ -204,11 +207,11 @@ export default function ScreenByPlateList() {
             ))}
           </select>
           <Input
-            type="number"
-            placeholder="Plate Index #"
+            type="text"
+            placeholder="Plate Index # (322 or BU0322)"
             value={plateIndex ?? ''}
-            onChange={(e) => setPlateIndex(e.target.value ? parseInt(e.target.value) : undefined)}
-            className="w-32"
+            onChange={(e) => setPlateIndex(e.target.value || undefined)}
+            className="w-44"
           />
           <label className="flex items-center gap-1.5 text-sm cursor-pointer">
             <input
