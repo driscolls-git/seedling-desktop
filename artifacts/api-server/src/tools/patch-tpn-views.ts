@@ -62,8 +62,16 @@ async function main() {
   // Refuse to run anywhere TPN is reachable in-database (i.e. prod).
   const reachable = await queryMany<{ n: number }>(
     "SELECT COUNT(*) n FROM sys.databases WHERE name = 'TPN'");
-  if (reachable[0].n > 0) {
+  if (!RESTORE && reachable[0].n > 0) {
     console.log("TPN exists on this server — patching is unnecessary here. Aborting.");
+    return;
+  }
+  // The guard above deliberately does NOT apply to --restore: restoring is
+  // exactly what you do once TPN exists again, and the originals cannot be
+  // re-applied until it does, because SQL Server validates object names when
+  // creating a view.
+  if (RESTORE && reachable[0].n === 0) {
+    console.log("TPN does not exist on this server yet — restore would fail. Aborting.");
     return;
   }
 
