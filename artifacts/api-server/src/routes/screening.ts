@@ -15,7 +15,8 @@ const router: IRouter = Router();
 
 // One row per progeny with its markers pivoted into marker1..marker5.
 // The link table holds duplicates (e.g. "Pisco" twice on one progeny), so the
-// inner DISTINCT dedupes before ranking.  Max observed is 5 distinct markers.
+// inner GROUP BY dedupes before ranking.  Max observed is 5 distinct markers.
+// Ranked by Marker_ID so Marker 1..5 line up with vw_GH_CrossesDesk.
 const MARKERS_CTE = `progeny_markers AS (
     SELECT ghsm_FK,
            MAX(CASE WHEN rn = 1 THEN markerName END) AS marker1,
@@ -25,12 +26,15 @@ const MARKERS_CTE = `progeny_markers AS (
            MAX(CASE WHEN rn = 5 THEN markerName END) AS marker5
     FROM (
       SELECT ghsm_FK, markerName,
-             ROW_NUMBER() OVER (PARTITION BY ghsm_FK ORDER BY markerName) AS rn
+             ROW_NUMBER() OVER (PARTITION BY ghsm_FK ORDER BY markerId, markerName) AS rn
       FROM (
-        SELECT DISTINCT pm.ghsm_FK,
-               COALESCE(NULLIF(LTRIM(RTRIM(ml.Marker_Alias_Driscolls)), ''), ml.Trait_Marker) AS markerName
+        SELECT pm.ghsm_FK,
+               COALESCE(NULLIF(LTRIM(RTRIM(ml.Marker_Alias_Driscolls)), ''), ml.Trait_Marker) AS markerName,
+               MIN(pm.Marker_ID) AS markerId
         FROM dbo.T_GHProgenyMarkers pm
         INNER JOIN dbo.M_GHMarkerLabs ml ON ml.GHMarkerLabs_ID = pm.Marker_ID
+        GROUP BY pm.ghsm_FK,
+                 COALESCE(NULLIF(LTRIM(RTRIM(ml.Marker_Alias_Driscolls)), ''), ml.Trait_Marker)
       ) d
       WHERE d.markerName IS NOT NULL
     ) r
@@ -71,6 +75,12 @@ const toIso = (v: unknown): string | null => (v instanceof Date ? v.toISOString(
 
 // ── Plates view (no GHSeedlingMaster_ID → berry/team filter by name) ──
 
+// Correlates a T_GHTraysCreation alias (prefix it, e.g. `tcb.${SAME_PLATE}`)
+// to the outer view row.  Plate_Index alone is not unique: numbering restarts
+// for each berry, so matching on it would mix plates from different berries.
+const SAME_PLATE =
+  "Plate_Index = v.Plate_Index AND Berry_ID = v.Berry_ID AND Pollination_Year = v.Pollination_Year";
+
 function buildPlateFilters(query: Record<string, unknown>): { where: string; params: Record<string, unknown> } {
   const where: string[] = [];
   const params: Record<string, unknown> = {};
@@ -93,7 +103,7 @@ function buildPlateFilters(query: Record<string, unknown>): { where: string; par
   }
   if (query.testingLab) { where.push("v.Testing_Lab_1 LIKE @lab"); params.lab = `%${String(query.testingLab)}%`; }
   if (query.plateIndex) {
-    // Accepts either the bare number or the printed label (e.g. 322 or BU0322).
+    // Accepts either the bare number or the printed label (e.g. 322 or 26BU0322).
     const n = parsePlateIndexInput(query.plateIndex);
     if (n != null) { where.push("v.Plate_Index = @plate"); params.plate = n; }
   }
@@ -118,11 +128,15 @@ router.get("/screening/plates", async (req, res) => {
 
     const rows = await queryMany<Record<string, unknown>>(
       `WITH ${MARKERS_CTE}
-       SELECT v.Plate_Index AS id, v.Plate_Index AS plateIndex,
-              ${plateLabelExpr("v.Plate_Index", "v.Berry")} AS plateLabel,
+       -- Plate numbers restart per berry, so a view row is identified by
+       -- (Plate_Index, Berry_ID, Pollination_Year).  The row number gives the
+       -- grid a unique key; Plate_Index alone repeats across berries.
+       SELECT ROW_NUMBER() OVER (ORDER BY v.Plate_Index, v.Berry_ID, v.Pollination_Year) AS id,
+              v.Plate_Index AS plateIndex,
+              ${plateLabelExpr("v.Plate_Index", "v.Berry", "v.Pollination_Year")} AS plateLabel,
               v.Progeny AS progeny,
               v.Testing_Lab_1 AS testingLab,
-              ${labBarcodeExpr("tcb.Plate_Index = v.Plate_Index")} AS labBarcode,
+              ${labBarcodeExpr(`tcb.${SAME_PLATE}`)} AS labBarcode,
               cr.createdBy, cr.createdDate,
               mk.marker1, mk.marker2, mk.marker3, mk.marker4, mk.marker5,
               v.Samples_Required AS samplesRequired, v.Samples_Collected AS samplesCollected,
@@ -135,17 +149,17 @@ router.get("/screening/plates", async (req, res) => {
               v.Screening AS screening, v.Berry AS berry, v.Team_Name AS teamName,
               v.D1_Program AS d1Program, v.Pollination_Year AS pollinationYear
        FROM dbo.vw_GH_MarkerPlateDesk v
-       -- A plate index maps to exactly one progeny (verified: no Plate_Index
-       -- spans multiple ghsm_FK), so MIN() just picks that value.
+       -- A plate (index + berry + year) maps to exactly one progeny (verified
+       -- on TST 2026-09-23), so MIN() just picks that value.
        OUTER APPLY (
          SELECT MIN(tcp.ghsm_FK) AS ghsmId
          FROM dbo.T_GHTraysCreation tcp
-         WHERE tcp.Plate_Index = v.Plate_Index
+         WHERE tcp.${SAME_PLATE}
        ) pl
        LEFT JOIN progeny_markers mk ON mk.ghsm_FK = pl.ghsmId
-       ${createdByApply("tcc.Plate_Index = v.Plate_Index")}
+       ${createdByApply(`tcc.${SAME_PLATE}`)}
        ${where}
-       ORDER BY v.Plate_Index
+       ORDER BY v.Plate_Index, v.Berry_ID, v.Pollination_Year
        OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY`,
       { ...params, offset, pageSize },
     );
@@ -234,8 +248,8 @@ router.get("/screening/progeny", async (req, res) => {
               v.D1_Program AS d1Program, v.D2_Program AS d2Program,
               ${labBarcodeExpr("tcb.ghsm_FK = v.GHSeedlingMaster_ID")} AS labBarcode,
               tr.startingPlateIndex, tr.endingPlateIndex,
-              ${plateLabelExpr("tr.startingPlateIndex", "v.Berry")} AS startingPlateLabel,
-              ${plateLabelExpr("tr.endingPlateIndex", "v.Berry")} AS endingPlateLabel,
+              ${plateLabelExpr("tr.startingPlateIndex", "v.Berry", "v.Pollination_Year")} AS startingPlateLabel,
+              ${plateLabelExpr("tr.endingPlateIndex", "v.Berry", "v.Pollination_Year")} AS endingPlateLabel,
               cr.createdBy, cr.createdDate,
               mk.marker1, mk.marker2, mk.marker3, mk.marker4, mk.marker5,
               tr.totalPlatesRequired, v.Plates_Collected AS platesCollected,
