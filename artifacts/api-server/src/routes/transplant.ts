@@ -220,7 +220,7 @@ router.get("/tray-codes", async (req, res) => {
               v.Plant_Qty         AS plantQty,
               v.Pollination_Year  AS pollinationYear,
               v.Plate_Index       AS plateIndex,
-              ${plateLabelExpr("v.Plate_Index", "v.Berry")} AS plateLabel,
+              ${plateLabelExpr("v.Plate_Index", "v.Berry", "v.Pollination_Year")} AS plateLabel,
               v.Berry             AS berry,
               v.PROGENY           AS progeny,
               v.Program           AS program,

@@ -25,7 +25,7 @@ export default function ScreenByPlateList() {
   const [programIds, setProgramIds] = useState<number[]>([]);
   const [testingLab, setTestingLab] = useState('');
   // Free text so the user can type either the bare number or the printed
-  // label (322 or BU0322); the API strips the prefix when filtering.
+  // label (322 or 26BU0322); the API strips the prefix when filtering.
   const [plateIndex, setPlateIndex] = useState<string | undefined>();
   const [screeningOnly, setScreeningOnly] = useState(true);
   const [sortedOnly, setSortedOnly] = useState(false);
@@ -72,7 +72,7 @@ export default function ScreenByPlateList() {
   };
 
   const columns: ColumnDef<ScreeningPlate>[] = [
-    // Shows the printed label (e.g. BU0322); falls back to the raw number.
+    // Shows the printed label (e.g. 26BU0322); falls back to the raw number.
     { key: 'plateLabel', header: 'Plate Index #', sticky: true, width: 'w-24' },
     { key: 'progeny', header: 'Progeny', width: 'w-28' },
     { key: 'testingLab', header: 'Testing Lab', width: 'w-24' },
@@ -208,7 +208,7 @@ export default function ScreenByPlateList() {
           </select>
           <Input
             type="text"
-            placeholder="Plate Index # (322 or BU0322)"
+            placeholder="Plate Index # (322 or 26BU0322)"
             value={plateIndex ?? ''}
             onChange={(e) => setPlateIndex(e.target.value || undefined)}
             className="w-44"

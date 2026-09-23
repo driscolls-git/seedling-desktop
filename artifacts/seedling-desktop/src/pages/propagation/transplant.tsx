@@ -114,7 +114,7 @@ export default function TransplantList() {
         esc(r.uniqueTrayCode),
         esc(r.plantQty),
         esc(r.pollinationYear),
-        // Printed label form (e.g. BU0322); falls back to the bare number if
+        // Printed label form (e.g. 26BU0322); falls back to the bare number if
         // the berry code can't be resolved.
         esc(r.plateLabel ?? r.plateIndex),
         esc(r.berry),
