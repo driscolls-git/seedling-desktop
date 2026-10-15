@@ -77,7 +77,7 @@ export default function TransplantList() {
       if (filters.berryId != null)         p.set('berryId', String(filters.berryId));
       if (filters.teamId != null)          p.set('teamId', String(filters.teamId));
       if (filters.pollinationYear != null) p.set('pollinationYear', String(filters.pollinationYear));
-      if (filters.spCrosses)               p.set('spCrosses', 'true');
+      if (filters.spCrosses !== undefined) p.set('spCrosses', String(filters.spCrosses));
       if (programIds.length)               p.set('programId', programIds.join(','));
       if (destinationIds.length)           p.set('destinationId', destinationIds.join(','));
       if (debouncedProgeny)                p.set('progeny', debouncedProgeny);
@@ -87,17 +87,10 @@ export default function TransplantList() {
         `/api/transplant/tray-codes?${p.toString()}`,
         { method: 'GET' },
       );
+      // Always the full list of tray codes for the current filters (not just
+      // rows created by this run). Downloaded even when empty, as a
+      // header-only file.
       const rows = body.data || [];
-
-      // Nothing matched the current filters — tell the user why instead of
-      // handing them a CSV containing only a header row.
-      if (rows.length === 0) {
-        toast({
-          title: t('propagation.transplant.exportTrayCodesEmpty'),
-          description: t('propagation.transplant.exportTrayCodesEmptyHint'),
-        });
-        return;
-      }
 
       const headers = [
         'Top', 'Unique Tray Code', 'Plant Qty', 'Pollination Year', 'Plate Index',
@@ -140,10 +133,15 @@ export default function TransplantList() {
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      toast({
-        title: t('propagation.transplant.exportTrayCodesSuccess'),
-        description: `${rows.length} rows exported.`,
-      });
+      toast(rows.length === 0
+        ? {
+            title: t('propagation.transplant.exportTrayCodesEmpty'),
+            description: t('propagation.transplant.exportTrayCodesEmptyHint'),
+          }
+        : {
+            title: t('propagation.transplant.exportTrayCodesSuccess'),
+            description: `${rows.length} rows exported.`,
+          });
     } catch (err) {
       toast({
         title: t('common.networkError'),
@@ -174,7 +172,7 @@ export default function TransplantList() {
       berryId: filters.berryId,
       teamId: filters.teamId,
       pollinationYear: filters.pollinationYear,
-      spCrosses: filters.spCrosses ? true : undefined,
+      spCrosses: filters.spCrosses,
       progeny: debouncedProgeny || undefined,
       programId: programIds.length ? programIds.join(',') : undefined,
       destinationId: destinationIds.length ? destinationIds.join(',') : undefined,
@@ -193,6 +191,7 @@ export default function TransplantList() {
         body: JSON.stringify(filterBody),
       });
 
+      // Nothing to generate — skip the write but still export the current list.
       if (preview.inserts === 0 && preview.qtyUpdates === 0 && preview.cancelled === 0) {
         toast({
           title: t('propagation.transplant.generateNothingToDo'),
@@ -200,6 +199,7 @@ export default function TransplantList() {
             sources: preview.sources,
           }),
         });
+        await exportTrayCodesCSV();
         return;
       }
 

@@ -548,7 +548,7 @@ describe("buildSourceFilters — Transplant-page filter translation", () => {
 
   it("treats unset/empty filters as no-ops rather than restrictions", () => {
     const f = buildSourceFilters({
-      spCrosses: false,
+      spCrosses: undefined,
       progeny: "",
       programIds: [],
       destinationIds: [],
@@ -564,6 +564,13 @@ describe("buildSourceFilters — Transplant-page filter translation", () => {
     expect(f.where).toContain("m.PROGENY LIKE @fprogeny");
     expect(f.params).toEqual({ fprogeny: "%12'34%" });
     expect(f.where).not.toContain("12'34"); // value never inlined into SQL
+  });
+
+  it("filters Cross Season: true = Summer (1), false = Winter (0)", () => {
+    expect(buildSourceFilters({ spCrosses: true }).where).toContain("m.SP_Crosses = 1");
+    const winter = buildSourceFilters({ spCrosses: false }).where;
+    expect(winter).toContain("m.SP_Crosses = 0");
+    expect(winter).not.toContain("m.SP_Crosses = 1");
   });
 
   it("matches program and destination against BOTH D1 and D2 columns", () => {

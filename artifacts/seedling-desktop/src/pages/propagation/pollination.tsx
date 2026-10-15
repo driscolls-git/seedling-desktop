@@ -118,7 +118,7 @@ export default function PollinationList() {
       if (filters.berryId) params.set('berryId', String(filters.berryId));
       if (filters.teamId) params.set('teamId', String(filters.teamId));
       if (filters.pollinationYear) params.set('pollinationYear', String(filters.pollinationYear));
-      if (filters.spCrosses) params.set('spCrosses', 'true');
+      if (filters.spCrosses !== undefined) params.set('spCrosses', String(filters.spCrosses));
       if (progenySearch) params.set('progeny', progenySearch);
       if (parentSearch) params.set('parent', parentSearch);
       if (programIds.length) params.set('programId', programIds.join(','));

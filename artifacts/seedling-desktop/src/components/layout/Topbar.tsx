@@ -43,8 +43,15 @@ export function Topbar() {
 
   const years = Array.from({ length: 8 }, (_, i) => 2025 + i);
 
+  const strawberryId = berries?.find(b => b.berryType === 'STRAW')?.id;
+  const isStrawberry = filters.berryId != null && filters.berryId === strawberryId;
+
   const handleBerryClick = (id: number) => {
-    setFilter('berryId', filters.berryId === id ? undefined : id);
+    const next = filters.berryId === id ? undefined : id;
+    setFilter('berryId', next);
+    // Cross Season only exists for Strawberry — clear it so a hidden filter
+    // can't keep narrowing other berries' data.
+    if (next == null || next !== strawberryId) setFilter('spCrosses', undefined);
   };
 
   const changeLanguage = (code: string) => {
@@ -108,15 +115,20 @@ export function Topbar() {
             ))}
           </select>
 
-          <label className="flex items-center gap-2 text-sm font-medium text-foreground cursor-pointer select-none">
-            <input 
-              type="checkbox" 
-              className="w-4 h-4 rounded border-input text-primary focus:ring-primary transition-all"
-              checked={filters.spCrosses}
-              onChange={(e) => setFilter('spCrosses', e.target.checked)}
-            />
-            {t('filters.spCrosses')}
-          </label>
+          {isStrawberry && (
+            <label className="flex items-center gap-2 text-sm font-medium text-foreground select-none">
+              {t('filters.crossSeason')}
+              <select
+                className="h-9 px-3 py-1.5 rounded-lg border border-input bg-background text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all"
+                value={filters.spCrosses === undefined ? '' : String(filters.spCrosses)}
+                onChange={(e) => setFilter('spCrosses', e.target.value === '' ? undefined : e.target.value === 'true')}
+              >
+                <option value="">{t('filters.bothSeasons')}</option>
+                <option value="true">{t('filters.summerCrosses')}</option>
+                <option value="false">{t('filters.winterCrosses')}</option>
+              </select>
+            </label>
+          )}
         </div>
       </div>
 

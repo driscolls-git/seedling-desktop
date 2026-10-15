@@ -85,6 +85,7 @@ const CREATED_BY = "GHTrayPipeline";
  * Plate_Index allocation (see EXISTING_SELECT).
  */
 export interface TrayFilters {
+  /** Cross Season: true = Summer, false = Winter, undefined = both. */
   spCrosses?: boolean;
   progeny?: string;
   programIds?: number[];
@@ -518,7 +519,9 @@ function buildSourceFilters(filters: TrayFilters): {
   const params: Record<string, unknown> = {};
   let join = "";
 
-  if (filters.spCrosses) where.push("m.SP_Crosses = 1");
+  // Cross Season: true = Summer, false = Winter, undefined = both.
+  if (filters.spCrosses === true) where.push("m.SP_Crosses = 1");
+  if (filters.spCrosses === false) where.push("m.SP_Crosses = 0");
 
   if (filters.progeny) {
     where.push("m.PROGENY LIKE @fprogeny");

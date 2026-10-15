@@ -10,6 +10,7 @@ function buildFilters(query: Record<string, unknown>): { where: string; params: 
   if (query.teamId) { where.push("m.Team_ID = @teamId"); params.teamId = parseInt(String(query.teamId)); }
   if (query.pollinationYear) { where.push("v.Pollination_Year = @py"); params.py = parseInt(String(query.pollinationYear)); }
   if (query.spCrosses === "true") where.push("v.SP_Crosses = 1");
+  if (query.spCrosses === "false") where.push("v.SP_Crosses = 0");
   if (query.progeny) { where.push("v.Progeny LIKE @prog"); params.prog = `%${String(query.progeny)}%`; }
   if (query.parent) { where.push("(v.PARENT1 LIKE @parent OR v.PARENT2 LIKE @parent)"); params.parent = `%${String(query.parent)}%`; }
   if (query.programId) {

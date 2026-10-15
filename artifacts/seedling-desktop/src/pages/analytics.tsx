@@ -51,7 +51,7 @@ function useAnalyticsData(tab: TabKey, groupBy: string, capExtras: boolean) {
   if (filters.berryId) params.set('berryId', String(filters.berryId));
   if (filters.teamId) params.set('teamId', String(filters.teamId));
   if (filters.pollinationYear) params.set('pollinationYear', String(filters.pollinationYear));
-  if (filters.spCrosses) params.set('spCrosses', 'true');
+  if (filters.spCrosses !== undefined) params.set('spCrosses', String(filters.spCrosses));
 
   return useQuery<AnalyticsRow[]>({
     queryKey: [`/api/analytics/${tab}`, groupBy, capExtras, filters.berryId, filters.teamId, filters.pollinationYear, filters.spCrosses],
@@ -76,7 +76,7 @@ function useMarkerAnalyticsData(groupBy: string, metric: string, programId: stri
   if (filters.berryId) params.set('berryId', String(filters.berryId));
   if (filters.teamId) params.set('teamId', String(filters.teamId));
   if (filters.pollinationYear) params.set('pollinationYear', String(filters.pollinationYear));
-  if (filters.spCrosses) params.set('spCrosses', 'true');
+  if (filters.spCrosses !== undefined) params.set('spCrosses', String(filters.spCrosses));
   if (programId) params.set('programId', programId);
   if (labId) params.set('labId', labId);
 
@@ -100,7 +100,7 @@ function useMarkerPlannedData(programId: string, labId: string) {
   if (filters.berryId) params.set('berryId', String(filters.berryId));
   if (filters.teamId) params.set('teamId', String(filters.teamId));
   if (filters.pollinationYear) params.set('pollinationYear', String(filters.pollinationYear));
-  if (filters.spCrosses) params.set('spCrosses', 'true');
+  if (filters.spCrosses !== undefined) params.set('spCrosses', String(filters.spCrosses));
   if (programId) params.set('programId', programId);
   if (labId) params.set('labId', labId);
 
@@ -127,7 +127,7 @@ function useParentSeedWeight(gender: string) {
   if (filters.berryId) params.set('berryId', String(filters.berryId));
   if (filters.teamId) params.set('teamId', String(filters.teamId));
   if (filters.pollinationYear) params.set('pollinationYear', String(filters.pollinationYear));
-  if (filters.spCrosses) params.set('spCrosses', 'true');
+  if (filters.spCrosses !== undefined) params.set('spCrosses', String(filters.spCrosses));
 
   return useQuery<ParentRow[]>({
     queryKey: ['/api/analytics/parents/seed-weight', gender, filters.berryId, filters.teamId, filters.pollinationYear, filters.spCrosses],
@@ -150,7 +150,7 @@ function useParentFruitPct(gender: string) {
   if (filters.berryId) params.set('berryId', String(filters.berryId));
   if (filters.teamId) params.set('teamId', String(filters.teamId));
   if (filters.pollinationYear) params.set('pollinationYear', String(filters.pollinationYear));
-  if (filters.spCrosses) params.set('spCrosses', 'true');
+  if (filters.spCrosses !== undefined) params.set('spCrosses', String(filters.spCrosses));
 
   return useQuery<ParentRow[]>({
     queryKey: ['/api/analytics/parents/fruit-pct', gender, filters.berryId, filters.teamId, filters.pollinationYear, filters.spCrosses],
@@ -186,7 +186,7 @@ function useLifecycleCompletion() {
   if (filters.berryId) params.set('berryId', String(filters.berryId));
   if (filters.teamId) params.set('teamId', String(filters.teamId));
   if (filters.pollinationYear) params.set('pollinationYear', String(filters.pollinationYear));
-  if (filters.spCrosses) params.set('spCrosses', 'true');
+  if (filters.spCrosses !== undefined) params.set('spCrosses', String(filters.spCrosses));
 
   return useQuery<LifecycleCompletion>({
     queryKey: ['lifecycle-completion', filters.berryId, filters.teamId, filters.pollinationYear, filters.spCrosses],

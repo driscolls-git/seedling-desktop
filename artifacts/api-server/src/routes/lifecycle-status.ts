@@ -127,6 +127,7 @@ router.get("/lifecycle-status/completion", async (req, res) => {
     if (req.query.teamId) { where.push("m.Team_ID = @teamId"); params.teamId = parseInt(String(req.query.teamId)); }
     if (req.query.pollinationYear) { where.push("v.Pollination_Year = @py"); params.py = parseInt(String(req.query.pollinationYear)); }
     if (req.query.spCrosses === "true") where.push("v.SP_Crosses = 1");
+    if (req.query.spCrosses === "false") where.push("v.SP_Crosses = 0");
 
     const combos = await queryMany<{ berry_id: number | null; team_id: number | null; pollination_year: number | null }>(
       `SELECT DISTINCT m.Berry_ID AS berry_id, m.Team_ID AS team_id, v.Pollination_Year AS pollination_year

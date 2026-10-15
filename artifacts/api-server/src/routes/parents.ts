@@ -66,6 +66,7 @@ router.get("/parents", async (req, res) => {
     }
     if (req.query.pollinationYear) { where.push("v.Pollination_Year = @py"); params.py = parseInt(String(req.query.pollinationYear)); }
     if (req.query.spCrosses === "true") { where.push("v.SP_Crosses = 1"); }
+    if (req.query.spCrosses === "false") { where.push("v.SP_Crosses = 0"); }
     if (req.query.selection) { where.push("v.Selection LIKE @sel"); params.sel = `%${String(req.query.selection)}%`; }
     if (req.query.active === "true") { where.push("v.Active = 1"); }
 

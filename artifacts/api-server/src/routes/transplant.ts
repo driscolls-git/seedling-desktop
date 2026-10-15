@@ -14,6 +14,7 @@ function buildFilters(query: Record<string, unknown>): { where: string; params: 
   if (query.teamId) { where.push("m.Team_ID = @teamId"); params.teamId = parseInt(String(query.teamId)); }
   if (query.pollinationYear) { where.push("v.Pollination_Year = @py"); params.py = parseInt(String(query.pollinationYear)); }
   if (query.spCrosses === "true") where.push("v.SP_Crosses = 1");
+  if (query.spCrosses === "false") where.push("v.SP_Crosses = 0");
   if (query.progeny) { where.push("v.Progeny LIKE @prog"); params.prog = `%${String(query.progeny)}%`; }
   if (query.programId) {
     const pids = String(query.programId).split(",").map((s) => parseInt(s.trim())).filter((n) => !isNaN(n));
@@ -163,10 +164,9 @@ router.get("/tray-codes", async (req, res) => {
       where.push("v.Pollination_Year = @py");
       params.py = parseInt(String(req.query.pollinationYear));
     }
-    if (req.query.spCrosses === "true") {
-      // The view stores SP_Crosses as a string 'True'/'False'.
-      where.push("v.SP_Crosses = 'True'");
-    }
+    // The view stores SP_Crosses as a string 'True'/'False'.
+    if (req.query.spCrosses === "true") where.push("v.SP_Crosses = 'True'");
+    if (req.query.spCrosses === "false") where.push("v.SP_Crosses = 'False'");
     if (req.query.programId) {
       const pids = String(req.query.programId).split(",").map((s) => parseInt(s.trim())).filter((n) => !isNaN(n));
       if (pids.length > 0) {
@@ -246,7 +246,11 @@ router.get("/tray-codes", async (req, res) => {
 /** Shared filter parsing for the generate + preview endpoints. */
 function trayFiltersFromBody(body: Record<string, unknown> | undefined) {
   return {
-    spCrosses: body?.spCrosses === true || body?.spCrosses === "true",
+    // Cross Season: true = Summer, false = Winter, absent = both.
+    spCrosses:
+      body?.spCrosses === true || body?.spCrosses === "true" ? true
+      : body?.spCrosses === false || body?.spCrosses === "false" ? false
+      : undefined,
     progeny:
       typeof body?.progeny === "string" && body.progeny.trim()
         ? String(body.progeny).trim()

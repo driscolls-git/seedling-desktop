@@ -472,6 +472,7 @@ function buildFilters(query: Record<string, unknown>): { where: string; params: 
   if (query.teamId) { where.push("m.Team_ID = @teamId"); params.teamId = parseInt(String(query.teamId)); }
   if (query.pollinationYear) { where.push("v.Pollination_Year = @py"); params.py = parseInt(String(query.pollinationYear)); }
   if (query.spCrosses === "true") where.push("v.SP_Crosses = 1");
+  if (query.spCrosses === "false") where.push("v.SP_Crosses = 0");
   if (query.progeny) { where.push("v.Progeny LIKE @progeny"); params.progeny = `%${String(query.progeny)}%`; }
 
   if (query.programId) {
@@ -503,6 +504,10 @@ function buildFilters(query: Record<string, unknown>): { where: string; params: 
   if (query.fumigated === "true") where.push("v.Fumigated = 1");
   if (query.fruitToGo === "true") where.push("(COALESCE(v.Successful_Pollinations, 0) - COALESCE(v.Total_Fruit_Collected, 0)) > 0");
   if (query.pollinationToGo === "true") where.push("(COALESCE(v.FLOWERS_TO_POLLINATE_REQUIRED, 0) - COALESCE(v.Successful_Pollinations, 0)) > 0");
+  // "Finished (Based on Seed Collected)" — hide crosses whose seed collected to
+  // go (required − inventory, as Seed_Weight_Variance in vw_GHSeedDesk) is
+  // zero or negative, leaving only those that still need seed collected.
+  if (query.seedToGo === "true") where.push("(COALESCE(v.SEED_WEIGHT_REQUIRED, 0) - COALESCE(v.Seed_Weight_Inventory, 0)) > 0");
   if (query.sowSeed === "true") where.push("v.SOW_SEED = 1");
   if (query.sowSeed === "false") where.push("v.SOW_SEED = 0");
   // Fields not in the view — silently skip:

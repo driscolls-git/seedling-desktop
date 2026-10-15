@@ -11,6 +11,7 @@ router.get("/dashboard/summary", async (req, res) => {
     if (req.query.teamId) { where.push("m.Team_ID = @teamId"); params.teamId = parseInt(String(req.query.teamId)); }
     if (req.query.pollinationYear) { where.push("v.Pollination_Year = @py"); params.py = parseInt(String(req.query.pollinationYear)); }
     if (req.query.spCrosses === "true") where.push("v.SP_Crosses = 1");
+    if (req.query.spCrosses === "false") where.push("v.SP_Crosses = 0");
     const whereClause = `WHERE ${where.join(" AND ")}`;
     const FROM = `FROM dbo.vw_GH_CrossesDesk v INNER JOIN dbo.M_GHSeedlingMaster m ON m.GHSeedlingMaster_ID = v.GHSeedlingMaster_ID`;
 
