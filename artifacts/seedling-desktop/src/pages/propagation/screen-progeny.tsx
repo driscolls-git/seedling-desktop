@@ -30,7 +30,7 @@ export default function ScreenByProgenyList() {
     berryId: filters.berryId,
     teamId: filters.teamId,
     pollinationYear: filters.pollinationYear,
-    spCrosses: filters.spCrosses || undefined,
+    spCrosses: filters.spCrosses,
     progeny: debouncedProgeny || undefined,
     programId: programIds.length ? programIds.join(',') : undefined,
     screening: screeningOnly,

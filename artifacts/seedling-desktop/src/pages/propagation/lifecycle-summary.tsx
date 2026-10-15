@@ -77,7 +77,7 @@ export default function LifecycleSummary() {
         if (filterTeamName && row.teamName !== filterTeamName) return false;
       }
       if (filters.pollinationYear && row.pollinationYear !== filters.pollinationYear) return false;
-      if (filters.spCrosses && row.spCrosses !== 1) return false;
+      if (filters.spCrosses !== undefined && (row.spCrosses === 1) !== filters.spCrosses) return false;
       return true;
     });
   }, [data, filters, teamsMap]);

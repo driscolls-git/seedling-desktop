@@ -4,7 +4,9 @@ interface GlobalFilters {
   berryId: number | undefined;
   teamId: number | undefined;
   pollinationYear: number;
-  spCrosses: boolean;
+  // Cross Season (Strawberry only): true = Summer (SP_Crosses = 1),
+  // false = Winter (SP_Crosses = 0), undefined = both / no filter.
+  spCrosses: boolean | undefined;
 }
 
 interface FilterContextType {
@@ -19,7 +21,7 @@ const defaultFilters: GlobalFilters = {
   berryId: undefined,
   teamId: undefined,
   pollinationYear: currentYear,
-  spCrosses: false,
+  spCrosses: undefined,
 };
 
 const FilterContext = createContext<FilterContextType | undefined>(undefined);

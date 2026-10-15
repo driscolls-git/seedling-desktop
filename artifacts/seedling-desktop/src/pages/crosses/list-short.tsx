@@ -53,6 +53,7 @@ export default function CrossListShort() {
   const [destinationIds, setDestinationIds] = useState<number[]>([]);
   const [activeOnly, setActiveOnly] = useState(true);
   const [fumigated, setFumigated] = useState<boolean | undefined>();
+  const [unfinishedOnly, setUnfinishedOnly] = useState(false);
   const [resetPageSignal, setResetPageSignal] = useState(0);
 
   const [inactivateTarget, setInactivateTarget] = useState<Cross | null>(null);
@@ -68,6 +69,7 @@ export default function CrossListShort() {
     destinationId: destinationIds.length ? destinationIds.join(',') : undefined,
     active: activeOnly,
     fumigated,
+    seedToGo: unfinishedOnly || undefined,
     page: 1,
     pageSize: 5000,
   } as any;
@@ -155,6 +157,7 @@ export default function CrossListShort() {
     setDestinationIds([]);
     setActiveOnly(true);
     setFumigated(undefined);
+    setUnfinishedOnly(false);
     setResetPageSignal(s => s + 1);
   };
 
@@ -331,6 +334,10 @@ export default function CrossListShort() {
               className="rounded"
             />
             Fumigated
+          </label>
+          <label className="flex items-center gap-1.5 text-sm cursor-pointer" title="Shows only crosses that still need seed collected (Seed Collected To Go > 0).">
+            <input type="checkbox" checked={unfinishedOnly} onChange={e => setUnfinishedOnly(e.target.checked)} className="rounded" />
+            Unfinished (Based on Seed Collected)
           </label>
           <Button variant="ghost" size="sm" onClick={resetFilters} className="gap-1 text-muted-foreground">
             <RotateCcw className="w-3.5 h-3.5" /> Reset

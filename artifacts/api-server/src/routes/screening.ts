@@ -213,6 +213,7 @@ function buildProgenyFilters(query: Record<string, unknown>): { where: string; p
   if (query.teamId) { where.push("m.Team_ID = @teamId"); params.teamId = parseInt(String(query.teamId)); }
   if (query.pollinationYear) { where.push("v.Pollination_Year = @py"); params.py = parseInt(String(query.pollinationYear)); }
   if (query.spCrosses === "true") where.push("v.SP_Crosses = 1");
+  if (query.spCrosses === "false") where.push("v.SP_Crosses = 0");
   if (query.progeny) { where.push("v.Progeny LIKE @prog"); params.prog = `%${String(query.progeny)}%`; }
   if (query.programId) {
     const pids = String(query.programId).split(",").map((s) => parseInt(s.trim())).filter((n) => !isNaN(n));

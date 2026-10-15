@@ -11,6 +11,7 @@ function buildCrossFilters(query: Record<string, unknown>, extraClauses: string[
   if (query.teamId) { where.push("m.Team_ID = @teamId"); params.teamId = parseInt(String(query.teamId)); }
   if (query.pollinationYear) { where.push("v.Pollination_Year = @py"); params.py = parseInt(String(query.pollinationYear)); }
   if (query.spCrosses === "true") where.push("v.SP_Crosses = 1");
+  if (query.spCrosses === "false") where.push("v.SP_Crosses = 0");
   if (query.programId) { where.push("(m.D1_PROGRAM_FK = @progId OR m.D2_PROGRAM_FK = @progId)"); params.progId = parseInt(String(query.programId)); }
   return { where: `WHERE ${where.join(" AND ")}`, params };
 }
@@ -103,6 +104,7 @@ router.get("/analytics/ship", async (req, res) => {
     if (req.query.teamId) { where.push("m.Team_ID = @teamId"); params.teamId = parseInt(String(req.query.teamId)); }
     if (req.query.pollinationYear) { where.push("v.Pollination_Year = @py"); params.py = parseInt(String(req.query.pollinationYear)); }
     if (req.query.spCrosses === "true") where.push("v.SP_Crosses = 1");
+    if (req.query.spCrosses === "false") where.push("v.SP_Crosses = 0");
     const whereClause = where.length ? `WHERE ${where.join(" AND ")}` : "";
     const groupCol = SHIP_GROUP_COLS[groupBy] || SHIP_GROUP_COLS.program;
 
@@ -265,6 +267,7 @@ router.get("/analytics/parents/fruit-pct", async (req, res) => {
     if (req.query.teamId) { where.push("m.Team_ID = @teamId"); params.teamId = parseInt(String(req.query.teamId)); }
     if (req.query.pollinationYear) { where.push("v.Pollination_Year = @py"); params.py = parseInt(String(req.query.pollinationYear)); }
     if (req.query.spCrosses === "true") where.push("v.SP_Crosses = 1");
+    if (req.query.spCrosses === "false") where.push("v.SP_Crosses = 0");
     const parentCol = gender === "male"
       ? "CASE WHEN COALESCE(CAST(v.Reciprocal_Done AS INT), 0) = 1 THEN v.PARENT1 ELSE v.PARENT2 END"
       : "CASE WHEN COALESCE(CAST(v.Reciprocal_Done AS INT), 0) = 1 THEN v.PARENT2 ELSE v.PARENT1 END";

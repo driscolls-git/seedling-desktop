@@ -56,6 +56,7 @@ export default function CrossListFull() {
   const [activeOnly, setActiveOnly] = useState(true);
   const [resetPageSignal, setResetPageSignal] = useState(0);
   const [fumigated, setFumigated] = useState<boolean | undefined>();
+  const [unfinishedOnly, setUnfinishedOnly] = useState(false);
   const [inactivateTarget, setInactivateTarget] = useState<Cross | null>(null);
   const debouncedProgeny = useDebounce(progenySearch);
 
@@ -69,6 +70,7 @@ export default function CrossListFull() {
     destinationId: destinationIds.length ? destinationIds.join(',') : undefined,
     active: activeOnly,
     fumigated,
+    seedToGo: unfinishedOnly || undefined,
     page: 1,
     pageSize: 5000,
     // Full list shows individual marker_1..6, P1/P2 inventory L1-L4, and
@@ -156,6 +158,7 @@ export default function CrossListFull() {
     setDestinationIds([]);
     setActiveOnly(true);
     setFumigated(undefined);
+    setUnfinishedOnly(false);
     setResetPageSignal(s => s + 1);
   };
 
@@ -306,7 +309,7 @@ export default function CrossListFull() {
     },
     { key: 'crossDesignedBy', header: 'Cross Designed By' },
     { key: 'fumigated', header: 'Fumigated?', render: (r) => r.fumigated ? 'Yes' : 'No' },
-    { key: 'spCrosses', header: 'SP Crosses?', render: (r) => r.spCrosses ? 'Yes' : 'No' },
+    { key: 'spCrosses', header: 'Cross Season', render: (r) => r.berry?.toUpperCase() === 'STRAW' ? (r.spCrosses ? 'Summer' : 'Winter') : '' },
     { key: 'active', header: 'Active?', render: (r) => r.active ? 'Yes' : 'No' },
     { key: 'id', header: 'ID', isNumeric: true },
   ];
@@ -397,6 +400,10 @@ export default function CrossListFull() {
           <label className="flex items-center gap-1.5 text-sm cursor-pointer">
             <input type="checkbox" checked={fumigated === true} onChange={e => setFumigated(e.target.checked ? true : undefined)} className="rounded" />
             Fumigated
+          </label>
+          <label className="flex items-center gap-1.5 text-sm cursor-pointer" title="Shows only crosses that still need seed collected (Seed Collected To Go > 0).">
+            <input type="checkbox" checked={unfinishedOnly} onChange={e => setUnfinishedOnly(e.target.checked)} className="rounded" />
+            Unfinished (Based on Seed Collected)
           </label>
           <Button variant="ghost" size="sm" onClick={resetFilters} className="gap-1 text-muted-foreground">
             <RotateCcw className="w-3.5 h-3.5" /> Reset

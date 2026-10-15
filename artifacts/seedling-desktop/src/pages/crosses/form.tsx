@@ -129,6 +129,7 @@ export default function CrossForm() {
     crossDesignedBy: isNew ? (user?.ghEmployee ?? '') : undefined,
     berryId: isNew ? (filters.berryId ?? undefined) : undefined,
     teamId: isNew ? (filters.teamId ?? undefined) : undefined,
+    spCrosses: isNew ? (filters.spCrosses ?? false) : undefined,
     expectedDiscardPercentage: 0,
     spinelessDiscardPercentage: 0,
   });
@@ -172,6 +173,14 @@ export default function CrossForm() {
     { query: { queryKey: ['/api/deadlines', form.berryId, form.d1ProgramId, form.teamId, destLocationId], enabled: !!(form.berryId && form.d1ProgramId && form.teamId && destLocationId) } }
   );
   const deadlineId = deadlinesData?.[0]?.id ?? null;
+
+  // Cross Season (Summer = SP_Crosses true, Winter = false) only applies to
+  // Strawberry; other berries are always saved as false.
+  const isStrawberry = berries?.find((b: any) => b.id === form.berryId)?.berryType?.toUpperCase() === 'STRAW';
+  useEffect(() => {
+    if (berries && !isStrawberry && form.spCrosses) update('spCrosses', false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isStrawberry, berries]);
 
   // When berry switches away from Blackberry, force Spiny Discard back to 0
   // so a stale non-zero value can't slip through on save.
@@ -491,12 +500,18 @@ export default function CrossForm() {
                   <span className="text-sm">{form.reciprocalAllowed ? 'Yes' : 'No'}</span>
                 </label>
               </FormField>
-              <FormField label="SP Crosses">
-                <label className="flex items-center gap-2 py-2">
-                  <input type="checkbox" checked={!!form.spCrosses} onChange={e => update('spCrosses', e.target.checked)} className="rounded" />
-                  <span className="text-sm">SP Cross</span>
-                </label>
-              </FormField>
+              {isStrawberry && (
+                <FormField label="Cross Season">
+                  <select
+                    value={form.spCrosses ? 'true' : 'false'}
+                    onChange={e => update('spCrosses', e.target.value === 'true')}
+                    className={selectInp}
+                  >
+                    <option value="true">Summer Crosses</option>
+                    <option value="false">Winter Crosses</option>
+                  </select>
+                </FormField>
+              )}
               <FormField label="Cross Designed By *">
                 <input type="text" value={form.crossDesignedBy ?? ''} onChange={e => update('crossDesignedBy', e.target.value || undefined)} className={inp} />
               </FormField>
