@@ -4,6 +4,19 @@ import { ChevronDown, ChevronUp, Download, ArrowUpDown, Save, Undo2 } from 'luci
 import { Button } from './button';
 import { cn, formatNumber } from '@/lib/utils';
 
+// ISO timestamps from the API ("2026-03-14T09:30:00.000Z") land in Excel as
+// text. Rewrite them as "2026-03-14" / "2026-03-14 09:30:00", which Excel
+// parses as real dates. The API serialises SQL datetimes with useUTC, so the
+// digits before the Z are already the stored wall-clock value — we take them
+// as-is rather than converting to local time (which could shift the day).
+const ISO_DATETIME = /^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2}:\d{2})(?:\.\d+)?(?:Z|[+-]\d{2}:?\d{2})?$/;
+function toExcelDate(value: unknown): unknown {
+  if (typeof value !== 'string') return value;
+  const m = ISO_DATETIME.exec(value);
+  if (!m) return value;
+  return m[2] === '00:00:00' ? m[1] : `${m[1]} ${m[2]}`;
+}
+
 export interface EditableConfig {
   type: 'text' | 'number' | 'dropdown';
   options?: { value: string; label: string }[];
@@ -172,7 +185,7 @@ export function DataTable<T extends Record<string, any>>({
     const headers = visibleColumns.map(c => c.header).join(',');
     const rows = sortedData.map(row =>
       visibleColumns.map(c => {
-        const raw = row[c.key as keyof T];
+        const raw = toExcelDate(row[c.key as keyof T]);
         const val = typeof raw === 'string' ? `"${raw.replace(/"/g, '""')}"` : raw;
         return val ?? '';
       }).join(',')
