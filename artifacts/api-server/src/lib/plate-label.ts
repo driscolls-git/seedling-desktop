@@ -57,9 +57,31 @@ export function parsePlateIndexInput(raw: unknown): number | null {
   if (raw == null) return null;
   const text = String(raw);
   const digits = /[A-Za-z]/.test(text)
-    ? (/[A-Za-z]\D*(\d+)\D*$/.exec(text)?.[1] ?? "")
+    ? lastDigitRunAfterLetter(text)
     : text.replace(/\D+/g, "");
   if (!digits) return null;
   const n = parseInt(digits, 10);
   return Number.isFinite(n) ? n : null;
+}
+
+const isDigit = (c: string) => c >= "0" && c <= "9";
+const isLetter = (c: string) => (c >= "A" && c <= "Z") || (c >= "a" && c <= "z");
+
+/**
+ * The last run of digits in `text`, provided a letter comes before it with no
+ * other digits in between ("26BU0322" -> "0322"); otherwise "".  Same result
+ * as /[A-Za-z]\D*(\d+)\D*$/, but a single linear scan: that regex backtracks
+ * polynomially on long letter-only input, and this value comes straight from
+ * a query string (CodeQL js/polynomial-redos).
+ */
+function lastDigitRunAfterLetter(text: string): string {
+  let end = text.length;
+  while (end > 0 && !isDigit(text[end - 1])) end--;
+  let start = end;
+  while (start > 0 && isDigit(text[start - 1])) start--;
+  if (start === end) return "";
+  for (let i = start - 1; i >= 0 && !isDigit(text[i]); i--) {
+    if (isLetter(text[i])) return text.slice(start, end);
+  }
+  return "";
 }
