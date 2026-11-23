@@ -73,13 +73,27 @@ function SearchableSelect({
   );
 }
 
-function FormField({ label, children, span }: { label: string; children: React.ReactNode; span?: number }) {
+// `id` lets the "still needed to save" list jump to the field; `missing`
+// turns the label red while the field stops Save.
+function FormField({ label, children, span, id, missing }: {
+  label: string; children: React.ReactNode; span?: number; id?: string; missing?: boolean;
+}) {
   return (
-    <div className={span ? `col-span-${span}` : ''}>
-      <label className="block text-sm font-medium mb-1">{label}</label>
+    <div id={id} className={`${span ? `col-span-${span}` : ''} scroll-mt-24`}>
+      <label className={`block text-sm font-medium mb-1 ${missing ? 'text-destructive' : ''}`}>{label}</label>
       {children}
     </div>
   );
+}
+
+type MissingItem = { key: string; label: string };
+
+/** Scrolls to a form field (FormField id `field-<key>`) and focuses its first input. */
+function goToField(key: string) {
+  const el = document.getElementById(`field-${key}`);
+  if (!el) return;
+  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  el.querySelector<HTMLElement>('input:not([readonly]), select, textarea, button')?.focus({ preventScroll: true });
 }
 
 function toDateInputValue(isoOrDate: string | undefined | null): string {
@@ -309,11 +323,27 @@ export default function CrossForm() {
     return count;
   }, [form.marker1, form.marker2, form.marker3, form.marker4, form.marker5, form.marker6]);
 
-  const requiredMissing = !form.parent1 || !form.parent2 || !form.destination1
-    || !form.d1ProgramId || !form.d1SeedlingShipRequest || !form.d1FieldPlantDate
-    || form.expectedDiscardPercentage == null || form.spinelessDiscardPercentage == null
-    || !form.traySize || !form.crossDesignedBy?.trim();
-  const screeningRequired = form.screening && (!form.testingLab1 || !form.marker1);
+  // Everything that stops Save, in form order, so the form can say what is
+  // missing instead of only greying out the button.  D1 Ship Request is
+  // read-only on edit, so it is required only for new crosses and copies
+  // (an older cross with a 0 request could otherwise never be saved).
+  const missing: MissingItem[] = [
+    !form.progeny && { key: 'progeny', label: 'Progeny' },
+    !form.parent1 && { key: 'parent1', label: 'Parent 1' },
+    !form.parent2 && { key: 'parent2', label: 'Parent 2' },
+    !form.crossDesignedBy?.trim() && { key: 'crossDesignedBy', label: 'Cross Designed By' },
+    !form.destination1 && { key: 'destination1', label: 'Destination 1 Location' },
+    !form.d1ProgramId && { key: 'd1ProgramId', label: 'Destination 1 Program' },
+    !isEdit && !form.d1SeedlingShipRequest && { key: 'd1SeedlingShipRequest', label: 'Destination 1 Ship Request (more than 0)' },
+    !form.d1FieldPlantDate && { key: 'd1FieldPlantDate', label: 'Destination 1 Field Plant Date' },
+    form.expectedDiscardPercentage == null && { key: 'expectedDiscardPercentage', label: 'Expected Discard %' },
+    form.spinelessDiscardPercentage == null && { key: 'spinelessDiscardPercentage', label: 'Spiny Discard %' },
+    !form.traySize && { key: 'traySize', label: 'Tray Size' },
+    form.screening && !form.testingLab1 && { key: 'testingLab1', label: 'Testing Lab 1 (Screening is on)' },
+    form.screening && !form.marker1 && { key: 'marker1', label: 'Marker 1 (Screening is on)' },
+  ].filter((m): m is MissingItem => !!m);
+  const isMissing = (key: string) => missing.some(m => m.key === key);
+  const field = (key: string) => ({ id: `field-${key}`, missing: isMissing(key) });
 
   const handleSave = () => {
     // requestedFieldPlantYear is a calculated column — don't send it; the server derives it.
@@ -376,6 +406,12 @@ export default function CrossForm() {
 
   const showRatioError = !!(form.berryId && form.d1ProgramId && form.teamId && ratiosData && ratioId === null);
   const showDeadlineError = !!(form.berryId && form.d1ProgramId && form.teamId && destLocationId && deadlinesData && deadlineId === null);
+  // Setup problems that also stop Save; they point at the field to change.
+  const blockers: MissingItem[] = [
+    ...missing,
+    ...(showRatioError ? [{ key: 'd1ProgramId', label: 'No ratio set up for this Berry / Destination 1 Program / Team' }] : []),
+    ...(showDeadlineError ? [{ key: 'destination1', label: 'No deadline set up for this Berry / Program / Team / Destination 1' }] : []),
+  ];
 
   return (
     <Layout>
@@ -401,13 +437,32 @@ export default function CrossForm() {
               <X className="w-4 h-4" /> Cancel
             </Button>
             {isBreeder && (
-              <Button onClick={handleSave} disabled={isSaving || !form.progeny || requiredMissing || !!screeningRequired || showRatioError || showDeadlineError} className="gap-1.5 rounded-lg">
+              <Button onClick={handleSave} disabled={isSaving || blockers.length > 0} className="gap-1.5 rounded-lg"
+                title={blockers.length ? `To save, fix: ${blockers.map(b => b.label).join(', ')}` : undefined}>
                 {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
                 {isEdit ? 'Save Changes' : isCopy ? 'Create Copy' : 'Create Cross'}
               </Button>
             )}
           </div>
         </div>
+
+        {isBreeder && blockers.length > 0 && (
+          <div role="status" className="sticky top-2 z-10 rounded-xl border border-amber-300 bg-amber-50 dark:bg-amber-950/60 dark:border-amber-700 px-4 py-3 text-sm shadow-sm">
+            <p className="font-medium text-amber-900 dark:text-amber-200">
+              {isEdit ? 'Save Changes' : isCopy ? 'Create Copy' : 'Create Cross'} is turned off until {blockers.length === 1 ? 'this is' : `these ${blockers.length} are`} fixed (click one to go to it):
+            </p>
+            <ul className="mt-2 flex flex-wrap gap-2">
+              {blockers.map(b => (
+                <li key={b.label}>
+                  <button type="button" onClick={() => goToField(b.key)}
+                    className="rounded-full border border-amber-400 bg-background px-3 py-1 text-xs font-medium text-amber-900 dark:text-amber-200 hover:bg-amber-100 dark:hover:bg-amber-900">
+                    {b.label}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         <div className="space-y-6">
           <section className="bg-card rounded-2xl border p-6 space-y-4">
@@ -437,7 +492,7 @@ export default function CrossForm() {
                   {berryOptions.map(b => <option key={b.value} value={b.value}>{b.label}</option>)}
                 </select>
               </FormField>
-              <FormField label="Progeny *">
+              <FormField label="Progeny *" {...field('progeny')}>
                 <Input
                   value={form.progeny || ''}
                   onChange={e => update('progeny', e.target.value)}
@@ -474,10 +529,10 @@ export default function CrossForm() {
               </FormField>
             </div>
             <div className="grid grid-cols-3 gap-4">
-              <FormField label="Parent 1 *">
+              <FormField label="Parent 1 *" {...field('parent1')}>
                 <SearchableSelect value={form.parent1 || ''} onChange={v => update('parent1', v)} options={selectionOptions} placeholder={t('filters.searchParent')} disabled={!parentFiltersReady} />
               </FormField>
-              <FormField label="Parent 2 *">
+              <FormField label="Parent 2 *" {...field('parent2')}>
                 <SearchableSelect value={form.parent2 || ''} onChange={v => update('parent2', v)} options={selectionOptions} placeholder={t('filters.searchParent')} disabled={!parentFiltersReady} />
               </FormField>
               <FormField label="Bulk Parent 3">
@@ -512,7 +567,7 @@ export default function CrossForm() {
                   </select>
                 </FormField>
               )}
-              <FormField label="Cross Designed By *">
+              <FormField label="Cross Designed By *" {...field('crossDesignedBy')}>
                 <input type="text" value={form.crossDesignedBy ?? ''} onChange={e => update('crossDesignedBy', e.target.value || undefined)} className={inp} />
               </FormField>
             </div>
@@ -536,22 +591,22 @@ export default function CrossForm() {
               <div className="space-y-4 p-4 bg-secondary/5 rounded-xl">
                 <h3 className="font-medium text-sm uppercase tracking-wider text-muted-foreground">Destination 1</h3>
                 <div className="grid grid-cols-2 gap-3">
-                  <FormField label="Location *">
+                  <FormField label="Location *" {...field('destination1')}>
                     <SearchableSelect value={form.destination1 || ''} onChange={v => update('destination1', v)} options={locationOptions} placeholder="Select destination..." />
                   </FormField>
-                  <FormField label="Program *">
+                  <FormField label="Program *" {...field('d1ProgramId')}>
                     <select value={form.d1ProgramId ?? ''} onChange={e => update('d1ProgramId', e.target.value ? Number(e.target.value) : undefined)} className={selectInp}>
                       <option value="">Select...</option>
                       {(programs || []).map(p => <option key={p.id} value={p.id}>{p.srcBreedingProgram}</option>)}
                     </select>
                   </FormField>
-                  <FormField label={isEdit ? "Ship Request" : "Ship Request *"}>
+                  <FormField label={isEdit ? "Ship Request" : "Ship Request *"} {...field('d1SeedlingShipRequest')}>
                     <input type="number" value={form.d1SeedlingShipRequest ?? ''} onChange={e => update('d1SeedlingShipRequest', e.target.value ? Number(e.target.value) : undefined)} className={inp} readOnly={isEdit} tabIndex={isEdit ? -1 : undefined} style={isEdit ? { opacity: 0.6, cursor: 'not-allowed' } : undefined} />
                   </FormField>
                   <FormField label="Ship Adj +/-">
                     <input type="number" value={form.breederRequestedShipDest1Adjustments ?? ''} onChange={e => update('breederRequestedShipDest1Adjustments', e.target.value ? Number(e.target.value) : undefined)} className={inp} />
                   </FormField>
-                  <FormField label="Field Plant Date *">
+                  <FormField label="Field Plant Date *" {...field('d1FieldPlantDate')}>
                     <input type="date" value={toDateInputValue(form.d1FieldPlantDate)} onChange={e => update('d1FieldPlantDate', e.target.value || undefined)} className={inp} />
                   </FormField>
                 </div>
@@ -585,13 +640,13 @@ export default function CrossForm() {
           <section className="bg-card rounded-2xl border p-6 space-y-4">
             <h2 className="text-lg font-semibold font-display border-b pb-2">Propagation</h2>
             <div className="grid grid-cols-4 gap-4">
-              <FormField label="Expected Discard % *">
+              <FormField label="Expected Discard % *" {...field('expectedDiscardPercentage')}>
                 <input type="number" min={0} max={99} value={form.expectedDiscardPercentage ?? ''} onChange={e => {
                   const v = e.target.value ? Math.min(99, Math.max(0, Number(e.target.value))) : undefined;
                   update('expectedDiscardPercentage', v);
                 }} className={inp} />
               </FormField>
-              <FormField label="Spiny Discard % *">
+              <FormField label="Spiny Discard % *" {...field('spinelessDiscardPercentage')}>
                 {(() => {
                   // Spiny Discard only applies to blackberries (BLACK).  For
                   // any other berry the field is locked to 0 and read-only.
@@ -621,7 +676,7 @@ export default function CrossForm() {
                   {transplantOptions.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
                 </select>
               </FormField>
-              <FormField label="Tray Size *">
+              <FormField label="Tray Size *" {...field('traySize')}>
                 <select value={form.traySize ?? ''} onChange={e => update('traySize', e.target.value ? Number(e.target.value) : undefined)} className={selectInp}>
                   <option value="">Select...</option>
                   {(trays || []).map(t => <option key={t.id} value={t.id}>{(t as any).trayName || (t as any).traySize || t.id}</option>)}
@@ -662,7 +717,7 @@ export default function CrossForm() {
               <FormField label="Total Markers">
                 <input type="number" value={computedTotalMarker} readOnly className={inp + " bg-muted cursor-not-allowed"} />
               </FormField>
-              <FormField label={form.screening ? "Testing Lab 1 *" : "Testing Lab 1"}>
+              <FormField label={form.screening ? "Testing Lab 1 *" : "Testing Lab 1"} {...field('testingLab1')}>
                 <select value={form.testingLab1 ?? ''} onChange={e => update('testingLab1', e.target.value || undefined)} className={selectInp}>
                   <option value="">Select...</option>
                   {labOptions.map(l => <option key={l.value} value={l.value}>{l.label}</option>)}
@@ -677,7 +732,7 @@ export default function CrossForm() {
             </div>
             <div className="grid grid-cols-6 gap-3">
               {([1, 2, 3, 4, 5, 6] as const).map(n => (
-                <FormField key={n} label={n === 1 && form.screening ? `Marker ${n} *` : `Marker ${n}`}>
+                <FormField key={n} label={n === 1 && form.screening ? `Marker ${n} *` : `Marker ${n}`} {...field(`marker${n}`)}>
                   <select value={(form as any)[`marker${n}`] ?? ''} onChange={e => update(`marker${n}` as keyof CrossInput, e.target.value || undefined)} className={selectInp}>
                     <option value="">Select...</option>
                     {markerOptions.map(m => <option key={m.value} value={m.value}>{m.label}</option>)}
