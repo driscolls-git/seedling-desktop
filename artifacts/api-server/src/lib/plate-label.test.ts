@@ -31,6 +31,19 @@ describe("parsePlateIndexInput — plate filter accepts number or printed label"
       expect(parsePlateIndexInput(v)).toBeNull();
     }
   });
+
+  it("only takes the digits that directly follow the letters", () => {
+    expect(parsePlateIndexInput("BU 0322 ")).toBe(322);
+    expect(parsePlateIndexInput("BU-0322")).toBe(322);
+    expect(parsePlateIndexInput("BU12-34")).toBeNull();
+  });
+
+  it("stays fast on very long input (no regex backtracking)", () => {
+    const started = Date.now();
+    expect(parsePlateIndexInput("A" + "a".repeat(200_000))).toBeNull();
+    expect(parsePlateIndexInput("A" + "a".repeat(200_000) + "7")).toBe(7);
+    expect(Date.now() - started).toBeLessThan(500);
+  });
 });
 
 describe("plateLabelExpr — SQL shape", () => {
